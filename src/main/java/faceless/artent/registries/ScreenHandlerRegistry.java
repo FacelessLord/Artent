@@ -1,0 +1,19 @@
+package faceless.artent.registries;
+
+import faceless.artent.Artent;
+import faceless.artent.objects.ModScreenHandlers;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.util.Identifier;
+
+public final class ScreenHandlerRegistry implements IRegistry {
+
+	public void register() {
+//		register(ModScreenHandlers.ALCHEMICAL_CIRCLE, "alchemical_circle");
+	}
+
+	public void register(ScreenHandlerType<?> item, String screenId) {
+//		Registry.register(Registries.SCREEN_HANDLER, new Identifier(Artent.MODID, screenId), item);
+	}
+}
