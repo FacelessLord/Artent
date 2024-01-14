@@ -15,18 +15,18 @@ import faceless.artent.transmutations.Transmutation;
 
 public class ActionClearGrass extends Transmutation {
 	public static Set<Block> grass = Arrays
-			.stream(new Block[] { Blocks.TALL_GRASS, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS })
+			.stream(new Block[]{ Blocks.TALL_GRASS, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS })
 			.collect(Collectors.toSet());
 	public static Set<Block> flowers = Arrays
 			.stream(
-					new Block[] { Blocks.DANDELION, Blocks.POPPY, Blocks.ORANGE_TULIP, Blocks.PINK_TULIP,
+					new Block[]{ Blocks.DANDELION, Blocks.POPPY, Blocks.ORANGE_TULIP, Blocks.PINK_TULIP,
 							Blocks.RED_TULIP, Blocks.WHITE_TULIP, Blocks.SUNFLOWER, Blocks.ROSE_BUSH,
 							Blocks.BLUE_ORCHID, Blocks.LILY_OF_THE_VALLEY, Blocks.AZURE_BLUET, Blocks.ALLIUM,
 							Blocks.BELL, Blocks.DEAD_BUSH, Blocks.OXEYE_DAISY, Blocks.CORNFLOWER })
 			.collect(Collectors.toSet());
 	public static Set<Block> plants = Arrays
 			.stream(
-					new Block[] { Blocks.ACACIA_LEAVES, Blocks.BIRCH_LEAVES, Blocks.DARK_OAK_LEAVES,
+					new Block[]{ Blocks.ACACIA_LEAVES, Blocks.BIRCH_LEAVES, Blocks.DARK_OAK_LEAVES,
 							Blocks.JUNGLE_LEAVES, Blocks.OAK_LEAVES, Blocks.OAK_LEAVES, Blocks.ACACIA_LOG,
 							Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG, Blocks.OAK_LOG, Blocks.SPRUCE_LOG,
 							Blocks.BAMBOO })
@@ -34,13 +34,13 @@ public class ActionClearGrass extends Transmutation {
 	public Random random = new Random();
 
 	public ActionClearGrass(int level) {
-		super("circle.clear_grass", (e, p) -> {
+		super("circle.clear_grass", (facing, e, p) -> {
 		});
-		this.setTickAction((e, p, tick) -> {
+		this.setTickAction((facing, e, p, tick) -> {
 			final int height = 2 * level + 1, width = 4 * level + 4;
 			World world = e.getWorld();
 			BlockPos entityPos = e.getPos();
-			boolean dirty = randomPoints(world, 64, entityPos, width, height, (pos, state) -> {
+			boolean dirty = randomPoints(world, 64, entityPos, facing, width, height, (pos, state) -> {
 				Block b = state.getBlock();
 				if ((grass.contains(b) || flowers.contains(b) || plants.contains(b))) {
 					world.breakBlock(pos, true);

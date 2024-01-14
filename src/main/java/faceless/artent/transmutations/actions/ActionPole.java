@@ -1,0 +1,69 @@
+package faceless.artent.transmutations.actions;
+
+import faceless.artent.api.Color;
+import faceless.artent.api.MiscUtils;
+import faceless.artent.objects.ModBlocks;
+import faceless.artent.transmutations.Transmutation;
+import net.minecraft.block.AirBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+
+public class ActionPole extends Transmutation {
+	public ActionPole(int level) {
+		super("circle.pole", (facing, e, p) -> {
+			final int heightRange = level + 3, widthRange = 2 * level;
+			var circle = e.getPos();
+			var world = e.getWorld();
+
+			for (int j = 1; j <= heightRange; j++) {
+				for (int i = -widthRange + 1; i <= widthRange; i++) {
+					for (int k = -widthRange + 1; k <= widthRange; k++) {
+						var rotated = MiscUtils.applyDirection(new int[]{ i, -j, k }, facing);
+
+						var blockPos = circle.add(rotated[0], rotated[1], rotated[2]);
+						var state = world.getBlockState(blockPos);
+						var block = state.getBlock();
+						if (block == Blocks.AIR || block == Blocks.CAVE_AIR || block == Blocks.VOID_AIR) {
+							continue;
+						}
+
+						var newPos = blockPos;
+						int l = heightRange;
+						for (; l > 0; l--) {
+							var newPosTemp = blockPos.offset(facing, l);
+							var tempState = world.getBlockState(newPosTemp);
+							var targetBlock = tempState.getBlock();
+							if (targetBlock == Blocks.AIR || targetBlock == Blocks.CAVE_AIR || targetBlock == Blocks.VOID_AIR || targetBlock == ModBlocks.alchemicalCircle) {
+								newPos = newPosTemp;
+								break;
+							}
+						}
+						if (l == 0)
+							continue;
+
+						// immediately creates blockEntity and writes it to chunk
+						world.setBlockState(newPos, state);
+						var entity = world.getBlockEntity(blockPos);
+						if (entity != null) {
+							var tag = entity.createNbt();
+
+							var newEntity = world.getBlockEntity(newPos);
+							if (newEntity == null) {
+								System.out.println("new entity is not created on setBlockState");
+								continue;
+							}
+
+							newEntity.readNbt(tag);
+						}
+
+						world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+					}
+				}
+			}
+		});
+
+		this.setPrepCol(new Color(80, 80, 255));
+		this.setActCol(new Color(40, 40, 255));
+	}
+}

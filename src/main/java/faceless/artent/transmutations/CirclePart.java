@@ -1,7 +1,5 @@
 package faceless.artent.transmutations;
 
-import faceless.artent.transmutations.gui.PartType;
-
 public class CirclePart {
     public final PartType part;
     public final boolean reverse;

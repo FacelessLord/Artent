@@ -1,4 +1,4 @@
-package faceless.artent.transmutations.gui;
+package faceless.artent.transmutations;
 
 import net.minecraft.util.Identifier;
 

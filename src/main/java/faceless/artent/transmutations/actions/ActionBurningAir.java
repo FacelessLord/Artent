@@ -29,9 +29,9 @@ public class ActionBurningAir extends Transmutation {
 	public Lazy<Map<Item, Integer>> fuelTimeMap = new Lazy<>(AbstractFurnaceBlockEntity::createFuelTimeMap);
 
 	public ActionBurningAir() {
-		super("circle.burning_air", (entity, playerEntity) -> {
+		super("circle.burning_air", (facing, entity, playerEntity) -> {
 		});
-		this.setTickAction((e, p, tick) -> {
+		this.setTickAction((facing, e, p, tick) -> {
 			int fuel = e.circleTag.getInt("furnaceFuel");
 			var center = e.getPos().toCenterPos();
 			Box box = new Box(center.add(-1.5f, -1.5f, -1.5f), center.add(1.5f, 1.5f, 1.5f));
@@ -70,9 +70,9 @@ public class ActionBurningAir extends Transmutation {
 						.map(Pair::getLeft)
 						.filter(be -> be instanceof FurnaceBlockEntity)
 						.map(be -> (FurnaceBlockEntity) be)
-						.filter(f -> getBurnTime(f) <= 0 && canAcceptRecipeOutput(f, getRecipeFor(f)))
+						.filter(f -> getBurnTime(f) <= 20 && canAcceptRecipeOutput(f, getRecipeFor(f)))
 						.map(f -> {
-							addBurnTime(f, PACKET_SIZE + 21);
+							addBurnTime(f, PACKET_SIZE + 10);
 							return PACKET_SIZE;
 						})
 						.reduce(Integer::sum)

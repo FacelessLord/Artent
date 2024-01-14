@@ -9,13 +9,13 @@ import net.minecraft.world.World;
 public class ActionFertilize extends Transmutation {
 
 	public ActionFertilize(int level) {
-		super("circle.fertilize", (e, p) -> {
+		super("circle.fertilize", (facing, e, p) -> {
 		});
-		this.setTickAction((e, p, tick) -> {
+		this.setTickAction((facing, e, p, tick) -> {
 			final int height = 2 * level + 1, width = 4 * level + 4;
 			World world = e.getWorld();
 
-			return randomPoints(world, 16, e.getPos(), width, height, (pos, state) -> {
+			return randomPoints(world, 16, e.getPos(), facing, width, height, (pos, state) -> {
 				Block b = state.getBlock();
 				if (b == Blocks.WATER) {
 					e.circleTag.putInt("moisture", e.circleTag.getInt("moisture") + 10);

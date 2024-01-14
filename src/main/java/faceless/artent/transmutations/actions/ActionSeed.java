@@ -18,20 +18,21 @@ import faceless.artent.transmutations.Transmutation;
 public class ActionSeed extends Transmutation {
 
 	public ActionSeed(int level) {
-		super("circle.seed", (e, p) -> {
+		super("circle.seed", (facing, e, p) -> {
 		});
-		this.setTickAction((e, p, tick) -> {
+		this.setTickAction((facing, e, p, tick) -> {
 			final int height = 2 * level + 1, width = 4 * level + 4;
 			World world = e.getWorld();
 
-			return randomPoints(world, 64, e.getPos(), width, height, (pos, state) -> {
+			return randomPoints(world, 64, e.getPos(), facing, width, height, (pos, state) -> {
 				Block b = state.getBlock();
 				if (b instanceof FarmlandBlock && world.getBlockState(pos.up()).isAir()) {
 					var center = e.getPos().toCenterPos();
+					// box is symmetrical so no need for applying direction
 					Box box = new Box(center.add(-1.5f, -1.5f, -1.5f), center.add(1.5f, 1.5f, 1.5f));
 					List<ItemEntity> entityList = e
-							.getWorld()
-							.getEntitiesByType(EntityType.ITEM, box, ie -> stackIsSeed(ie.getStack()));
+						.getWorld()
+						.getEntitiesByType(EntityType.ITEM, box, ie -> stackIsSeed(ie.getStack()));
 					if (!entityList.isEmpty()) {
 						ItemEntity seedsEntity = entityList.get(0);
 						ItemStack seeds = seedsEntity.getStack();
@@ -39,9 +40,11 @@ public class ActionSeed extends Transmutation {
 							return true;
 
 						world
-								.setBlockState(
-										pos.up(),
-										((AliasedBlockItem) seeds.getItem()).getBlock().getDefaultState());
+							.setBlockState(
+								// seeds grow on top only
+								pos.up(),
+								((AliasedBlockItem) seeds.getItem()).getBlock().getDefaultState()
+							);
 					}
 				}
 				return false;
@@ -53,6 +56,6 @@ public class ActionSeed extends Transmutation {
 
 	public static boolean stackIsSeed(ItemStack stack) {
 		return stack.getItem() instanceof AliasedBlockItem
-				&& ((AliasedBlockItem) stack.getItem()).getBlock() instanceof PlantBlock;
+			&& ((AliasedBlockItem) stack.getItem()).getBlock() instanceof PlantBlock;
 	}
 }

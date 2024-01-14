@@ -5,12 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import faceless.artent.transmutations.Transmutation;
-import faceless.artent.transmutations.actions.ActionBurningAir;
-import faceless.artent.transmutations.actions.ActionClearGrass;
-import faceless.artent.transmutations.actions.ActionCollectItems;
-import faceless.artent.transmutations.actions.ActionFertilize;
-import faceless.artent.transmutations.actions.ActionHarvest;
-import faceless.artent.transmutations.actions.ActionSeed;
+import faceless.artent.transmutations.actions.*;
 
 public class TransmutationRegistry implements IRegistry {
 	public static final Hashtable<String, Transmutation> registry = new Hashtable<>();
@@ -36,32 +31,35 @@ public class TransmutationRegistry implements IRegistry {
 
 	@Override
 	public void register() {
-		registerForReversed("C1n", new Transmutation("circle.empty", (e, p) -> {
+		registerForReversed("C1n", new Transmutation("circle.empty", (facing, e, p) -> {
 			if (p != null)
 				p.damage(p.getDamageSources().magic(), 1f);
 		}), "C1");
 
-		registerForReversed("C3nD3rT3n", new ActionClearGrass(0), "C3");
-		registerForReversed("C2nD2rT2n", new ActionClearGrass(1), "C2");
 		registerForReversed("C1nD1rT1n", new ActionClearGrass(2), "C1");
+		registerForReversed("C2nD2rT2n", new ActionClearGrass(1), "C2");
+		registerForReversed("C3nD3rT3n", new ActionClearGrass(0), "C3");
 
-		registerForReversed("C3nS3nS3r", new ActionCollectItems(0), "C3");
-		registerForReversed("C2nS2nS2r", new ActionCollectItems(1), "C2");
 		registerForReversed("C1nS1nS1r", new ActionCollectItems(2), "C1");
+		registerForReversed("C2nS2nS2r", new ActionCollectItems(1), "C2");
+		registerForReversed("C3nS3nS3r", new ActionCollectItems(0), "C3");
 
 		registerForReversed("C1nT1nS1n", new ActionBurningAir(), "C1");
 
-		registerForReversed("C3nD3rS3r", new ActionSeed(0), "C3");
-		registerForReversed("C2nD2rS2r", new ActionSeed(1), "C2");
 		registerForReversed("C1nD1rS1r", new ActionSeed(2), "C1");
+		registerForReversed("C2nD2rS2r", new ActionSeed(1), "C2");
+		registerForReversed("C3nD3rS3r", new ActionSeed(0), "C3");
 
-		registerForReversed("C3nD3rT3nS3r", new ActionHarvest(0), "C3");
-		registerForReversed("C2nD2rT2nS2r", new ActionHarvest(1), "C2");
 		registerForReversed("C1nD1rT1nS1r", new ActionHarvest(2), "C1");
+		registerForReversed("C2nD2rT2nS2r", new ActionHarvest(1), "C2");
+		registerForReversed("C3nD3rT3nS3r", new ActionHarvest(0), "C3");
 
-		registerForReversed("C3nL3nD3r", new ActionFertilize(0), "C3");
-		registerForReversed("C2nL2nD2r", new ActionFertilize(1), "C2");
 		registerForReversed("C1nL1nD1r", new ActionFertilize(2), "C1");
+		registerForReversed("C2nL2nD2r", new ActionFertilize(1), "C2");
+		registerForReversed("C3nL3nD3r", new ActionFertilize(0), "C3");
+
+		registerForReversed("C1nR1rR2n", new ActionPole(2), "C1");
+		registerForReversed("C2nR2rR3n", new ActionPole(1), "C2");
 	}
 
 	/**

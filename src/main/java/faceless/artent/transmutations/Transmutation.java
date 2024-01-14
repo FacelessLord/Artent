@@ -1,11 +1,14 @@
 package faceless.artent.transmutations;
 
+import faceless.artent.api.MiscUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+
 import net.minecraft.util.math.random.Random;
 
 import faceless.artent.api.Color;
@@ -22,7 +25,7 @@ public class Transmutation {
 	public Transmutation(String name, TransAction action) {
 		this.name = name;
 		this.action = action;
-		this.setTickAction((entity, playerEntity, integer) -> true);
+		this.setTickAction((facing, entity, playerEntity, integer) -> true);
 		this.setRenderAction((entity, playerEntity, integer) -> {
 		});
 	}
@@ -80,10 +83,10 @@ public class Transmutation {
 		this.tickAction = tickAction;
 	}
 
-	public boolean randomPoints(World world, int count, BlockPos center, int widthRange, int heightRange,
-			BiFunction<BlockPos, BlockState, Boolean> action, Behaviour behaviour) {
+	public boolean randomPoints(World world, int count, BlockPos center, Direction facing, int widthRange, int heightRange,
+								BiFunction<BlockPos, BlockState, Boolean> action, Behaviour behaviour) {
 		for (int i = 0; i < count; i++) {
-			if (randomPoint(world, center, widthRange, heightRange, action) && behaviour == Behaviour.StopOnTrue)
+			if (randomPoint(world, center, facing, widthRange, heightRange, action) && behaviour == Behaviour.StopOnTrue)
 				return true;
 			else if (behaviour == Behaviour.StopOnFalse)
 				return false;
@@ -91,33 +94,33 @@ public class Transmutation {
 		return false;
 	}
 
-	public boolean randomPoint(World world, BlockPos center, int widthRange, int heightRange,
-			BiFunction<BlockPos, BlockState, Boolean> action) {
-		BlockPos pos = getNextPos(world.random, center, widthRange, heightRange);
+	public boolean randomPoint(World world, BlockPos center, Direction facing, int widthRange, int heightRange,
+							   BiFunction<BlockPos, BlockState, Boolean> action) {
+		BlockPos pos = getNextPos(world.random, center, facing, widthRange, heightRange);
 		BlockState state = world.getBlockState(pos);
 		return action.apply(pos, state);
 	}
 
-	public void randomPoints(World world, int count, BlockPos center, int widthRange, int heightRange,
-			BiConsumer<BlockPos, BlockState> action) {
+	public void randomPoints(World world, int count, BlockPos center, Direction facing, int widthRange, int heightRange,
+							 BiConsumer<BlockPos, BlockState> action) {
 		for (int i = 0; i < count; i++) {
-			randomPoint(world, center, widthRange, heightRange, action);
+			randomPoint(world, center, facing, widthRange, heightRange, action);
 		}
 	}
 
-	public void randomPoint(World world, BlockPos center, int widthRange, int heightRange,
-			BiConsumer<BlockPos, BlockState> action) {
-		BlockPos pos = getNextPos(world.random, center, widthRange, heightRange);
+	public void randomPoint(World world, BlockPos center, Direction facing, int widthRange, int heightRange,
+							BiConsumer<BlockPos, BlockState> action) {
+		BlockPos pos = getNextPos(world.random, center, facing, widthRange, heightRange);
 		BlockState state = world.getBlockState(pos);
 		action.accept(pos, state);
 	}
 
-	private BlockPos getNextPos(Random random, BlockPos center, int widthRange, int heightRange) {
+	private BlockPos getNextPos(Random random, BlockPos center, Direction facing, int widthRange, int heightRange) {
 		int k = random.nextInt(2 * heightRange + 1) - heightRange;
 		int j = random.nextInt(2 * widthRange + 1) - widthRange;
 		int i = random.nextInt(2 * widthRange + 1) - widthRange;
-
-		return center.add(i, k, j);
+		var rotated = MiscUtils.applyDirection(new int[]{ i, k, j }, facing);
+		return center.add(rotated[0], rotated[1], rotated[2]);
 	}
 
 	public enum Behaviour {

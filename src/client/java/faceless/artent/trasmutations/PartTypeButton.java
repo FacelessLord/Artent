@@ -9,7 +9,7 @@ import net.minecraft.screen.ScreenTexts;
 import static net.minecraft.client.gui.screen.Screen.hasShiftDown;
 
 import faceless.artent.api.MiscUtils;
-import faceless.artent.transmutations.gui.PartType;
+import faceless.artent.transmutations.PartType;
 
 @Environment(EnvType.CLIENT)
 public class PartTypeButton extends ButtonWidget {

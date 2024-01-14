@@ -1,5 +1,6 @@
 package faceless.artent.transmutations.actions;
 
+import faceless.artent.api.MiscUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
@@ -13,17 +14,20 @@ import faceless.artent.transmutations.world.AlchemicalCircleEntity;
 
 public class ActionCollectItems extends Transmutation {
 	public ActionCollectItems(int level) {
-		super("circle.item_collector", (e, p) -> {
+		super("circle.item_collector", (facing, e, p) -> {
 		});
-		this.setTickAction((e, p, tick) -> {
+		this.setTickAction((facing, e, p, tick) -> {
 			final float heightRange = level + 1.5f, widthRange = 2 * level + 1.5f;
 			var center = e.getPos().toCenterPos();
+			var min = MiscUtils.applyDirection(new float[]{ -widthRange, -0.5f, -widthRange }, facing);
+			var max = MiscUtils.applyDirection(new float[]{ widthRange, heightRange, widthRange }, facing);
 			Box box = new Box(
-					center.add(-widthRange, -0.5f, -widthRange),
-					center.add(widthRange, heightRange, widthRange));
+				center.add(min[0], min[1], min[2]),
+				center.add(max[0], max[1], max[2]));
+
 			List<ItemEntity> entityList = e.getWorld().getEntitiesByType(EntityType.ITEM, box, ie -> true);
 
-			if (entityList.size() <= 0)
+			if (entityList.size() == 0)
 				return false;
 			ItemEntity itemEntity = entityList.get(0);
 			ItemStack stack = itemEntity.getStack();
@@ -40,8 +44,8 @@ public class ActionCollectItems extends Transmutation {
 						return;
 					}
 					if (invStack.getItem() == stack.getItem()
-							&& invStack.getOrCreateNbt().equals(stack.getOrCreateNbt())
-							&& invStack.getCount() < stack.getMaxCount()) {
+						&& invStack.getOrCreateNbt().equals(stack.getOrCreateNbt())
+						&& invStack.getCount() < stack.getMaxCount()) {
 						if (inv.getStack(i).getCount() + stack.getCount() <= stack.getMaxCount()) {
 							stack.setCount(inv.getStack(i).getCount() + stack.getCount());
 							inv.setStack(i, stack);

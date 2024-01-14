@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import faceless.artent.transmutations.gui.PartType;
-
 public class CircleHelper {
     public static CirclePart getCirclePart(String circleString) {
         PartType type = PartType.fromCode(circleString.substring(0, 2));

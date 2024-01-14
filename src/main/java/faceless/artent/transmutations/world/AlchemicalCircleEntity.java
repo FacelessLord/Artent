@@ -3,6 +3,10 @@ package faceless.artent.transmutations.world;
 import java.util.ArrayList;
 import java.util.List;
 
+import faceless.artent.api.Color;
+import faceless.artent.objects.ModBlocks;
+import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
+import net.fabricmc.fabric.api.rendering.data.v1.RenderAttachmentBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import faceless.artent.objects.ModBlockEntities;
@@ -11,7 +15,7 @@ import faceless.artent.transmutations.CircleHelper;
 import faceless.artent.transmutations.CirclePart;
 import faceless.artent.transmutations.State;
 import faceless.artent.transmutations.Transmutation;
-import faceless.artent.transmutations.gui.PartType;
+import faceless.artent.transmutations.PartType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class AlchemicalCircleEntity extends BlockEntity {
+public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlockEntity {
 
 	public List<CirclePart> parts = new ArrayList<>();
 	public int actionTime = 0;
@@ -51,39 +55,34 @@ public class AlchemicalCircleEntity extends BlockEntity {
 			entity.markDirty();
 		}
 
-		String formula = CircleHelper.createCircleFormula(entity.parts);
-		if (TransmutationRegistry.registry.containsKey(formula)) {
-			Transmutation t2 = TransmutationRegistry.registry.get(formula);
-			if (entity.transmutation != t2) {
-				entity.transmutation = TransmutationRegistry.registry.get(formula);
-				entity.actionTime = 0;
+		if (state.getBlock() != ModBlocks.alchemicalCircle)
+			return;
+		var facing = state.get(AlchemicalCircleBlock.FACING);
+
+		updateTransmutation(entity);
+
+		if (entity.transmutation != null) {
+			if (entity.state == State.Preparation) {
+				entity.actionTime++;
+				if (entity.actionTime > entity.transmutation.getPrepTime()) {
+					entity.actionTime = 0;
+					entity.transmutation.action.accept(facing, entity, entity.alchemist);
+					entity.state = State.Action;
+					entity.boundCircles.stream().filter(e -> e.transmutation != null).forEach(e -> {
+						e.state = State.Action;
+						e.alchemist = entity.alchemist;
+					});
+				}
 				entity.markDirty();
-			} else {
-				if (entity.state == State.Preparation) {
-					entity.actionTime++;
-					if (entity.actionTime > entity.transmutation.getPrepTime()) {
-						entity.actionTime = 0;
-						entity.transmutation.action.accept(entity, entity.alchemist);
-						entity.state = State.Action;
-						entity.boundCircles.stream().filter(e -> e.transmutation != null).forEach(e -> {
-							e.state = State.Action;
-							e.alchemist = entity.alchemist;
-						});
-					}
-					entity.markDirty();
-				}
-				if (entity.state == State.Action) {
-					entity.actionTime++;
-					if (entity.transmutation.getTickAction().accept(entity, entity.alchemist, entity.actionTime)) {
-						entity.actionTime = 0;
-						entity.state = State.Idle;
-					}
-					entity.markDirty();
-				}
 			}
-		} else {
-			entity.transmutation = null;
-			entity.markDirty();
+			if (entity.state == State.Action) {
+				entity.actionTime++;
+				if (entity.transmutation.getTickAction().accept(facing, entity, entity.alchemist, entity.actionTime)) {
+					entity.actionTime = 0;
+					entity.state = State.Idle;
+				}
+				entity.markDirty();
+			}
 		}
 
 		if (entity.world.getTime() % 40 == 0) {
@@ -94,11 +93,26 @@ public class AlchemicalCircleEntity extends BlockEntity {
 
 			List<Pair<BlockEntity, Direction>> eToRemove = new ArrayList<>();
 			entity.boundEntities
-					.stream()
-					.filter(e -> e.getLeft() != null && world.getBlockEntity(e.getLeft().getPos()) != e.getLeft())
-					.forEach(eToRemove::add);
+				.stream()
+				.filter(e -> e.getLeft() != null && world.getBlockEntity(e.getLeft().getPos()) != e.getLeft())
+				.forEach(eToRemove::add);
 			entity.boundEntities.removeAll(eToRemove);
 
+			entity.markDirty();
+		}
+	}
+
+	private static void updateTransmutation(AlchemicalCircleEntity entity) {
+		var formula = CircleHelper.createCircleFormula(entity.parts);
+		if (TransmutationRegistry.registry.containsKey(formula)) {
+			Transmutation t2 = TransmutationRegistry.registry.get(formula);
+			if (entity.transmutation != t2) {
+				entity.transmutation = TransmutationRegistry.registry.get(formula);
+				entity.actionTime = 0;
+				entity.markDirty();
+			}
+		} else {
+			entity.transmutation = null;
 			entity.markDirty();
 		}
 	}
@@ -124,6 +138,7 @@ public class AlchemicalCircleEntity extends BlockEntity {
 
 	private void readClientNbt(NbtCompound tag) {
 		parts = CircleHelper.getCircles(tag.getString("aamcircle"));
+		transmutation = TransmutationRegistry.registry.getOrDefault(tag.getString("aamcircle"), null);
 
 		if (tag.contains("circleTag"))
 			circleTag = tag.getCompound("circleTag");
@@ -136,7 +151,7 @@ public class AlchemicalCircleEntity extends BlockEntity {
 			NbtCompound lst = tag.getCompound("boundCircles");
 			int size = lst.getInt("size");
 			for (int i = 0; i < size; i++) {
-				int[] posArray = lst.getIntArray(i + "");
+				int[] posArray = lst.getIntArray(String.valueOf(i));
 				BlockPos pos = new BlockPos(posArray[0], posArray[1], posArray[2]);
 				BlockEntity entity = world.getBlockEntity(pos);
 				if (entity instanceof AlchemicalCircleEntity)
@@ -146,16 +161,15 @@ public class AlchemicalCircleEntity extends BlockEntity {
 			NbtCompound elst = tag.getCompound("boundEntities");
 			int esize = elst.getInt("size");
 			for (int i = 0; i < esize; i++) {
-				int[] posArray = elst.getIntArray(i + "");
+				int[] posArray = elst.getIntArray(String.valueOf(i));
 				BlockPos pos = new BlockPos(posArray[0], posArray[1], posArray[2]);
 				BlockEntity entity = world.getBlockEntity(pos);
 				boundEntities.add(new Pair<>(entity, Direction.byId(posArray[3])));
 			}
 
 			if (state != State.Idle) {
-				if(tag.containsUuid("aamAlchemist"))
+				if (tag.containsUuid("aamAlchemist"))
 					alchemist = world.getPlayerByUuid(tag.getUuid("aamAlchemist"));
-				transmutation = TransmutationRegistry.registry.getOrDefault(tag.getString("aamcircle"), null);
 			}
 		} else
 			orderLoad(tag);
@@ -181,7 +195,7 @@ public class AlchemicalCircleEntity extends BlockEntity {
 		lst.putInt("size", boundCircles.size());
 		for (int i = 0; i < boundCircles.size(); i++) {
 			AlchemicalCircleEntity entity = boundCircles.get(i);
-			lst.putIntArray(i + "", new int[] { entity.pos.getX(), entity.pos.getY(), entity.pos.getZ() });
+			lst.putIntArray(String.valueOf(i), new int[]{ entity.pos.getX(), entity.pos.getY(), entity.pos.getZ() });
 		}
 		tag.put("boundCircles", lst);
 
@@ -191,10 +205,10 @@ public class AlchemicalCircleEntity extends BlockEntity {
 			Pair<BlockEntity, Direction> entityDir = boundEntities.get(i);
 			BlockEntity entity = entityDir.getLeft();
 			elst
-					.putIntArray(
-							i + "",
-							new int[] { entity.getPos().getX(), entity.getPos().getY(), entity.getPos().getZ(),
-									entityDir.getRight().getId() });
+				.putIntArray(
+					String.valueOf(i),
+					new int[]{ entity.getPos().getX(), entity.getPos().getY(), entity.getPos().getZ(),
+						entityDir.getRight().getId() });
 		}
 		tag.put("boundEntities", elst);
 	}
@@ -202,11 +216,26 @@ public class AlchemicalCircleEntity extends BlockEntity {
 	@Nullable
 	@Override
 	public Packet<ClientPlayPacketListener> toUpdatePacket() {
-		return BlockEntityUpdateS2CPacket.create(this);
+		return BlockEntityUpdateS2CPacket.create(this, BlockEntity::createNbt);
 	}
 
 	@Override
 	public NbtCompound toInitialChunkDataNbt() {
 		return createNbt();
+	}
+
+	@Override
+	public @Nullable Object getRenderData() {
+		if (transmutation != null) {
+			if (state == State.Preparation) {
+				return transmutation.getPreparationColor();
+			}
+
+			if (state == State.Action) {
+				return transmutation.getActionColor();
+			}
+		}
+
+		return new Color();
 	}
 }

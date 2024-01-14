@@ -19,6 +19,7 @@ public final class ItemRegistry implements IRegistry {
 		register(ModItems.alchemicalCoal, ModItemGroups.Main);
 		FuelRegistry.INSTANCE.add(ModItems.alchemicalCoal, 2400);
 		register(ModItems.chalk, ModItemGroups.Main);
+		register(ModItems.alchemicalPaper, ModItemGroups.Main);
 	}
 
 	public void register(String itemId, Item item, ArtentItemGroupBuilder groupBuilder) {
