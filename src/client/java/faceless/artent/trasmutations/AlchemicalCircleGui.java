@@ -1,9 +1,9 @@
 package faceless.artent.trasmutations;
 
 import faceless.artent.Artent;
-import faceless.artent.transmutations.CirclePart;
-import faceless.artent.transmutations.PartType;
-import faceless.artent.transmutations.world.AlchemicalCircleEntity;
+import faceless.artent.transmutations.api.CirclePart;
+import faceless.artent.transmutations.api.PartType;
+import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import faceless.artent.trasmutations.network.AlchemicalCircleClientHook;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class AlchemicalCircleGui extends Screen {
-	public static final Identifier guiTexture = new Identifier(Artent.MODID, "textures/gui/alchemical_circle.png");
+	public static final Identifier TEXTURE = new Identifier(Artent.MODID, "textures/gui/alchemical_circle.png");
 	public AlchemicalCircleEntity circle;
 	protected int backgroundWidth = 176;
 	protected int backgroundHeight = 166;
@@ -52,14 +52,14 @@ public class AlchemicalCircleGui extends Screen {
 	@Override
 	public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.renderBackground(context, mouseX, mouseY, delta);
-		this.drawBackground(context, delta, mouseX, mouseY);
+		this.drawBackground(context);
 	}
 
-	protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+	protected void drawBackground(DrawContext context) {
 		var range = Math.max(backgroundWidth, backgroundHeight);
 		int x = (width - range) / 2;
 		int y = (height - range) / 2;
-		context.drawTexture(AlchemicalCircleGui.guiTexture, x, y, range, range, 8, 8, 112, 112, 256, 256);
+		context.drawTexture(TEXTURE, x, y, range, range, 8, 8, 112, 112, 256, 256);
 
 
 		for (CirclePart part : circle.parts) {

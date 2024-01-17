@@ -1,5 +1,6 @@
 package faceless.artent.api.math;
 
+
 public class Vec3 {
     public final float X;
     public final float Y;

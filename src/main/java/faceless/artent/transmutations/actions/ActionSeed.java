@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import java.util.List;
 
 import faceless.artent.api.Color;
-import faceless.artent.transmutations.Transmutation;
+import faceless.artent.transmutations.api.Transmutation;
 
 public class ActionSeed extends Transmutation {
 
@@ -23,6 +23,8 @@ public class ActionSeed extends Transmutation {
 		this.setTickAction((facing, e, p, tick) -> {
 			final int height = 2 * level + 1, width = 4 * level + 4;
 			World world = e.getWorld();
+			if (world == null)
+				return false;
 
 			return randomPoints(world, 64, e.getPos(), facing, width, height, (pos, state) -> {
 				Block b = state.getBlock();

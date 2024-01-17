@@ -1,16 +1,11 @@
 package faceless.artent;
 
+import faceless.artent.registries.*;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import faceless.artent.registries.BlockEntityRegistry;
-import faceless.artent.registries.BlockRegistry;
-import faceless.artent.registries.ItemGroupRegistry;
-import faceless.artent.registries.ItemRegistry;
-import faceless.artent.registries.ScreenHandlerRegistry;
-import faceless.artent.registries.TransmutationRegistry;
 import faceless.artent.transmutations.network.AlchemicalCircleServerHook;
 
 public class Artent implements ModInitializer {
@@ -26,6 +21,7 @@ public class Artent implements ModInitializer {
 	public static ItemGroupRegistry ItemGroups = new ItemGroupRegistry();
 	public static ScreenHandlerRegistry ScreenHandlers = new ScreenHandlerRegistry();
 	public static AlchemicalCircleServerHook ServerHook = new AlchemicalCircleServerHook();
+	public static EnhancerRegistry Enhancers = new EnhancerRegistry();
 
 	@Override
 	public void onInitialize() {
@@ -44,6 +40,7 @@ public class Artent implements ModInitializer {
 		BlockEntities.register();
 		Transmutations.register();
 		ScreenHandlers.register();
+		Enhancers.register();
 		ServerHook.load();
 
 		ItemGroups.register();

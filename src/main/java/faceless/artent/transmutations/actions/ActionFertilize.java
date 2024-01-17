@@ -1,7 +1,7 @@
 package faceless.artent.transmutations.actions;
 
 import faceless.artent.api.Color;
-import faceless.artent.transmutations.Transmutation;
+import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.block.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
@@ -14,6 +14,8 @@ public class ActionFertilize extends Transmutation {
 		this.setTickAction((facing, e, p, tick) -> {
 			final int height = 2 * level + 1, width = 4 * level + 4;
 			World world = e.getWorld();
+			if (world == null)
+				return false;
 
 			return randomPoints(world, 16, e.getPos(), facing, width, height, (pos, state) -> {
 				Block b = state.getBlock();

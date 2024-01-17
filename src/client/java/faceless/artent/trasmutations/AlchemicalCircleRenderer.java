@@ -2,10 +2,10 @@ package faceless.artent.trasmutations;
 
 import faceless.artent.api.Color;
 import faceless.artent.objects.ModBlocks;
-import faceless.artent.transmutations.CirclePart;
-import faceless.artent.transmutations.State;
-import faceless.artent.transmutations.world.AlchemicalCircleBlock;
-import faceless.artent.transmutations.world.AlchemicalCircleEntity;
+import faceless.artent.transmutations.api.CirclePart;
+import faceless.artent.transmutations.api.State;
+import faceless.artent.transmutations.block.AlchemicalCircleBlock;
+import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -40,9 +40,13 @@ public class AlchemicalCircleRenderer implements BlockEntityRenderer<AlchemicalC
 	public void render(AlchemicalCircleEntity entity, float tickDelta, MatrixStack matrices,
 					   VertexConsumerProvider vertexConsumers, int light, int overlay) {
 		List<CirclePart> parts = entity.parts;
-		var blockState = entity.getWorld().getBlockState(entity.getPos());
+		var world = entity.getWorld();
+		if (world == null)
+			return;
+
+		var blockState = world.getBlockState(entity.getPos());
 		var block = blockState.getBlock();
-		if (block != ModBlocks.alchemicalCircle) {
+		if (block != ModBlocks.AlchemicalCircle) {
 			return;
 		}
 

@@ -1,10 +1,9 @@
 package faceless.artent.objects;
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import faceless.artent.sharpening.screenHandlers.SharpeningAnvilScreenHandler;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.ScreenHandlerType;
 
 public class ModScreenHandlers {
-//	public static final ScreenHandlerType<AlchemicalCircleGuiHandler> ALCHEMICAL_CIRCLE = new ExtendedScreenHandlerType<>(
-//			AlchemicalCircleGuiHandler::new);
-
+	public static ScreenHandlerType<SharpeningAnvilScreenHandler> SHARPENING_ANVIL_HANDLER = new ScreenHandlerType<>(SharpeningAnvilScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
 }

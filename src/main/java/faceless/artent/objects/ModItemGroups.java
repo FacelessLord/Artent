@@ -1,6 +1,6 @@
 package faceless.artent.objects;
 
-import faceless.artent.item.group.ArtentItemGroupBuilder;
+import faceless.artent.api.item.group.ArtentItemGroupBuilder;
 import net.minecraft.item.ItemStack;
 
 public class ModItemGroups {

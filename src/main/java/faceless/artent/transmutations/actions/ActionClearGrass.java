@@ -6,12 +6,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import faceless.artent.api.Color;
-import faceless.artent.transmutations.Transmutation;
+import faceless.artent.transmutations.api.Transmutation;
 
 public class ActionClearGrass extends Transmutation {
 	public static Set<Block> grass = Arrays
@@ -31,7 +30,6 @@ public class ActionClearGrass extends Transmutation {
 							Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG, Blocks.OAK_LOG, Blocks.SPRUCE_LOG,
 							Blocks.BAMBOO })
 			.collect(Collectors.toSet());
-	public Random random = new Random();
 
 	public ActionClearGrass(int level) {
 		super("circle.clear_grass", (facing, e, p) -> {
@@ -39,6 +37,9 @@ public class ActionClearGrass extends Transmutation {
 		this.setTickAction((facing, e, p, tick) -> {
 			final int height = 2 * level + 1, width = 4 * level + 4;
 			World world = e.getWorld();
+			if (world == null)
+				return false;
+
 			BlockPos entityPos = e.getPos();
 			boolean dirty = randomPoints(world, 64, entityPos, facing, width, height, (pos, state) -> {
 				Block b = state.getBlock();

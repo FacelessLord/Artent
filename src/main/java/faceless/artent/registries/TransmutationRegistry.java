@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import faceless.artent.transmutations.Transmutation;
+import faceless.artent.transmutations.api.Transmutation;
 import faceless.artent.transmutations.actions.*;
 
 public class TransmutationRegistry implements IRegistry {

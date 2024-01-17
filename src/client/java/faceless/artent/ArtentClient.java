@@ -3,7 +3,6 @@ package faceless.artent;
 import faceless.artent.api.Color;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModBlocks;
-import faceless.artent.objects.ModItems;
 import faceless.artent.registries.ScreenRegistry;
 import faceless.artent.trasmutations.AlchemicalCircleRenderer;
 import faceless.artent.trasmutations.network.AlchemicalCircleClientHook;
@@ -21,14 +20,14 @@ public class ArtentClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		Screens.register();
 		ClientHook.loadClient();
-		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.alchemicalCircle, RenderLayer.getCutoutMipped());
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.AlchemicalCircle, RenderLayer.getCutoutMipped());
 		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
 			if (view == null || view.getBlockEntityRenderData(pos) == null)
 				return new Color().asInt();
 			//noinspection DataFlowIssue
 			return ((Color) view.getBlockEntityRenderData(pos)).asInt();
-		}, ModBlocks.alchemicalCircle);
+		}, ModBlocks.AlchemicalCircle);
 //		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.alchemicalPaper, new AlchemicalPaperRenderer());
-		BlockEntityRendererFactories.register(ModBlockEntities.alchemicalCircleEntity, AlchemicalCircleRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntities.AlchemicalCircleEntity, AlchemicalCircleRenderer::new);
 	}
 }

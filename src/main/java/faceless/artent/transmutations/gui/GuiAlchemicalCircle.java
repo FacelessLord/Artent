@@ -1,11 +1,11 @@
 //package faceless.artent.transmutations.gui;
 //
-//import com.faceless.aam.Core;
-//import com.faceless.aam.common.transmutations.world.AlchemicalCircleEntity;
+//import com.faceless.artent.Core;
+//import com.faceless.artent.common.transmutations.world.AlchemicalCircleEntity;
 //import com.mojang.blaze3d.systems.RenderSystem;
 //
 //import faceless.artent.Artent;
-//import faceless.artent.transmutations.CirclePart;
+//import faceless.artent.transmutations.api.CirclePart;
 //import net.fabricmc.api.EnvType;
 //import net.fabricmc.api.Environment;
 //import net.minecraft.client.MinecraftClient;
@@ -13,7 +13,7 @@
 //import net.minecraft.text.TranslatableText;
 //import net.minecraft.util.Identifier;
 //
-//import static com.faceless.aam.api.common.inventory.GuiHelper.drawRectangle;
+//import static com.faceless.artent.api.common.inventory.GuiHelper.drawRectangle;
 //
 //@Environment(EnvType.CLIENT)
 //public class GuiAlchemicalCircle extends Screen {
@@ -21,7 +21,7 @@
 //    private final AlchemicalCircleBlockEntity entity;
 //
 //    public GuiAlchemicalCircle(String title, AlchemicalCircleEntity entity) {
-//        super(new TranslatableText(title));
+//        super(Text.translatable(title));
 //        this.entity = entity;
 //    }
 //

@@ -1,5 +1,6 @@
 package faceless.artent.registries;
 
+import faceless.artent.sharpening.blockEntities.SharpeningAnvilBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,13 +12,15 @@ import net.minecraft.util.Identifier;
 import faceless.artent.Artent;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModBlocks;
-import faceless.artent.transmutations.world.AlchemicalCircleEntity;
+import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 
 public class BlockEntityRegistry implements IRegistry {
 	@Override
 	public void register() {
-		ModBlockEntities.alchemicalCircleEntity = register(AlchemicalCircleEntity::new, "alchemical_circle",
-				ModBlocks.alchemicalCircle);
+		ModBlockEntities.AlchemicalCircleEntity = register(AlchemicalCircleEntity::new, "alchemical_circle",
+				ModBlocks.AlchemicalCircle);
+		ModBlockEntities.SharpeningAnvilEnitity = register(SharpeningAnvilBlockEntity::new, "sharpening_anvil",
+				ModBlocks.SharpeningAnvil);
 	}
 
 	public <T extends BlockEntity> BlockEntityType<T> register(FabricBlockEntityTypeBuilder.Factory<T> item, String id,

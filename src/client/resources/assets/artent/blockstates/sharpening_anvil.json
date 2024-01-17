@@ -1,0 +1,19 @@
+{
+    "variants": {
+      "facing=east": {
+        "model": "artent:block/sharpening_anvil",
+        "y": 90
+      },
+      "facing=north": {
+        "model": "artent:block/sharpening_anvil"
+      },
+      "facing=south": {
+        "model": "artent:block/sharpening_anvil",
+        "y": 180
+      },
+      "facing=west": {
+        "model": "artent:block/sharpening_anvil",
+        "y": 270
+      }
+    }
+  }

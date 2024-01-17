@@ -1,13 +1,10 @@
 package faceless.artent.transmutations.actions;
 
 import faceless.artent.api.Color;
-import faceless.artent.api.MiscUtils;
+import faceless.artent.api.DirectionUtils;
 import faceless.artent.objects.ModBlocks;
-import faceless.artent.transmutations.Transmutation;
-import net.minecraft.block.AirBlock;
+import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 
 public class ActionPole extends Transmutation {
 	public ActionPole(int level) {
@@ -15,11 +12,13 @@ public class ActionPole extends Transmutation {
 			final int heightRange = level + 3, widthRange = 2 * level;
 			var circle = e.getPos();
 			var world = e.getWorld();
+			if (world == null)
+				return;
 
 			for (int j = 1; j <= heightRange; j++) {
 				for (int i = -widthRange + 1; i <= widthRange; i++) {
 					for (int k = -widthRange + 1; k <= widthRange; k++) {
-						var rotated = MiscUtils.applyDirection(new int[]{ i, -j, k }, facing);
+						var rotated = DirectionUtils.applyDirection(new int[]{ i, -j, k }, facing);
 
 						var blockPos = circle.add(rotated[0], rotated[1], rotated[2]);
 						var state = world.getBlockState(blockPos);
@@ -34,7 +33,7 @@ public class ActionPole extends Transmutation {
 							var newPosTemp = blockPos.offset(facing, l);
 							var tempState = world.getBlockState(newPosTemp);
 							var targetBlock = tempState.getBlock();
-							if (targetBlock == Blocks.AIR || targetBlock == Blocks.CAVE_AIR || targetBlock == Blocks.VOID_AIR || targetBlock == ModBlocks.alchemicalCircle) {
+							if (targetBlock == Blocks.AIR || targetBlock == Blocks.CAVE_AIR || targetBlock == Blocks.VOID_AIR || targetBlock == ModBlocks.AlchemicalCircle) {
 								newPos = newPosTemp;
 								break;
 							}

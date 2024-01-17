@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "faceless.artent.sharpening.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ItemStackMixin",
+    "SharpenableItem",
+    "ToolMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

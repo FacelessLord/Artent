@@ -10,10 +10,10 @@ import net.minecraft.util.Identifier;
 public final class ScreenHandlerRegistry implements IRegistry {
 
 	public void register() {
-//		register(ModScreenHandlers.ALCHEMICAL_CIRCLE, "alchemical_circle");
+		register(ModScreenHandlers.SHARPENING_ANVIL_HANDLER, "sharpening_anvil");
 	}
 
 	public void register(ScreenHandlerType<?> item, String screenId) {
-//		Registry.register(Registries.SCREEN_HANDLER, new Identifier(Artent.MODID, screenId), item);
+		Registry.register(Registries.SCREEN_HANDLER, new Identifier(Artent.MODID, screenId), item);
 	}
 }

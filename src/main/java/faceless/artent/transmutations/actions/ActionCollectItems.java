@@ -1,6 +1,6 @@
 package faceless.artent.transmutations.actions;
 
-import faceless.artent.api.MiscUtils;
+import faceless.artent.api.DirectionUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
@@ -9,8 +9,7 @@ import net.minecraft.util.math.Box;
 
 import java.util.List;
 
-import faceless.artent.transmutations.Transmutation;
-import faceless.artent.transmutations.world.AlchemicalCircleEntity;
+import faceless.artent.transmutations.api.Transmutation;
 
 public class ActionCollectItems extends Transmutation {
 	public ActionCollectItems(int level) {
@@ -19,22 +18,25 @@ public class ActionCollectItems extends Transmutation {
 		this.setTickAction((facing, e, p, tick) -> {
 			final float heightRange = level + 1.5f, widthRange = 2 * level + 1.5f;
 			var center = e.getPos().toCenterPos();
-			var min = MiscUtils.applyDirection(new float[]{ -widthRange, -0.5f, -widthRange }, facing);
-			var max = MiscUtils.applyDirection(new float[]{ widthRange, heightRange, widthRange }, facing);
+			var min = DirectionUtils.applyDirection(new float[]{ -widthRange, -0.5f, -widthRange }, facing);
+			var max = DirectionUtils.applyDirection(new float[]{ widthRange, heightRange, widthRange }, facing);
 			Box box = new Box(
 				center.add(min[0], min[1], min[2]),
 				center.add(max[0], max[1], max[2]));
+			var world = e.getWorld();
 
-			List<ItemEntity> entityList = e.getWorld().getEntitiesByType(EntityType.ITEM, box, ie -> true);
+			if (world == null)
+				return false;
+
+			List<ItemEntity> entityList = world.getEntitiesByType(EntityType.ITEM, box, ie -> true);
 
 			if (entityList.size() == 0)
 				return false;
 			ItemEntity itemEntity = entityList.get(0);
 			ItemStack stack = itemEntity.getStack();
-			e.boundEntities.stream().forEach(pair -> {
-				if (!(pair.getLeft() instanceof Inventory))
+			e.boundEntities.forEach(pair -> {
+				if (!(pair.getLeft() instanceof Inventory inv))
 					return;
-				Inventory inv = ((Inventory) pair.getLeft());
 				for (int i = 0; i < inv.size(); i++) {
 					ItemStack invStack = inv.getStack(i);
 					if (invStack.isEmpty()) {
@@ -61,9 +63,5 @@ public class ActionCollectItems extends Transmutation {
 			});
 			return false;
 		});
-	}
-
-	public boolean canDropItem(AlchemicalCircleEntity entity, ItemStack stack) {
-		return true;
 	}
 }

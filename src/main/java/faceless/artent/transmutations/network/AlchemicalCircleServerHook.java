@@ -1,7 +1,7 @@
 package faceless.artent.transmutations.network;
 
 import faceless.artent.Artent;
-import faceless.artent.transmutations.world.AlchemicalCircleEntity;
+import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.BlockEntity;
@@ -27,14 +27,15 @@ public class AlchemicalCircleServerHook {
 			// Server sided code
 			server.execute(() -> {
 				BlockEntity blockEntity = player.getWorld().getBlockEntity(pos);
+				if (blockEntity == null)
+					return;
+
 				blockEntity.readNbt(tag);
-				
 				blockEntity.markDirty();
 			});
 		});
 	}
 
-	@SuppressWarnings("resource")
 	public static void packetOpenCircleGui(PlayerEntity player, AlchemicalCircleEntity entity) {
 		if (player.getWorld().isClient)
 			return;
