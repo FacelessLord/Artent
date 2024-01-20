@@ -58,17 +58,7 @@ public class AlchemicalCircleRenderer implements BlockEntityRenderer<AlchemicalC
 
 		applyFacingRotation(matrices, facing);
 
-		Color c = new Color();
-		if (entity.transmutation != null) {
-			if (entity.state == State.Preparation) {
-				c = entity.transmutation.getPreparationColor();
-			}
-
-			if (entity.state == State.Action) {
-				entity.transmutation.getRenderAction().accept(entity, entity.alchemist, entity.actionTime);
-				c = entity.transmutation.getActionColor();
-			}
-		}
+		Color c = entity.getRenderColor();
 		RenderSystem.clearColor(c.getRedF(), c.getGreenF(), c.getBlueF(), 1f);
 
 		matrices.translate(0, 0.01f, 0);

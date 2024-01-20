@@ -47,6 +47,8 @@ public class AlchemicalCircleGui extends Screen {
 				j++;
 			}
 		}
+
+		// TODO кнопки для удаления добавленных элементов
 	}
 
 	@Override

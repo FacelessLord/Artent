@@ -25,7 +25,7 @@ public class ArtentClient implements ClientModInitializer {
 			if (view == null || view.getBlockEntityRenderData(pos) == null)
 				return new Color().asInt();
 			//noinspection DataFlowIssue
-			return ((Color) view.getBlockEntityRenderData(pos)).asInt();
+			return (int) view.getBlockEntityRenderData(pos);
 		}, ModBlocks.AlchemicalCircle);
 //		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.alchemicalPaper, new AlchemicalPaperRenderer());
 		BlockEntityRendererFactories.register(ModBlockEntities.AlchemicalCircleEntity, AlchemicalCircleRenderer::new);

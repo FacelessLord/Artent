@@ -60,6 +60,12 @@ public class ActionPole extends Transmutation {
 					}
 				}
 			}
+
+			var state = world.getBlockState(circle);
+			if(state == null)
+				return;
+
+			world.setBlockState(circle, Blocks.AIR.getDefaultState());
 		});
 
 		this.setPrepCol(new Color(80, 80, 255));

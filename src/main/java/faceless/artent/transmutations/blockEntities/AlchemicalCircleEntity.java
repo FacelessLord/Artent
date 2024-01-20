@@ -55,8 +55,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 			entity.markDirty();
 		}
 
-		if (state.getBlock() != ModBlocks.AlchemicalCircle)
-			return;
+		if (state.getBlock() != ModBlocks.AlchemicalCircle) return;
 		var facing = state.get(AlchemicalCircleBlock.FACING);
 
 		updateTransmutation(entity);
@@ -92,10 +91,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 			entity.boundCircles.removeAll(toRemove);
 
 			List<Pair<BlockEntity, Direction>> eToRemove = new ArrayList<>();
-			entity.boundEntities
-				.stream()
-				.filter(e -> e.getLeft() != null && world.getBlockEntity(e.getLeft().getPos()) != e.getLeft())
-				.forEach(eToRemove::add);
+			entity.boundEntities.stream().filter(e -> e.getLeft() != null && world.getBlockEntity(e.getLeft().getPos()) != e.getLeft()).forEach(eToRemove::add);
 			entity.boundEntities.removeAll(eToRemove);
 
 			entity.markDirty();
@@ -137,14 +133,12 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 	}
 
 	private void readClientNbt(NbtCompound tag) {
-		if (world == null)
-			return;
+		if (world == null) return;
 
 		parts = CircleHelper.getCircles(tag.getString("artentcircle"));
 		transmutation = TransmutationRegistry.registry.getOrDefault(tag.getString("artentcircle"), null);
 
-		if (tag.contains("circleTag"))
-			circleTag = tag.getCompound("circleTag");
+		if (tag.contains("circleTag")) circleTag = tag.getCompound("circleTag");
 
 		Inventories.readNbt(tag, this.inventory);
 
@@ -157,8 +151,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 				int[] posArray = lst.getIntArray(String.valueOf(i));
 				BlockPos pos = new BlockPos(posArray[0], posArray[1], posArray[2]);
 				BlockEntity entity = world.getBlockEntity(pos);
-				if (entity instanceof AlchemicalCircleEntity)
-					boundCircles.add((AlchemicalCircleEntity) entity);
+				if (entity instanceof AlchemicalCircleEntity) boundCircles.add((AlchemicalCircleEntity) entity);
 			}
 
 			NbtCompound elst = tag.getCompound("boundEntities");
@@ -174,8 +167,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 				if (tag.containsUuid("artentAlchemist"))
 					alchemist = world.getPlayerByUuid(tag.getUuid("artentAlchemist"));
 			}
-		} else
-			orderLoad(tag);
+		} else orderLoad(tag);
 	}
 
 	private void orderLoad(NbtCompound tag) {
@@ -188,8 +180,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		tag.putString("artentcircle", CircleHelper.createCircleFormula(parts));
 		tag.putInt("artentActTime", actionTime);
 		tag.putInt("artentState", state.ordinal());
-		if (alchemist != null)
-			tag.putUuid("artentAlchemist", alchemist.getUuid());
+		if (alchemist != null) tag.putUuid("artentAlchemist", alchemist.getUuid());
 
 		Inventories.writeNbt(tag, this.inventory);
 
@@ -207,11 +198,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		for (int i = 0; i < boundEntities.size(); i++) {
 			Pair<BlockEntity, Direction> entityDir = boundEntities.get(i);
 			BlockEntity entity = entityDir.getLeft();
-			elst
-				.putIntArray(
-					String.valueOf(i),
-					new int[]{ entity.getPos().getX(), entity.getPos().getY(), entity.getPos().getZ(),
-						entityDir.getRight().getId() });
+			elst.putIntArray(String.valueOf(i), new int[]{ entity.getPos().getX(), entity.getPos().getY(), entity.getPos().getZ(), entityDir.getRight().getId() });
 		}
 		tag.put("boundEntities", elst);
 	}
@@ -227,33 +214,21 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		return createNbt();
 	}
 
-	@Override
-	public @Nullable Object getRenderData() {
+	public Color getRenderColor() {
 		if (transmutation != null) {
 			if (state == State.Preparation) {
 				float percentage = actionTime / ((float) transmutation.getPrepTime());
-				return transmutation.getPreparationColor()
-					.multiply(percentage)
-					.add(new Color().multiply(1 - percentage))
-					.asInt();
+				return transmutation.getPreparationColor().multiply(percentage).add(new Color().multiply(1 - percentage));
 			}
 			if (state == State.Action) {
-				return transmutation.getPreparationColor().asInt();
+				return transmutation.getPreparationColor();
 			}
 		}
-//
-//		// =================================
-//		TODO remove
-//		if (transmutation != null) {
-//			if (state == State.Preparation) {
-//				return transmutation.getPreparationColor();
-//			}
-//
-//			if (state == State.Action) {
-//				return transmutation.getActionColor();
-//			}
-//		}
-
 		return new Color();
+	}
+
+	@Override
+	public @Nullable Object getRenderData() {
+		return getRenderColor().asInt();
 	}
 }
