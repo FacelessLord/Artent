@@ -2,13 +2,11 @@ package faceless.artent.transmutations.item;
 
 import faceless.artent.api.item.ArtentItem;
 import faceless.artent.objects.ModBlocks;
-import faceless.artent.objects.ModItems;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import faceless.artent.transmutations.network.AlchemicalCircleServerHook;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
