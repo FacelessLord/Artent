@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "artent:block/crimsonwood/_planks"
+  }
+}

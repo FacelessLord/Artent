@@ -20,5 +20,9 @@ public class EnhancerRegistry implements IRegistry{
 	@Override
 	public void register() {
 		register(ModItems.EnderInversionUpgrade);
+		register(ModItems.NetherFireStone);
+		register(ModItems.GoldenCrossUpgrade);
+		register(ModItems.PoisonBottleUpgrade);
+		register(ModItems.VampiresFangUpgrade);
 	}
 }

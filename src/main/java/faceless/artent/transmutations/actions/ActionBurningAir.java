@@ -1,5 +1,8 @@
 package faceless.artent.transmutations.actions;
 
+import faceless.artent.api.functions.Lazy;
+import faceless.artent.api.math.Color;
+import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.FurnaceBlockEntity;
@@ -16,10 +19,6 @@ import net.minecraft.util.math.Box;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-
-import faceless.artent.api.Color;
-import faceless.artent.api.functions.Lazy;
-import faceless.artent.transmutations.api.Transmutation;
 
 public class ActionBurningAir extends Transmutation {
 	private static final int PACKET_SIZE = 200;

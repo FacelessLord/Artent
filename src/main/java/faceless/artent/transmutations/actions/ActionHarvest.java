@@ -1,6 +1,6 @@
 package faceless.artent.transmutations.actions;
 
-import faceless.artent.api.Color;
+import faceless.artent.api.math.Color;
 import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.block.*;
 import net.minecraft.world.World;

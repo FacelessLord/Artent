@@ -28,10 +28,12 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class SharpeningAnvil extends BlockWithEntity implements INamed {
+	public static final MapCodec<SharpeningAnvil> CODEC = SharpeningAnvil.createCodec(SharpeningAnvil::new);
 	public BlockItem Item;
+
 	@Override
 	protected MapCodec<? extends BlockWithEntity> getCodec() {
-		return null;
+		return CODEC;
 	}
 
 	@Override

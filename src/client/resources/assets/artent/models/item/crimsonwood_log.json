@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "artent:block/crimsonwood/_log_top",
+    "side": "artent:block/crimsonwood/_log_side"
+  }
+}

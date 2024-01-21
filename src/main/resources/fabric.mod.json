@@ -25,6 +25,7 @@
 	"mixins": [
 		"artent.mixins.json",
 		"sharpening.mixins.json",
+		"brewing.mixins.json",
 		{
 			"config": "artent.client.mixins.json",
 			"environment": "client"

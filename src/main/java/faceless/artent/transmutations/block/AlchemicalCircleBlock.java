@@ -6,7 +6,7 @@ import faceless.artent.api.item.INamed;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModItems;
 import faceless.artent.transmutations.api.State;
-import faceless.artent.transmutations.network.AlchemicalCircleServerHook;
+import faceless.artent.network.ArtentServerHook;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -77,15 +77,15 @@ public class AlchemicalCircleBlock extends BlockWithEntity implements INamed {
 		if (!(blockEntity instanceof AlchemicalCircleEntity circle))
 			return ActionResult.FAIL;
 
-		if (player.getEquippedStack(EquipmentSlot.MAINHAND).getItem() == ModItems.chalk) {
-			AlchemicalCircleServerHook.packetOpenCircleGui(player, circle);
+		if (player.getEquippedStack(EquipmentSlot.MAINHAND).getItem() == ModItems.Chalk) {
+			ArtentServerHook.packetOpenCircleGui(player, circle);
 			return ActionResult.SUCCESS;
 		}
 
 		var mainHand = player.getEquippedStack(EquipmentSlot.MAINHAND);
 
 		if (!mainHand.isEmpty()) {
-			if (mainHand.getItem() == ModItems.alchemicalClock) {
+			if (mainHand.getItem() == ModItems.AlchemicalClock) {
 				var tag = new NbtCompound();
 				circle.writeNbt(tag);
 				player.sendMessage(Text.literal(tag.asString()));
@@ -141,6 +141,6 @@ public class AlchemicalCircleBlock extends BlockWithEntity implements INamed {
 
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, ModBlockEntities.AlchemicalCircleEntity, AlchemicalCircleEntity::tick);
+		return validateTicker(type, ModBlockEntities.AlchemicalCircle, AlchemicalCircleEntity::tick);
 	}
 }

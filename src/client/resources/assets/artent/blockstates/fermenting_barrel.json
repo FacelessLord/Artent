@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "artent:block/fermenting_barrel",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "artent:block/fermenting_barrel"
+    },
+    "facing=south": {
+      "model": "artent:block/fermenting_barrel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "artent:block/fermenting_barrel",
+      "y": 270
+    }
+  }
+}

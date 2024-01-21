@@ -1,0 +1,68 @@
+{    
+	"parent": "item/generated",
+    "textures": {
+        "layer0": "artent:item/potions/big_concentrate"
+    },
+	"overrides": [
+        {
+            "predicate": {
+                "amount": 0
+            },
+            "model": "artent:item/big_concentrate_phial"
+        },
+        {
+            "predicate": {
+                "amount": 0.1
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_0"
+        },
+        {
+            "predicate": {
+                "amount": 0.2
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_1"
+        },
+        {
+            "predicate": {
+                "amount": 0.3
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_2"
+        },
+        {
+            "predicate": {
+                "amount": 0.4
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_3"
+        },
+        {
+            "predicate": {
+                "amount": 0.5
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_4"
+        },
+        {
+            "predicate": {
+                "amount": 0.6
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_5"
+        },
+        {
+            "predicate": {
+                "amount": 0.7
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_6"
+        },
+        {
+            "predicate": {
+                "amount": 0.8
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_7"
+        },
+        {
+            "predicate": {
+                "amount": 0.9
+            },
+            "model": "artent:item/big_concentrate_models/big_concentrate_8"
+        }
+    ]
+}

@@ -1,21 +1,12 @@
 package faceless.artent.transmutations.blockEntities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import faceless.artent.api.Color;
+import faceless.artent.api.math.Color;
+import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModBlocks;
+import faceless.artent.registries.TransmutationRegistry;
+import faceless.artent.transmutations.api.*;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;
 import net.fabricmc.fabric.api.blockview.v2.RenderDataBlockEntity;
-import org.jetbrains.annotations.Nullable;
-
-import faceless.artent.objects.ModBlockEntities;
-import faceless.artent.registries.TransmutationRegistry;
-import faceless.artent.transmutations.api.CircleHelper;
-import faceless.artent.transmutations.api.CirclePart;
-import faceless.artent.transmutations.api.State;
-import faceless.artent.transmutations.api.Transmutation;
-import faceless.artent.transmutations.api.PartType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,9 +21,12 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlockEntity {
-
 	public List<CirclePart> parts = new ArrayList<>();
 	public int actionTime = 0;
 	public Transmutation transmutation;
@@ -45,7 +39,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 	NbtCompound loadData = null;
 
 	public AlchemicalCircleEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.AlchemicalCircleEntity, pos, state);
+		super(ModBlockEntities.AlchemicalCircle, pos, state);
 	}
 
 	public static void tick(World world, BlockPos pos, BlockState state, AlchemicalCircleEntity entity) {

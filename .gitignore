@@ -43,3 +43,5 @@ replay_*.log
 bin/
 .metadata/
 gradle/
+/src/client/resources/storage/
+/src/client/resources/storage.rar

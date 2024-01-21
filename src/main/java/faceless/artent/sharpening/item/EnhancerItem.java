@@ -1,11 +1,16 @@
 package faceless.artent.sharpening.item;
 
+import faceless.artent.api.CancellationToken;
+import faceless.artent.api.item.INamed;
 import faceless.artent.sharpening.api.IEnhancer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-public class EnhancerItem extends Item implements IEnhancer {
+public class EnhancerItem extends Item implements IEnhancer, INamed {
 	private final Formatting formatting;
 	private final String nameKey;
 
@@ -23,5 +28,10 @@ public class EnhancerItem extends Item implements IEnhancer {
 	@Override
 	public Text getName() {
 		return Text.translatable(nameKey);
+	}
+
+	@Override
+	public String getId() {
+		return nameKey;
 	}
 }

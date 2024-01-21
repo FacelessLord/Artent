@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SharpeningAnvilBlockEntity extends BlockEntityWithInventory implements NamedScreenHandlerFactory {
 	public SharpeningAnvilBlockEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.SharpeningAnvilEnitity, pos, state);
+		super(ModBlockEntities.SharpeningAnvil, pos, state);
 	}
 
 	@Override
@@ -52,9 +52,9 @@ public class SharpeningAnvilBlockEntity extends BlockEntityWithInventory impleme
 			var level = sharpenable.getLevel(target);
 			var resultStack = target.copy();
 			var flag = false;
-			if (modifier.getItem() == ModItems.Catalyst0 && level < 7 && modifier.getCount() >= getCatalystCount(level + 1)
-				|| modifier.getItem() == ModItems.Catalyst1 && level >= 7 && level < 12 && modifier.getCount() >= getCatalystCount(level + 1)
-				|| modifier.getItem() == ModItems.Catalyst2 && level < 15 && modifier.getCount() >= getCatalystCount(level + 1)) {
+			if (modifier.getItem() == ModItems.StoneOfTheSea && level < 7 && modifier.getCount() >= getCatalystCount(level + 1)
+				|| modifier.getItem() == ModItems.FortitudeSpiritStone && level < 12 && modifier.getCount() >= getCatalystCount(level + 1)
+				|| modifier.getItem() == ModItems.AmberSphere && level < 15 && modifier.getCount() >= getCatalystCount(level + 1)) {
 				SharpeningUtils.setItemLevel(resultStack, level + 1);
 				flag = true;
 			}

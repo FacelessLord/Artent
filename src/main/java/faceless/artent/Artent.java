@@ -6,7 +6,7 @@ import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import faceless.artent.transmutations.network.AlchemicalCircleServerHook;
+import faceless.artent.network.ArtentServerHook;
 
 public class Artent implements ModInitializer {
 	public static final String MODID = "artent";
@@ -20,8 +20,12 @@ public class Artent implements ModInitializer {
 	public static TransmutationRegistry Transmutations = new TransmutationRegistry();
 	public static ItemGroupRegistry ItemGroups = new ItemGroupRegistry();
 	public static ScreenHandlerRegistry ScreenHandlers = new ScreenHandlerRegistry();
-	public static AlchemicalCircleServerHook ServerHook = new AlchemicalCircleServerHook();
+	public static ArtentServerHook ServerHook = new ArtentServerHook();
 	public static EnhancerRegistry Enhancers = new EnhancerRegistry();
+
+	public static EntityRegistry Entities = new EntityRegistry();
+	public static AlchemicalPotionRegistry Potions = new AlchemicalPotionRegistry();
+	public static BrewingRegistry Brewing = new BrewingRegistry();
 
 	@Override
 	public void onInitialize() {
@@ -35,12 +39,16 @@ public class Artent implements ModInitializer {
 	}
 
 	public void registerAll() {
+		Potions.register();
 		Items.register();
 		Blocks.register();
 		BlockEntities.register();
+		Entities.register();
 		Transmutations.register();
 		ScreenHandlers.register();
 		Enhancers.register();
+		Brewing.register();
+
 		ServerHook.load();
 
 		ItemGroups.register();

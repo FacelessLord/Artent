@@ -10,6 +10,7 @@ public class ItemGroupRegistry implements IRegistry {
 	@Override
 	public void register() {
 		Registry.register(Registries.ITEM_GROUP, new Identifier("artent", "main"), ModItemGroups.Main.build());
+		Registry.register(Registries.ITEM_GROUP, new Identifier("artent", "potions"), ModItemGroups.Potions.build());
 	}
 
 }

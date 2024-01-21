@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import faceless.artent.api.Color;
+import faceless.artent.api.math.Color;
 import faceless.artent.transmutations.api.Transmutation;
 
 public class ActionSeed extends Transmutation {

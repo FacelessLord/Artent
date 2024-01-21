@@ -1,6 +1,6 @@
 package faceless.artent.trasmutations;
 
-import faceless.artent.api.Color;
+import faceless.artent.api.math.Color;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.transmutations.api.CirclePart;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;

@@ -1,0 +1,9 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "artent:item/potions/big_concentrate",
+		"layer1": "artent:item/potions/big_concentrate_offset_7",
+		"particle": "artent:item/potions/big_concentrate"
+	}
+}

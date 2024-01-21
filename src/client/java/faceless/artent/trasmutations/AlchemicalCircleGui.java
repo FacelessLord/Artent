@@ -4,7 +4,7 @@ import faceless.artent.Artent;
 import faceless.artent.transmutations.api.CirclePart;
 import faceless.artent.transmutations.api.PartType;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
-import faceless.artent.trasmutations.network.AlchemicalCircleClientHook;
+import faceless.artent.network.ArtentClientHook;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
@@ -38,7 +38,7 @@ public class AlchemicalCircleGui extends Screen {
 			var button = new PartTypeButton(k + j * 24 * scaleFactor, l + 24 * i, 24, type,
 				b -> {
 					circle.addPart(type, (type.itemTexture != type.itemTextureRev) && hasShiftDown());
-					AlchemicalCircleClientHook.packetSynchronizeCircle(circle);
+					ArtentClientHook.packetSynchronizeCircle(circle);
 				});
 			addDrawableChild(button);
 			i++;

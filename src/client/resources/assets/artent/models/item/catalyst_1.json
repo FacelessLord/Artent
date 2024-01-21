@@ -1,6 +1,1 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "artent:item/catalysts/catalyst_1"
-  }
-}
+{"parent": "minecraft:item/generated", "textures": {"layer0": "artent:item/catalyst_1"}}

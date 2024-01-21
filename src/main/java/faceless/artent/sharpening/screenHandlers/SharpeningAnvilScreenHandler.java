@@ -60,12 +60,12 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 	}
 
 	private boolean isCatalyst(Item modifierItem) {
-		return modifierItem == ModItems.Catalyst0 || modifierItem == ModItems.Catalyst1 || modifierItem == ModItems.Catalyst2;
+		return modifierItem == ModItems.StoneOfTheSea || modifierItem == ModItems.FortitudeSpiritStone || modifierItem == ModItems.AmberSphere;
 	}
 
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slot) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

@@ -1,6 +1,15 @@
 package faceless.artent.sharpening.api;
 
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class SharpeningUtils {
 	public static int getItemLevel(ItemStack stack) {
@@ -45,5 +54,25 @@ public class SharpeningUtils {
 
 	public static boolean hasSlots(ItemStack stack) {
 		return stack.getOrCreateNbt().contains("artent.slot.length");
+	}
+
+	public static Stream<IEnhancer> getNonEmptySlots(ItemStack stack) {
+		if (stack.getItem() instanceof ISharpenable sharpenable) {
+			return Arrays.stream(sharpenable.getSlots(stack)).filter(Objects::nonNull);
+		}
+		return Stream.<IEnhancer>builder().build();
+	}
+
+	public static ItemStack getCarriedItem(LivingEntity livingAttacker) {
+		var attackerItem = ItemStack.EMPTY;
+		if (livingAttacker instanceof MobEntity mob) {
+			attackerItem = mob.getEquippedStack(mob.getActiveHand() == Hand.OFF_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
+		}
+		if (livingAttacker instanceof PlayerEntity player) {
+			attackerItem = player.getEquippedStack(player.getActiveHand() == Hand.OFF_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
+		}
+		if (SharpeningUtils.hasSlots(attackerItem))
+			return attackerItem;
+		return ItemStack.EMPTY;
 	}
 }

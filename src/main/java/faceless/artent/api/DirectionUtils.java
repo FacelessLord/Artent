@@ -1,6 +1,5 @@
 package faceless.artent.api;
 
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 
 public class DirectionUtils {
@@ -25,19 +24,19 @@ public class DirectionUtils {
 			default -> src;
 		};
 	}
-
-	// Corrupted don't use
-	@Deprecated
-	public static OrderedBox orderBox(Box box, Direction direction) {
-		return switch (direction) {
-			case UP, SOUTH, EAST ->
-				new OrderedBox((int) box.minX, (int) box.maxX, 1, (int) box.minY, (int) box.maxY, 1, (int) box.minZ, (int) box.maxZ, 1);
-			case DOWN ->
-				new OrderedBox((int) box.minX, (int) box.maxX, 1, (int) box.maxY, (int) box.minY, -1, (int) box.minZ, (int) box.maxZ, 1);
-			case NORTH ->
-				new OrderedBox((int) box.minX, (int) box.maxX, 1, (int) box.minY, (int) box.maxY, 1, (int) box.maxZ, (int) box.minZ, -1);
-			case WEST ->
-				new OrderedBox((int) box.maxX, (int) box.minX, -1, (int) box.minY, (int) box.maxY, 1, (int) box.minZ, (int) box.maxZ, 1);
-		};
-	}
+//
+//	// Corrupted don't use
+//	@Deprecated
+//	public static OrderedBox orderBox(Box box, Direction direction) {
+//		return switch (direction) {
+//			case UP, SOUTH, EAST ->
+//				new OrderedBox((int) box.minX, (int) box.maxX, 1, (int) box.minY, (int) box.maxY, 1, (int) box.minZ, (int) box.maxZ, 1);
+//			case DOWN ->
+//				new OrderedBox((int) box.minX, (int) box.maxX, 1, (int) box.maxY, (int) box.minY, -1, (int) box.minZ, (int) box.maxZ, 1);
+//			case NORTH ->
+//				new OrderedBox((int) box.minX, (int) box.maxX, 1, (int) box.minY, (int) box.maxY, 1, (int) box.maxZ, (int) box.minZ, -1);
+//			case WEST ->
+//				new OrderedBox((int) box.maxX, (int) box.minX, -1, (int) box.minY, (int) box.maxY, 1, (int) box.minZ, (int) box.maxZ, 1);
+//		};
+//	}
 }

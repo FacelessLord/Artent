@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "artent:item/smithing_hammer",
-		"particle": "artent:item/smithing_hammer"
+		"0": "artent:block/smithing_hammer",
+		"particle": "artent:block/smithing_hammer"
 	},
 	"elements": [
 		{

@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 
 import net.minecraft.util.math.random.Random;
 
-import faceless.artent.api.Color;
+import faceless.artent.api.math.Color;
 
 public class Transmutation {
 	public TransAction action;

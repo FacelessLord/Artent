@@ -1,0 +1,9 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "artent:item/golden_bucket_filled_base",
+		"layer1": "artent:item/golden_bucket_filled_offset",
+		"particle": "artent:item/golden_bucket_filled_base"
+	}
+}
