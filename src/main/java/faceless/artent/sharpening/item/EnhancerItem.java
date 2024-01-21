@@ -1,12 +1,8 @@
 package faceless.artent.sharpening.item;
 
-import faceless.artent.api.CancellationToken;
 import faceless.artent.api.item.INamed;
 import faceless.artent.sharpening.api.IEnhancer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 

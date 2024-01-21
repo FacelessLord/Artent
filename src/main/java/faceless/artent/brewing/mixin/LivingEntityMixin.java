@@ -28,6 +28,7 @@ public class LivingEntityMixin {
 
 	@Shadow
 	private boolean effectsChanged = true;
+
 	@Inject(at = @At("HEAD"), method = "onStatusEffectUpgraded")
 	protected void onStatusEffectUpgraded(StatusEffectInstance effect, boolean reapplyEffect, @Nullable Entity source, CallbackInfo ci) {
 		this.effectsChanged = true;

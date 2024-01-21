@@ -1,5 +1,7 @@
 package faceless.artent.transmutations.actions;
 
+import faceless.artent.api.math.Color;
+import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.block.Block;
 import net.minecraft.block.FarmlandBlock;
 import net.minecraft.block.PlantBlock;
@@ -11,9 +13,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 
 import java.util.List;
-
-import faceless.artent.api.math.Color;
-import faceless.artent.transmutations.api.Transmutation;
 
 public class ActionSeed extends Transmutation {
 

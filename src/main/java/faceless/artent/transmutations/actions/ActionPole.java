@@ -1,7 +1,7 @@
 package faceless.artent.transmutations.actions;
 
-import faceless.artent.api.math.Color;
 import faceless.artent.api.DirectionUtils;
+import faceless.artent.api.math.Color;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.block.Blocks;
@@ -62,7 +62,7 @@ public class ActionPole extends Transmutation {
 			}
 
 			var state = world.getBlockState(circle);
-			if(state == null)
+			if (state == null)
 				return;
 
 			world.setBlockState(circle, Blocks.AIR.getDefaultState());

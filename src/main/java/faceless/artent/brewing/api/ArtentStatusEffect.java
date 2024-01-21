@@ -34,7 +34,7 @@ public class ArtentStatusEffect extends StatusEffect {
 		if (this == ModPotionEffects.BERSERK) {
 			onRemoved(entity.getAttributes());
 			// TODO status effect queue
-			entity.addStatusEffect(new StatusEffectInstance(ModPotionEffects.BERSERK_RECOIL, 30*20, amplifier, true, true));
+			entity.addStatusEffect(new StatusEffectInstance(ModPotionEffects.BERSERK_RECOIL, 30 * 20, amplifier, true, true));
 		}
 		if (this == ModPotionEffects.FLIGHT && entity instanceof ServerPlayerEntity player) {
 			player.getAbilities().allowFlying = false;

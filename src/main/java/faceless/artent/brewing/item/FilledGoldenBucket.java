@@ -11,12 +11,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class FilledGoldenBucket extends Item {
-    public FilledGoldenBucket(Settings settings) {
-        super(settings);
-    }
+	public FilledGoldenBucket(Settings settings) {
+		super(settings);
+	}
 
-    @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        AlchemicalPotionUtil.createEffectTooltip(stack, tooltip);
-    }
+	@Override
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+		AlchemicalPotionUtil.createEffectTooltip(stack, tooltip);
+	}
 }

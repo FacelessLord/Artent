@@ -1,5 +1,6 @@
 package faceless.artent.trasmutations;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import faceless.artent.api.math.Color;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.transmutations.api.CirclePart;
@@ -19,13 +20,11 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
-
-import java.util.List;
-
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.math.Direction;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
+
+import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class AlchemicalCircleRenderer implements BlockEntityRenderer<AlchemicalCircleEntity> {

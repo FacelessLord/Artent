@@ -1,10 +1,10 @@
 package faceless.artent.transmutations.item;
 
 import faceless.artent.api.item.ArtentItem;
+import faceless.artent.network.ArtentServerHook;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
-import faceless.artent.network.ArtentServerHook;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemUsageContext;

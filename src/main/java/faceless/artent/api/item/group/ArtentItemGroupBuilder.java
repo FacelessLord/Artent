@@ -1,14 +1,14 @@
 package faceless.artent.api.item.group;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 public class ArtentItemGroupBuilder {
 	public ItemGroup.Builder builder;

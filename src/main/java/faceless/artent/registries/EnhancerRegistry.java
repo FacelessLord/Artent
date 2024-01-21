@@ -5,7 +5,7 @@ import faceless.artent.sharpening.api.IEnhancer;
 
 import java.util.Hashtable;
 
-public class EnhancerRegistry implements IRegistry{
+public class EnhancerRegistry implements IRegistry {
 	public static int nextId = 1;
 
 	public static Hashtable<IEnhancer, Integer> EnhancerToIds = new Hashtable<>();

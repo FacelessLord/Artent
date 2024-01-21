@@ -1,5 +1,7 @@
 package faceless.artent.trasmutations;
 
+import faceless.artent.api.MiscUtils;
+import faceless.artent.transmutations.api.PartType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
@@ -7,9 +9,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.screen.ScreenTexts;
 
 import static net.minecraft.client.gui.screen.Screen.hasShiftDown;
-
-import faceless.artent.api.MiscUtils;
-import faceless.artent.transmutations.api.PartType;
 
 @Environment(EnvType.CLIENT)
 public class PartTypeButton extends ButtonWidget {

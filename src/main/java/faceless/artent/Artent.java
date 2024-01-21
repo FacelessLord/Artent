@@ -1,12 +1,10 @@
 package faceless.artent;
 
+import faceless.artent.network.ArtentServerHook;
 import faceless.artent.registries.*;
 import net.fabricmc.api.ModInitializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import faceless.artent.network.ArtentServerHook;
 
 public class Artent implements ModInitializer {
 	public static final String MODID = "artent";

@@ -1,6 +1,7 @@
 package faceless.artent.transmutations.actions;
 
 import faceless.artent.api.DirectionUtils;
+import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
@@ -8,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Box;
 
 import java.util.List;
-
-import faceless.artent.transmutations.api.Transmutation;
 
 public class ActionCollectItems extends Transmutation {
 	public ActionCollectItems(int level) {

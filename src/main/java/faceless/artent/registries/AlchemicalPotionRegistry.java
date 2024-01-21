@@ -9,8 +9,8 @@ import java.util.Hashtable;
 import static faceless.artent.objects.AlchemicalPotions.*;
 
 public class AlchemicalPotionRegistry implements IRegistry {
-	private static Hashtable<String, AlchemicalPotion> RegisteredPotions = new Hashtable<>();
-	private static Hashtable<String, AlchemicalPotion> FermentedPotions = new Hashtable<>();
+	private static final Hashtable<String, AlchemicalPotion> RegisteredPotions = new Hashtable<>();
+	private static final Hashtable<String, AlchemicalPotion> FermentedPotions = new Hashtable<>();
 
 	public static Hashtable<String, AlchemicalPotion> getRegisteredPotions() {
 		return RegisteredPotions;

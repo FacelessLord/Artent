@@ -1,12 +1,11 @@
 package faceless.artent.transmutations.block;
 
 import com.mojang.serialization.MapCodec;
-
 import faceless.artent.api.item.INamed;
+import faceless.artent.network.ArtentServerHook;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModItems;
 import faceless.artent.transmutations.api.State;
-import faceless.artent.network.ArtentServerHook;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;

@@ -21,61 +21,61 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class BerryBush extends Block {
-    public final int type;
-    public static final IntProperty AGE = IntProperty.of("age", 0, 2);
+	public final int type;
+	public static final IntProperty AGE = IntProperty.of("age", 0, 2);
 
-    public BerryBush(int type, Settings settings) {
-        super(settings);
-        this.type = type;
-        this.setDefaultState(this.stateManager.getDefaultState().with(AGE, 0));
-    }
+	public BerryBush(int type, Settings settings) {
+		super(settings);
+		this.type = type;
+		this.setDefaultState(this.stateManager.getDefaultState().with(AGE, 0));
+	}
 
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(AGE);
-    }
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(AGE);
+	}
 
-    @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        super.randomTick(state, world, pos, random);
-        if (world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2) {
-            world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), Block.NOTIFY_LISTENERS);
-        }
-    }
+	@Override
+	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+		super.randomTick(state, world, pos, random);
+		if (world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2) {
+			world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), Block.NOTIFY_LISTENERS);
+		}
+	}
 
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	@Override
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 
-        var stack = player.getEquippedStack(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-        if (stack.getItem() == Items.BONE_MEAL) {
-            if (!world.isClient()) {
-                if (world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2 && world.random.nextFloat() < 0.80) {
-                    world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), Block.NOTIFY_LISTENERS);
-                }
-                var newStack = stack.copy();
-                newStack.setCount(stack.getCount() - 1);
-                player.setStackInHand(hand, newStack);
-            }
+		var stack = player.getEquippedStack(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+		if (stack.getItem() == Items.BONE_MEAL) {
+			if (!world.isClient()) {
+				if (world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2 && world.random.nextFloat() < 0.80) {
+					world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), Block.NOTIFY_LISTENERS);
+				}
+				var newStack = stack.copy();
+				newStack.setCount(stack.getCount() - 1);
+				player.setStackInHand(hand, newStack);
+			}
 
-            return ActionResult.success(world.isClient());
-        }
+			return ActionResult.success(world.isClient());
+		}
 
-        if (state.get(AGE) == 2) {
-            if (!world.isClient()) {
-                player.giveItemStack(new ItemStack(ModItems.berries[type], world.random.nextInt(3) + 1));
-                state = state.with(AGE, 0);
-                world.setBlockState(pos, state, Block.NOTIFY_LISTENERS);
-            }
+		if (state.get(AGE) == 2) {
+			if (!world.isClient()) {
+				player.giveItemStack(new ItemStack(ModItems.berries[type], world.random.nextInt(3) + 1));
+				state = state.with(AGE, 0);
+				world.setBlockState(pos, state, Block.NOTIFY_LISTENERS);
+			}
 
-            return ActionResult.success(world.isClient());
-        }
-        return ActionResult.FAIL;
-    }
+			return ActionResult.success(world.isClient());
+		}
+		return ActionResult.FAIL;
+	}
 
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(2, 0, 2, 14, 15, 14);
+	protected static final VoxelShape SHAPE = Block.createCuboidShape(2, 0, 2, 14, 15, 14);
 
-    @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return SHAPE;
-    }
+	@Override
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+		return SHAPE;
+	}
 }

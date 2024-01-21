@@ -143,7 +143,7 @@ public class FermentingBarrel extends BlockWithEntity {
 				player.sendMessage(Text.translatable("text.artent.barrel.fermented." + be.portionsLeft + "/" + 9 + ".of").append(Text.translatable(be.potionKey)), false);
 			} else {
 				if (!be.potionKey.equals(""))
-					player.sendMessage(Text.translatable("text.artent.barrel.fermenting." + be.portionsLeft + "/" + 9).append(Text.translatable(be.potionKey)).append(Text.translatable("text.artent.fermentation.time.prefix")).append(Text.translatable((FermentingBarrelBlockEntity.FERMENTATION_TIME - be.fermentedTime) / 20 + "")).append(Text.translatable("text.artent.fermentation.time.suffix")), false);
+					player.sendMessage(Text.translatable("text.artent.barrel.fermenting." + be.portionsLeft + "/" + 9).append(Text.translatable(be.potionKey)).append(Text.translatable("text.artent.fermentation.time.prefix")).append(Text.translatable(String.valueOf((FermentingBarrelBlockEntity.FERMENTATION_TIME - be.fermentedTime) / 20))).append(Text.translatable("text.artent.fermentation.time.suffix")), false);
 				else
 					player.sendMessage(Text.translatable("text.artent.barrel.empty"), false);
 			}

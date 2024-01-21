@@ -7,8 +7,8 @@ import faceless.artent.brewing.api.BrewingIngredient;
 import java.util.Hashtable;
 import java.util.List;
 
-import static faceless.artent.objects.BrewingRecipes.*;
 import static faceless.artent.objects.AlchemicalPotions.*;
+import static faceless.artent.objects.BrewingRecipes.*;
 
 public class BrewingRegistry implements IRegistry {
 	public static final Hashtable<BrewingIngredient, Color> Ingredients = new Hashtable<>();

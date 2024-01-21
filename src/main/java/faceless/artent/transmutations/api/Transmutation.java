@@ -1,16 +1,14 @@
 package faceless.artent.transmutations.api;
 
 import faceless.artent.api.DirectionUtils;
+import faceless.artent.api.math.Color;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 import java.util.function.BiFunction;
-
-import net.minecraft.util.math.random.Random;
-
-import faceless.artent.api.math.Color;
 
 public class Transmutation {
 	public TransAction action;

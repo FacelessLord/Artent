@@ -1,10 +1,10 @@
 package faceless.artent.trasmutations;
 
 import faceless.artent.Artent;
+import faceless.artent.network.ArtentClientHook;
 import faceless.artent.transmutations.api.CirclePart;
 import faceless.artent.transmutations.api.PartType;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
-import faceless.artent.network.ArtentClientHook;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;

@@ -5,12 +5,12 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterials;
 
 public class SmithingHammer extends SwordItem implements INamed {
-    public SmithingHammer(Settings settings) {
-        super(ToolMaterials.IRON, 3, -2.4f, settings);
-    }
+	public SmithingHammer(Settings settings) {
+		super(ToolMaterials.IRON, 3, -2.4f, settings);
+	}
 
-    @Override
-    public String getId() {
-        return "smithing_hammer";
-    }
+	@Override
+	public String getId() {
+		return "smithing_hammer";
+	}
 }
