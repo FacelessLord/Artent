@@ -12,6 +12,8 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 import static net.minecraft.world.Heightmap.Type.MOTION_BLOCKING_NO_LEAVES;
 
 public class ArtentStatusEffect extends StatusEffect {
@@ -26,19 +28,19 @@ public class ArtentStatusEffect extends StatusEffect {
 		this.isInstant = isInstant;
 	}
 
-	public void onEffectRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
-		if (this == ModPotionEffects.FLIGHT && entity instanceof ServerPlayerEntity player) {
+	public void onEffectRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier, List<StatusEffectInstance> statusEffectQueue) {
+		if (!(entity instanceof ServerPlayerEntity player))
+			return;
+
+		if (this == ModPotionEffects.FLIGHT) {
 			player.interactionManager.getGameMode().setAbilities(player.getAbilities());
+			player.sendAbilitiesUpdate();
+			player.getAbilities().allowFlying = false;
 			player.sendAbilitiesUpdate();
 		}
 		if (this == ModPotionEffects.BERSERK) {
 			onRemoved(entity.getAttributes());
-			// TODO status effect queue
-			entity.addStatusEffect(new StatusEffectInstance(ModPotionEffects.BERSERK_RECOIL, 30 * 20, amplifier, true, true));
-		}
-		if (this == ModPotionEffects.FLIGHT && entity instanceof ServerPlayerEntity player) {
-			player.getAbilities().allowFlying = false;
-			player.sendAbilitiesUpdate();
+			statusEffectQueue.add(new StatusEffectInstance(ModPotionEffects.BERSERK_RECOIL, 30 * 20, amplifier, true, true));
 		}
 	}
 

@@ -12,6 +12,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Environment(EnvType.CLIENT)
 public class AlchemicalCircleGui extends Screen {
 	public static final Identifier TEXTURE = new Identifier(Artent.MODID, "textures/gui/alchemical_circle.png");
@@ -39,6 +42,7 @@ public class AlchemicalCircleGui extends Screen {
 				b -> {
 					circle.addPart(type, (type.itemTexture != type.itemTextureRev) && hasShiftDown());
 					ArtentClientHook.packetSynchronizeCircle(circle);
+					updateCurrentParts();
 				});
 			addDrawableChild(button);
 			i++;
@@ -48,13 +52,48 @@ public class AlchemicalCircleGui extends Screen {
 			}
 		}
 
-		// TODO кнопки для удаления добавленных элементов
+		updateCurrentParts();
 	}
 
 	@Override
 	public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.renderBackground(context, mouseX, mouseY, delta);
 		this.drawBackground(context);
+	}
+
+	private List<PartTypeButton> currentParts = new ArrayList<>();
+
+	public void updateCurrentParts() {
+		for (PartTypeButton currentPartButton : currentParts) {
+			remove(currentPartButton);
+		}
+		currentParts.clear();
+
+		var range = Math.max(backgroundWidth, backgroundHeight);
+		int l = (height - range) / 2;
+
+		int scaleFactor = (int) Math.floor(this.height / 180f);
+		int i = 0;
+		int j = 0;
+
+		var drawnParts = circle.parts;
+
+		int u = (width - range) / 2;
+		for (CirclePart part : drawnParts) {
+			var button = new PartTypeButton(u - (1 + j) * 24 * scaleFactor, l + 24 * i, 24, part.part,
+				b -> {
+					circle.removePart(part);
+					ArtentClientHook.packetSynchronizeCircle(circle);
+					updateCurrentParts();
+				}, part.reverse);
+			addDrawableChild(button);
+			currentParts.add(button);
+			i++;
+			if (i > 6) {
+				i = 0;
+				j++;
+			}
+		}
 	}
 
 	protected void drawBackground(DrawContext context) {
@@ -73,5 +112,12 @@ public class AlchemicalCircleGui extends Screen {
 
 			context.drawTexture(texture, x, y, range, range, 0, 0, 1024, 1024, 1024, 1024);
 		}
+	}
+
+	@Override
+	public void close() {
+		super.close();
+		if (circle.parts.size() == 0)
+			ArtentClientHook.packetRemoveCircle(circle.getPos());
 	}
 }

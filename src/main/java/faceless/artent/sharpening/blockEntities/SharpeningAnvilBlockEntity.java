@@ -38,7 +38,7 @@ public class SharpeningAnvilBlockEntity extends BlockEntityWithInventory impleme
 
 	@Override
 	public void writeNbt(NbtCompound nbt) {
-		Inventories.writeNbt(nbt, items);
+		BlockEntityWithInventory.writeInventoryNbt(nbt, items, true);
 		super.writeNbt(nbt);
 	}
 

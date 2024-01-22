@@ -161,4 +161,7 @@ public class FermentingBarrel extends BlockWithEntity {
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
 		return new FermentingBarrelBlockEntity(pos, state);
 	}
+
+	// TODO change model based on surrounding - cut upper portion of box when there is no block over barrel
+	// add top legs when there is a barrel over it
 }

@@ -29,7 +29,7 @@ public final class ModBlocks {
 	}
 
 	public static final AlchemicalCircleBlock AlchemicalCircle = new AlchemicalCircleBlock(
-		FabricBlockSettings.create().notSolid().nonOpaque().breakInstantly().dropsNothing());
+		FabricBlockSettings.create().notSolid().collidable(false).nonOpaque().breakInstantly().dropsNothing());
 	public static SharpeningAnvil SharpeningAnvil = new SharpeningAnvil(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)
 		.mapColor(MapColor.GRAY)
 		.nonOpaque()

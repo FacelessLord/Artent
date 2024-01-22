@@ -6,6 +6,7 @@ import faceless.artent.registries.TransmutationRegistry;
 import faceless.artent.transmutations.api.CircleHelper;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
@@ -42,7 +43,7 @@ public class AlchemicalPaper extends ArtentItem {
 		BlockState circleState = ModBlocks.AlchemicalCircle
 			.getDefaultState()
 			.with(AlchemicalCircleBlock.FACING, blockSide);
-		context.getWorld().setBlockState(circlePos, circleState);
+		context.getWorld().setBlockState(circlePos, circleState, Block.NOTIFY_ALL);
 
 		var blockEntity = context.getWorld().getBlockEntity(circlePos);
 		if (blockEntity == null)

@@ -4,6 +4,7 @@ import faceless.artent.brewing.api.AlchemicalPotionUtil;
 import faceless.artent.objects.ModEntities;
 import faceless.artent.objects.ModItems;
 import net.minecraft.block.AbstractCandleBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.Entity;
@@ -149,7 +150,7 @@ public class ThrowablePotionPhialEntity extends ThrownItemEntity {
 		} else if (CampfireBlock.isLitCampfire(blockState)) {
 			world.syncWorldEvent(null, WorldEvents.FIRE_EXTINGUISHED, pos, 0);
 			CampfireBlock.extinguish(this.getOwner(), world, pos, blockState);
-			world.setBlockState(pos, blockState.with(CampfireBlock.LIT, false));
+			world.setBlockState(pos, blockState.with(CampfireBlock.LIT, false), Block.NOTIFY_ALL);
 		}
 	}
 }

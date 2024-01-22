@@ -1,5 +1,6 @@
 package faceless.artent.transmutations.blockEntities;
 
+import faceless.artent.api.blockEntity.BlockEntityWithInventory;
 import faceless.artent.api.math.Color;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModBlocks;
@@ -126,6 +127,11 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		}
 	}
 
+	public void removePart(CirclePart part) {
+		parts.removeIf(pt -> pt == null || pt.equals(part));
+		markDirty();
+	}
+
 	private void readClientNbt(NbtCompound tag) {
 		if (world == null) return;
 
@@ -176,7 +182,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		tag.putInt("artentState", state.ordinal());
 		if (alchemist != null) tag.putUuid("artentAlchemist", alchemist.getUuid());
 
-		Inventories.writeNbt(tag, this.inventory);
+		BlockEntityWithInventory.writeInventoryNbt(tag, this.inventory, true);
 
 		tag.put("circleTag", circleTag);
 

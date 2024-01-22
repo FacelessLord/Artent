@@ -44,7 +44,8 @@ public class ActionSeed extends Transmutation {
 							.setBlockState(
 								// seeds grow on top only
 								pos.up(),
-								((AliasedBlockItem) seeds.getItem()).getBlock().getDefaultState()
+								((AliasedBlockItem) seeds.getItem()).getBlock().getDefaultState(),
+								Block.NOTIFY_ALL
 							);
 					}
 				}

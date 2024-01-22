@@ -10,6 +10,7 @@ import faceless.artent.objects.ModBlocks;
 import faceless.artent.objects.ModEntities;
 import faceless.artent.objects.ModItems;
 import faceless.artent.registries.ScreenRegistry;
+import faceless.artent.sharpening.SharpeningAnvilRenderer;
 import faceless.artent.trasmutations.AlchemicalCircleRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -40,6 +41,7 @@ public class ArtentClient implements ClientModInitializer {
 		}, ModBlocks.AlchemicalCircle);
 //		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.alchemicalPaper, new AlchemicalPaperRenderer()); TODO
 		BlockEntityRendererFactories.register(ModBlockEntities.AlchemicalCircle, AlchemicalCircleRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntities.SharpeningAnvil, SharpeningAnvilRenderer::new);
 
 		// BREWING
 		BlockEntityRendererFactories.register(ModBlockEntities.BrewingCauldron, BrewingCauldronRenderer::new);

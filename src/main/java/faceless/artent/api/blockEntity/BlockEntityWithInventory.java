@@ -1,13 +1,20 @@
 package faceless.artent.api.blockEntity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockEntityWithInventory extends BlockEntity implements Inventory {
 	public DefaultedList<ItemStack> items;
@@ -77,5 +84,33 @@ public abstract class BlockEntityWithInventory extends BlockEntity implements In
 	public void markDirty() {
 		super.markDirty();
 		onContentChanged();
+		//noinspection DataFlowIssue
+		world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+	}
+
+	@Nullable
+	@Override
+	public Packet<ClientPlayPacketListener> toUpdatePacket() {
+		return BlockEntityUpdateS2CPacket.create(this);
+	}
+
+	@Override
+	public NbtCompound toInitialChunkDataNbt() {
+		return createNbt();
+	}
+
+	// Custom "implementation" because Inventories.writeNbt doesn't save empty ItemStacks
+	public static void writeInventoryNbt(NbtCompound nbt, DefaultedList<ItemStack> stacks, boolean setIfEmpty) {
+		NbtList nbtList = new NbtList();
+		for (int i = 0; i < stacks.size(); ++i) {
+			ItemStack itemStack = stacks.get(i);
+			NbtCompound nbtCompound = new NbtCompound();
+			nbtCompound.putByte("Slot", (byte) i);
+			itemStack.writeNbt(nbtCompound);
+			nbtList.add(nbtCompound);
+		}
+		if (!nbtList.isEmpty() || setIfEmpty) {
+			nbt.put("Items", nbtList);
+		}
 	}
 }

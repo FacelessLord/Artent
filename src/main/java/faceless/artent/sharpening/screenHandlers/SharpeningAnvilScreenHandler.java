@@ -65,6 +65,7 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slot) {
+		// TODO transferStackInSlot
 		return ItemStack.EMPTY;
 	}
 

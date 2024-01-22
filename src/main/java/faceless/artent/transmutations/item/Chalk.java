@@ -5,6 +5,7 @@ import faceless.artent.network.ArtentServerHook;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemUsageContext;
@@ -27,7 +28,7 @@ public class Chalk extends ArtentItem {
 		BlockState circleState = ModBlocks.AlchemicalCircle
 			.getDefaultState()
 			.with(AlchemicalCircleBlock.FACING, blockSide);
-		world.setBlockState(circlePos, circleState);
+		world.setBlockState(circlePos, circleState, Block.NOTIFY_ALL);
 
 		BlockEntity blockEntity = world.getBlockEntity(circlePos);
 		if (!(blockEntity instanceof AlchemicalCircleEntity circle))
@@ -38,7 +39,6 @@ public class Chalk extends ArtentItem {
 			return ActionResult.FAIL;
 
 		ArtentServerHook.packetOpenCircleGui(player, circle);
-		// TODO удалять круг, если при его закрытии нет ни одлной части
 		// TODO дамажить мел при добавлении частей
 		return ActionResult.SUCCESS;
 	}

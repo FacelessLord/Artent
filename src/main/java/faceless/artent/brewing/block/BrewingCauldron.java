@@ -98,9 +98,6 @@ public class BrewingCauldron extends BlockWithEntity {
 					.orElse("")), false);
 			}
 		}
-//		if (world.isClient()) {
-//			return ActionResult.SUCCESS;
-//		}
 
 		if (stack.getItem() == ModItems.EmptyPhial) {
 			var brewingState = cauldron.getBrewingState();

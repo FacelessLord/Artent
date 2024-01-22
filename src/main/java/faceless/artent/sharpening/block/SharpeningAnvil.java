@@ -24,6 +24,8 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -128,5 +130,15 @@ public class SharpeningAnvil extends BlockWithEntity implements INamed {
 	@Override
 	public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
 		return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
+	}
+
+	@Override
+	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+		var facing = state.get(FACING);
+		return switch (facing) {
+			case DOWN, UP -> Block.createCuboidShape(0f, 0f, 0, 16, 10, 16);
+			case NORTH, SOUTH -> Block.createCuboidShape(5f, 0f, 0, 11f, 10f, 16f);
+			case EAST, WEST -> Block.createCuboidShape(0f, 0f, 5f, 16f, 10f, 11f);
+		};
 	}
 }

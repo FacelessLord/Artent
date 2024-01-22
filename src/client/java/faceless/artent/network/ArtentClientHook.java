@@ -90,4 +90,10 @@ public class ArtentClientHook {
 		passedData.writeNbt(tag);
 		ClientPlayNetworking.send(ArtentServerHook.SYNCHRONIZE_CIRCLE, passedData);
 	}
+
+	public static void packetRemoveCircle(BlockPos pos) {
+		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+		passedData.writeBlockPos(pos);
+		ClientPlayNetworking.send(ArtentServerHook.REMOVE_CIRCLE, passedData);
+	}
 }

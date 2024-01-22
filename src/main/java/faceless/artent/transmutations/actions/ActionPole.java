@@ -4,6 +4,7 @@ import faceless.artent.api.DirectionUtils;
 import faceless.artent.api.math.Color;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.transmutations.api.Transmutation;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 
 public class ActionPole extends Transmutation {
@@ -42,7 +43,7 @@ public class ActionPole extends Transmutation {
 							continue;
 
 						// immediately creates blockEntity and writes it to chunk
-						world.setBlockState(newPos, state);
+						world.setBlockState(newPos, state, Block.NOTIFY_ALL);
 						var entity = world.getBlockEntity(blockPos);
 						if (entity != null) {
 							var tag = entity.createNbt();
@@ -56,7 +57,7 @@ public class ActionPole extends Transmutation {
 							newEntity.readNbt(tag);
 						}
 
-						world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+						world.setBlockState(blockPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
 					}
 				}
 			}
@@ -65,7 +66,7 @@ public class ActionPole extends Transmutation {
 			if (state == null)
 				return;
 
-			world.setBlockState(circle, Blocks.AIR.getDefaultState());
+			world.setBlockState(circle, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
 		});
 
 		this.setPrepCol(new Color(80, 80, 255));
