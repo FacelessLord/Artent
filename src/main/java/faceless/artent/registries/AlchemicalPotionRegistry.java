@@ -1,8 +1,6 @@
 package faceless.artent.registries;
 
 import faceless.artent.brewing.api.AlchemicalPotion;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 
 import java.util.Hashtable;
 
@@ -50,12 +48,12 @@ public class AlchemicalPotionRegistry implements IRegistry {
 	}
 
 	public void register(AlchemicalPotion potion) {
-		RegisteredPotions.put(potion.id, Registry.register(Registries.POTION, potion.id, potion));
+		RegisteredPotions.put(potion.id, potion);
 	}
 
 	public void register(AlchemicalPotion potion, AlchemicalPotion fermented) {
-		RegisteredPotions.put(potion.id, Registry.register(Registries.POTION, potion.id, potion));
-		FermentedPotions.put(potion.id, Registry.register(Registries.POTION, fermented.id, fermented));
+		RegisteredPotions.put(potion.id, potion);
+		FermentedPotions.put(potion.id, fermented);
 	}
 
 	public static boolean potionIsRegistered(String id) {

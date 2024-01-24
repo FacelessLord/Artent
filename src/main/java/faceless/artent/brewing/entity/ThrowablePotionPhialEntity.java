@@ -16,8 +16,6 @@ import net.minecraft.entity.passive.AxolotlEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -64,18 +62,10 @@ public class ThrowablePotionPhialEntity extends ThrownItemEntity {
 			return;
 		}
 		ItemStack itemStack = this.getStack();
-		Potion potion = AlchemicalPotionUtil.getPotion(itemStack);
 		List<StatusEffectInstance> list = AlchemicalPotionUtil.getPotionEffects(itemStack);
 		Direction direction = blockHitResult.getSide();
 		BlockPos blockPos = blockHitResult.getBlockPos();
 		BlockPos blockPos2 = blockPos.offset(direction);
-		if (potion == Potions.WATER && list.isEmpty()) {
-			this.extinguishFire(blockPos2);
-			this.extinguishFire(blockPos2.offset(direction.getOpposite()));
-			for (Direction direction2 : Direction.Type.HORIZONTAL) {
-				this.extinguishFire(blockPos2.offset(direction2));
-			}
-		}
 	}
 
 	@Override
@@ -85,11 +75,11 @@ public class ThrowablePotionPhialEntity extends ThrownItemEntity {
 			return;
 		}
 		ItemStack itemStack = this.getStack();
-		Potion potion = AlchemicalPotionUtil.getPotion(itemStack);
+		var potion = AlchemicalPotionUtil.getPotion(itemStack);
 		List<StatusEffectInstance> list = AlchemicalPotionUtil.getPotionEffects(itemStack);
-		if (potion == Potions.WATER && list.isEmpty()) {
+		if (list.isEmpty()) {
 			this.damageEntitiesHurtByWater();
-		} else if (!list.isEmpty()) {
+		} else {
 			this.applySplashPotion(list, hitResult.getType() == HitResult.Type.ENTITY ? ((EntityHitResult) hitResult).getEntity() : null);
 		}
 		int i = potion.hasInstantEffect() ? WorldEvents.INSTANT_SPLASH_POTION_SPLASHED : WorldEvents.SPLASH_POTION_SPLASHED;

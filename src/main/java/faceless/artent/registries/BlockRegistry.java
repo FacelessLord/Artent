@@ -3,7 +3,6 @@ package faceless.artent.registries;
 import faceless.artent.Artent;
 import faceless.artent.api.item.INamed;
 import faceless.artent.api.item.group.ArtentItemGroupBuilder;
-import faceless.artent.brewing.ingridients.Ingredients;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.objects.ModItemGroups;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -22,21 +21,21 @@ public class BlockRegistry implements IRegistry {
 		register(ModBlocks.DungeonSandstone, ModItemGroups.Main);
 
 		// BREWING
-		// TODO make blocks INamed
-		ModBlocks.BrewingCauldronItem = register("cauldron", ModBlocks.BrewingCauldron, ModItemGroups.Potions);
-		ModBlocks.BrewingCauldronCopperItem = register("cauldron_copper", ModBlocks.BrewingCauldronCopper, ModItemGroups.Potions);
+		ModBlocks.BrewingCauldronItem = register(ModBlocks.BrewingCauldron, ModItemGroups.Potions);
+		ModBlocks.BrewingCauldronCopperItem = register(ModBlocks.BrewingCauldronCopper, ModItemGroups.Potions);
 		ModBlocks.ShroomItem = register("shroom", ModBlocks.Shroom, ModItemGroups.Potions);
 		ModBlocks.ShadowveilItem = register("shadowveil", ModBlocks.Shadowveil, ModItemGroups.Potions);
 		ModBlocks.CrimsonwoodLogItem = register("crimsonwood_log", ModBlocks.CrimsonwoodLog, ModItemGroups.Potions);
 		ModBlocks.CrimsonwoodPlanksItem = register("crimsonwood_planks", ModBlocks.CrimsonwoodPlanks, ModItemGroups.Potions);
-		ModBlocks.CrimsonwoodLeavesItem = register("crimsonwood_leaves", ModBlocks.CrimsonwoodLeaves, ModItemGroups.Potions);
+		ModBlocks.CrimsonwoodLeavesItem = register(ModBlocks.CrimsonwoodLeaves, ModItemGroups.Potions);
+		// TODO sapling
 //		register(ModBlocks.CrimsonwoodSapling, ModBlocks.CrimsonwoodSaplingItem, "crimsonwood_sapling");
 		for (int i = 0; i < 4; i++) {
-			ModBlocks.berryBushItem[i] = register(Ingredients.GetBerryName(i) + "_bush", ModBlocks.berryBush[i], ModItemGroups.Potions);
+			ModBlocks.berryBushItem[i] = register(ModBlocks.berryBush[i], ModItemGroups.Potions);
 		}
 
 		register("cauldron_fluid", ModBlocks.CauldronFluid);
-		ModBlocks.FermentingBarrelItem = register("fermenting_barrel", ModBlocks.FermentingBarrel, ModItemGroups.Potions);
+		ModBlocks.FermentingBarrelItem = register(ModBlocks.FermentingBarrel, ModItemGroups.Potions);
 
 		// SHARPENING
 		ModBlocks.SharpeningAnvil.Item = register(ModBlocks.SharpeningAnvil, ModItemGroups.Main);

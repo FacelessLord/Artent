@@ -26,6 +26,7 @@ public class AlchemicalPotions {
 	public static final AlchemicalPotion NIGHT_VISION = new AlchemicalPotion("night_vision", Color.Red, new StatusEffectInstance(StatusEffects.NIGHT_VISION, 1800));
 
 	public static final AlchemicalPotion FLIGHT = new AlchemicalPotion("flight", Color.Red, new StatusEffectInstance(ModPotionEffects.FLIGHT, 3600));
+	// TODO LUCK
 	public static final AlchemicalPotion LUCK = new AlchemicalPotion("luck", Color.Red, new StatusEffectInstance(StatusEffects.LUCK, 1800));
 	public static final AlchemicalPotion SATURATION = new AlchemicalPotion("saturation", Color.Red, new StatusEffectInstance(StatusEffects.SATURATION, 600));
 	public static final AlchemicalPotion SURFACE_TELEPORTATION = new AlchemicalPotion("surface_teleportation", Color.Red, new StatusEffectInstance(ModPotionEffects.SURFACE_TELEPORTATION, 1));

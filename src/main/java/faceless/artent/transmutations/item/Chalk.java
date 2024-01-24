@@ -13,8 +13,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 
 public class Chalk extends ArtentItem {
-	public Chalk() {
-		super("chalk/chalk");
+	public Chalk(Settings settings) {
+		super(settings, "chalk/chalk");
 	}
 
 	@Override
@@ -39,7 +39,6 @@ public class Chalk extends ArtentItem {
 			return ActionResult.FAIL;
 
 		ArtentServerHook.packetOpenCircleGui(player, circle);
-		// TODO дамажить мел при добавлении частей
 		return ActionResult.SUCCESS;
 	}
 }

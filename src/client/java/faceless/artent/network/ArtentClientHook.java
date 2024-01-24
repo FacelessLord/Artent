@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -89,6 +90,12 @@ public class ArtentClientHook {
 		passedData.writeBlockPos(entity.getPos());
 		passedData.writeNbt(tag);
 		ClientPlayNetworking.send(ArtentServerHook.SYNCHRONIZE_CIRCLE, passedData);
+	}
+
+	public static void packetDamageChalk(PlayerEntity player) {
+		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+		passedData.writeUuid(player.getUuid());
+		ClientPlayNetworking.send(ArtentServerHook.DAMAGE_CHALK, passedData);
 	}
 
 	public static void packetRemoveCircle(BlockPos pos) {

@@ -32,7 +32,7 @@ public class ArtentStatusEffect extends StatusEffect {
 		if (!(entity instanceof ServerPlayerEntity player))
 			return;
 
-		if (this == ModPotionEffects.FLIGHT) {
+		if (this == ModPotionEffects.FLIGHT && !player.isCreative()) {
 			player.interactionManager.getGameMode().setAbilities(player.getAbilities());
 			player.sendAbilitiesUpdate();
 			player.getAbilities().allowFlying = false;
@@ -48,7 +48,7 @@ public class ArtentStatusEffect extends StatusEffect {
 	public void applyUpdateEffect(LivingEntity entity, int amplifier) {
 		if (entity == null)
 			return;
-		if (this == ModPotionEffects.FLIGHT && entity instanceof ServerPlayerEntity player) {
+		if (this == ModPotionEffects.FLIGHT && entity instanceof ServerPlayerEntity player && !player.isCreative()) {
 			player.getAbilities().allowFlying = true;
 			player.sendAbilitiesUpdate();
 		}

@@ -54,7 +54,7 @@ public final class ModBlocks {
 		.mapColor(MapColor.GRAY)
 		.nonOpaque()
 		.dropsNothing());
-	public static Block Shroom = new MushroomPlantBlock(null, FabricBlockSettings.copyOf(Blocks.BROWN_MUSHROOM)
+	public static MushroomPlantBlock Shroom = new MushroomPlantBlock(null, FabricBlockSettings.copyOf(Blocks.BROWN_MUSHROOM)
 		.mapColor(MapColor.BROWN)
 		.nonOpaque()
 		.noCollision()
@@ -64,7 +64,7 @@ public final class ModBlocks {
 		.luminance(state -> 1)
 		.postProcess((a, b, c) -> true));
 	public static BlockItem ShroomItem;
-	public static Block Shadowveil = new FlowerBlock(StatusEffects.BAD_OMEN, 5, FabricBlockSettings
+	public static FlowerBlock Shadowveil = new FlowerBlock(StatusEffects.BAD_OMEN, 5, FabricBlockSettings
 		.copyOf(Blocks.ALLIUM)
 		.nonOpaque()
 		.noCollision()
@@ -85,7 +85,7 @@ public final class ModBlocks {
 		.strength(2.0f)
 		.sounds(BlockSoundGroup.WOOD));
 	public static BlockItem CrimsonwoodLogItem;
-	public static LeavesBlock CrimsonwoodLeaves = new CrimsonwoodLeaves(FabricBlockSettings
+	public static CrimsonwoodLeaves CrimsonwoodLeaves = new CrimsonwoodLeaves(FabricBlockSettings
 		.copyOf(Blocks.ACACIA_LEAVES)
 		.strength(0.2f)
 		.ticksRandomly()
@@ -108,7 +108,7 @@ public final class ModBlocks {
 		.strength(2.0f, 3.0f)
 		.sounds(BlockSoundGroup.WOOD));
 	public static BlockItem CrimsonwoodPlanksItem;
-	public static Block FermentingBarrel = new FermentingBarrel(FabricBlockSettings
+	public static FermentingBarrel FermentingBarrel = new FermentingBarrel(FabricBlockSettings
 		.copyOf(Blocks.OAK_PLANKS)
 		.mapColor(MapColor.BROWN)
 		.nonOpaque()

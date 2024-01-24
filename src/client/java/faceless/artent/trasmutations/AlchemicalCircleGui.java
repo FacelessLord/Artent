@@ -2,14 +2,18 @@ package faceless.artent.trasmutations;
 
 import faceless.artent.Artent;
 import faceless.artent.network.ArtentClientHook;
+import faceless.artent.network.ArtentServerHook;
 import faceless.artent.transmutations.api.CirclePart;
 import faceless.artent.transmutations.api.PartType;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -42,7 +46,9 @@ public class AlchemicalCircleGui extends Screen {
 				b -> {
 					circle.addPart(type, (type.itemTexture != type.itemTextureRev) && hasShiftDown());
 					ArtentClientHook.packetSynchronizeCircle(circle);
-					updateCurrentParts();
+					var player = MinecraftClient.getInstance().player;
+					if (player == null || !damageChalk(player))
+						updateCurrentParts();
 				});
 			addDrawableChild(button);
 			i++;
@@ -55,13 +61,23 @@ public class AlchemicalCircleGui extends Screen {
 		updateCurrentParts();
 	}
 
+	private boolean damageChalk(PlayerEntity player) {
+		ArtentClientHook.packetDamageChalk(player);
+		if (ArtentServerHook.damageChalk(player, Hand.MAIN_HAND) || ArtentServerHook.damageChalk(player, Hand.OFF_HAND)) {
+			close();
+			return true;
+		}
+
+		return false;
+	}
+
 	@Override
 	public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.renderBackground(context, mouseX, mouseY, delta);
 		this.drawBackground(context);
 	}
 
-	private List<PartTypeButton> currentParts = new ArrayList<>();
+	private final List<PartTypeButton> currentParts = new ArrayList<>();
 
 	public void updateCurrentParts() {
 		for (PartTypeButton currentPartButton : currentParts) {

@@ -1,6 +1,7 @@
 package faceless.artent.brewing.block;
 
 import com.mojang.serialization.MapCodec;
+import faceless.artent.api.item.INamed;
 import faceless.artent.brewing.api.AlchemicalPotionUtil;
 import faceless.artent.brewing.blockEntities.BrewingCauldronBlockEntity;
 import faceless.artent.objects.ModBlockEntities;
@@ -31,7 +32,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-public class BrewingCauldron extends BlockWithEntity {
+public class BrewingCauldron extends BlockWithEntity implements INamed {
 	public static final MapCodec<SharpeningAnvil> CODEC = SharpeningAnvil.createCodec(SharpeningAnvil::new);
 	public static final BooleanProperty HAS_COAL = BooleanProperty.of("has_coal");
 	public static final BooleanProperty IS_BURNING = BooleanProperty.of("is_burning");
@@ -41,6 +42,11 @@ public class BrewingCauldron extends BlockWithEntity {
 		this.setDefaultState(this.stateManager.getDefaultState()
 			.with(HAS_COAL, false)
 			.with(IS_BURNING, false));
+	}
+
+	@Override
+	public String getId() {
+		return "cauldron";
 	}
 
 	@Override
@@ -80,23 +86,23 @@ public class BrewingCauldron extends BlockWithEntity {
 		if (stack.getItem() == ModItems.AlchemicalClock) {
 			var brewingState = cauldron.getBrewingState();
 			if (world.isClient()) {
-				player.sendMessage(Text.literal("[CLIENT]"));
+//				player.sendMessage(Text.literal("[CLIENT]"));
 				player.sendMessage(Text.translatable(brewingState.toString()), false);
-				player.sendMessage(Text.translatable(cauldron.color.toString()), false);
-				player.sendMessage(Text.translatable(cauldron.ingredients.stream()
-					.map(i -> i.item().getName().getString())
-					.reduce((a, b) -> a + "|" + b)
-					.orElse("")), false);
-			} else {
-				// TODO remove
-				player.sendMessage(Text.literal("[SERVER]"));
-				player.sendMessage(Text.translatable(brewingState.toString()), false);
-				player.sendMessage(Text.translatable(cauldron.color.toString()), false);
+//				player.sendMessage(Text.translatable(cauldron.color.toString()), false);
 				player.sendMessage(Text.translatable(cauldron.ingredients.stream()
 					.map(i -> i.item().getName().getString())
 					.reduce((a, b) -> a + "|" + b)
 					.orElse("")), false);
 			}
+//			else {
+//				player.sendMessage(Text.literal("[SERVER]"));
+//				player.sendMessage(Text.translatable(brewingState.toString()), false);
+//				player.sendMessage(Text.translatable(cauldron.color.toString()), false);
+//				player.sendMessage(Text.translatable(cauldron.ingredients.stream()
+//					.map(i -> i.item().getName().getString())
+//					.reduce((a, b) -> a + "|" + b)
+//					.orElse("")), false);
+//			}
 		}
 
 		if (stack.getItem() == ModItems.EmptyPhial) {

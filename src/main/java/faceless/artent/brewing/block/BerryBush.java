@@ -1,5 +1,7 @@
 package faceless.artent.brewing.block;
 
+import faceless.artent.api.item.INamed;
+import faceless.artent.brewing.ingridients.Ingredients;
 import faceless.artent.objects.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +22,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class BerryBush extends Block {
+public class BerryBush extends Block implements INamed {
 	public final int type;
 	public static final IntProperty AGE = IntProperty.of("age", 0, 2);
 
@@ -28,6 +30,11 @@ public class BerryBush extends Block {
 		super(settings);
 		this.type = type;
 		this.setDefaultState(this.stateManager.getDefaultState().with(AGE, 0));
+	}
+
+	@Override
+	public String getId() {
+		return Ingredients.GetBerryName(type) + "_bush";
 	}
 
 	@Override

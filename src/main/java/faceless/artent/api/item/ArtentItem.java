@@ -11,6 +11,11 @@ public class ArtentItem extends Item implements INamed {
 		Id = itemId;
 	}
 
+	public ArtentItem(Settings settings, String itemId) {
+		super(settings);
+		Id = itemId;
+	}
+
 	@Override
 	public String getId() {
 		return Id;

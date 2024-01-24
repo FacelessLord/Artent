@@ -66,6 +66,7 @@ public class BrewingAutomata {
 		}
 		potion.color = color;
 		Color finalColor = color;
+		// TODO add more blue color to potions like true blue, purple, cyan, emerald green,
 		Arrays.stream(potion.statusEffects).forEach(s -> MiscUtils.setStatusEffectColor(s, finalColor.toHex()));
 	}
 

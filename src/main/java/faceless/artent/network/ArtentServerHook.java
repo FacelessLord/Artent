@@ -3,6 +3,7 @@ package faceless.artent.network;
 import faceless.artent.Artent;
 import faceless.artent.brewing.blockEntities.BrewingCauldronBlockEntity;
 import faceless.artent.objects.ModBlocks;
+import faceless.artent.objects.ModItems;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -10,18 +11,21 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 public class ArtentServerHook {
 
-	public static final Identifier OPEN_CIRCLE_GUI_PACKET_ID = new Identifier(Artent.MODID, "packet.open.circle");
-	public static final Identifier SYNC_CAULDRON_PACKET_ID = new Identifier(Artent.MODID, "packet.sync.cauldron");
-	public static final Identifier SYNCHRONIZE_CIRCLE = new Identifier(Artent.MODID, "packet.sync.circle");
-	public static final Identifier REMOVE_CIRCLE = new Identifier(Artent.MODID, "packet.close.circle");
+	public static final Identifier OPEN_CIRCLE_GUI_PACKET_ID = new Identifier(Artent.MODID, "packet.circle.open");
+	public static final Identifier SYNC_CAULDRON_PACKET_ID = new Identifier(Artent.MODID, "packet.cauldron.sync");
+	public static final Identifier SYNCHRONIZE_CIRCLE = new Identifier(Artent.MODID, "packet.circle.sync");
+	public static final Identifier DAMAGE_CHALK = new Identifier(Artent.MODID, "packet.chalk.damage");
+	public static final Identifier REMOVE_CIRCLE = new Identifier(Artent.MODID, "packet.circle.close");
 
 //	public static final Identifier EntitySpawnPacketID = new Identifier(Artent.MODID, "entity_spawn_packet");
 
@@ -57,6 +61,32 @@ public class ArtentServerHook {
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
 			});
 		});
+		ServerPlayNetworking.registerGlobalReceiver(DAMAGE_CHALK, (server, player, handler, buffer, sender) -> {
+			var playerUuid = buffer.readUuid();
+
+			// Server sided code
+			server.execute(() -> {
+				if (!player.getUuid().equals(playerUuid))
+					return;
+				var world = player.getWorld();
+				if (world == null)
+					return;
+
+				if (damageChalk(player, Hand.MAIN_HAND)) {
+					player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+				} else if (damageChalk(player, Hand.OFF_HAND)) {
+					player.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
+				}
+			});
+		});
+	}
+
+	public static boolean damageChalk(PlayerEntity player, Hand hand) {
+		var mainHand = player.getStackInHand(hand);
+		return !player.isCreative()
+				   && !mainHand.isEmpty()
+				   && mainHand.getItem() == ModItems.Chalk
+				   && mainHand.damage(1, player.getWorld().getRandom(), player instanceof ServerPlayerEntity serverPlayer ? serverPlayer : null);
 	}
 
 	public static void packetOpenCircleGui(PlayerEntity player, AlchemicalCircleEntity entity) {

@@ -3,6 +3,7 @@ package faceless.artent.brewing.block;
 import com.mojang.serialization.MapCodec;
 import faceless.artent.api.ChatUtils;
 import faceless.artent.api.MiscUtils;
+import faceless.artent.api.item.INamed;
 import faceless.artent.brewing.api.AlchemicalPotionUtil;
 import faceless.artent.brewing.blockEntities.FermentingBarrelBlockEntity;
 import faceless.artent.objects.ModBlockEntities;
@@ -28,7 +29,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class FermentingBarrel extends BlockWithEntity {
+public class FermentingBarrel extends BlockWithEntity implements INamed {
 	public static final MapCodec<FermentingBarrel> CODEC = FermentingBarrel.createCodec(FermentingBarrel::new);
 	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
@@ -40,6 +41,11 @@ public class FermentingBarrel extends BlockWithEntity {
 	public FermentingBarrel(Settings settings) {
 		super(settings);
 		this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+	}
+
+	@Override
+	public String getId() {
+		return "fermenting_barrel";
 	}
 
 	@Override

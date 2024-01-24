@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 
 public final class ModItems {
 	public static final ArtentItem PhiloStone = new ArtentItem("philosophers_stone");
-	public static final Chalk Chalk = new Chalk();
+	public static final Chalk Chalk = new Chalk(new FabricItemSettings().maxDamage(128));
 	public static final AlchemicalClock AlchemicalClock = new AlchemicalClock();
 	public static final AlchemicalCoal AlchemicalCoal = new AlchemicalCoal();
 	public static final AlchemicalPaper AlchemicalPaper = new AlchemicalPaper();
@@ -24,6 +24,9 @@ public final class ModItems {
 	public static Item StoneOfTheSea = new Item(new FabricItemSettings().maxCount(64));
 	public static Item FortitudeSpiritStone = new Item(new FabricItemSettings().maxCount(64));
 	public static Item AmberSphere = new Item(new FabricItemSettings().maxCount(64));
+
+	public static Item[] Catalysts = new Item[]{ StoneOfTheSea, FortitudeSpiritStone, AmberSphere };
+
 	public static EnhancerItem EnderInversionUpgrade = new EnderInversion(new FabricItemSettings().maxCount(1));
 	public static EnhancerItem NetherFireStone = new NetherFireStone(new FabricItemSettings().maxCount(1));
 	public static EnhancerItem GoldenCrossUpgrade = new GoldenCross(new FabricItemSettings().maxCount(1));

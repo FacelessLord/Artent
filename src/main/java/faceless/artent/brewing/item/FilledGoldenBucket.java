@@ -13,6 +13,7 @@ import java.util.List;
 public class FilledGoldenBucket extends Item {
 	public FilledGoldenBucket(Settings settings) {
 		super(settings);
+		// TODO 32x32 texture
 	}
 
 	@Override
