@@ -3,9 +3,7 @@ package faceless.artent.brewing.api;
 import faceless.artent.api.math.Color;
 import faceless.artent.objects.ModPotionEffects;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -28,7 +26,7 @@ public class ArtentStatusEffect extends StatusEffect {
 		this.isInstant = isInstant;
 	}
 
-	public void onEffectRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier, List<StatusEffectInstance> statusEffectQueue) {
+	public void onEffectRemoved(LivingEntity entity, int amplifier, List<StatusEffectInstance> statusEffectQueue) {
 		if (!(entity instanceof ServerPlayerEntity player))
 			return;
 
@@ -64,13 +62,16 @@ public class ArtentStatusEffect extends StatusEffect {
 			else
 				onRemoved(entity.getAttributes());
 		}
-		if (this == ModPotionEffects.REGENERATION) {
-			if (entity.getGroup() == EntityGroup.UNDEAD) {
-				entity.timeUntilRegen = 20;
-				entity.damage(entity.getDamageSources().magic(), 1);
-			} else
-				entity.heal(1f);
+		if (entity.hasStatusEffect(ModPotionEffects.FEATHER_FALLING)) {
+			entity.fallDistance = 0;
 		}
+//		if (this == ModPotionEffects.REGENERATION) {
+//			if (entity.getGroup() == EntityGroup.UNDEAD) {
+//				entity.timeUntilRegen = 20;
+//				entity.damage(entity.getDamageSources().magic(), 1);
+//			} else
+//				entity.heal(1f);
+//		}
 	}
 
 	public void applyInstantEffect(@Nullable Entity source, @Nullable Entity attacker, LivingEntity target, int amplifier, double proximity) {
@@ -93,7 +94,7 @@ public class ArtentStatusEffect extends StatusEffect {
 			|| this == ModPotionEffects.FLIGHT
 			|| this == ModPotionEffects.FREEZING && duration % 10 == 0
 			|| this == ModPotionEffects.BERSERK && duration == 600
-			|| this == ModPotionEffects.REGENERATION && ((20 >> amplifier) == 0 || duration % (20 >> amplifier) == 0)
+//			|| this == ModPotionEffects.REGENERATION && ((20 >> amplifier) == 0 || duration % (20 >> amplifier) == 0)
 			|| this == ModPotionEffects.FAST_SWIMMING && (duration % 10 == 0);
 	}
 

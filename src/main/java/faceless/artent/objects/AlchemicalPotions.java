@@ -33,11 +33,11 @@ public class AlchemicalPotions {
 	public static final AlchemicalPotion LUMBERJACK = new AlchemicalPotion("lumberjack", Color.Red, new StatusEffectInstance(ModPotionEffects.LUMBERJACK, 3600));
 	public static final AlchemicalPotion HASTE = new AlchemicalPotion("haste", Color.Red, new StatusEffectInstance(StatusEffects.HASTE, 1800));
 
-	public static final AlchemicalPotion INSTANT_HARM = new AlchemicalPotion("artent:instant_harm", Color.Red, new StatusEffectInstance(ModPotionEffects.INSTANT_HARM, 1));
+	public static final AlchemicalPotion INSTANT_HARM = new AlchemicalPotion("artent:instant_harm", Color.Red, new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1));
 	public static final AlchemicalPotion FERMENTED_VAMPIRISM = new AlchemicalPotion("artent:fermented_vampirism", Color.Red, new StatusEffectInstance(ModPotionEffects.FERMENTED_VAMPIRISM, 1200));
 	public static final AlchemicalPotion FERMENTED_HOLY_WATER = new AlchemicalPotion("artent:fermented_holy_water", Color.Red, new StatusEffectInstance(ModPotionEffects.FERMENTED_HOLY_WATER, 1200));
 	public static final AlchemicalPotion FERMENTED_LIQUID_FLAME = new AlchemicalPotion("artent:fermented_liquid_flame", Color.Red, new StatusEffectInstance(ModPotionEffects.FERMENTED_LIQUID_FLAME, 1));
-	public static final AlchemicalPotion INSTANT_HEALING = new AlchemicalPotion("artent:instant_healing", Color.Red, new StatusEffectInstance(ModPotionEffects.INSTANT_HEALING, 1));
+	public static final AlchemicalPotion INSTANT_HEALING = new AlchemicalPotion("artent:instant_healing", Color.Red, new StatusEffectInstance(StatusEffects.INSTANT_HEALTH, 1));
 	public static final AlchemicalPotion FERMENTED_ANTIDOTE = new AlchemicalPotion("artent:fermented_antidote", Color.Red, new StatusEffectInstance(ModPotionEffects.FERMENTED_ANTIDOTE, 1));
 	public static final AlchemicalPotion FERMENTED_SATURATION = new AlchemicalPotion("artent:fermented_saturation", Color.Red, new StatusEffectInstance(ModPotionEffects.FERMENTED_SATURATION, 1));
 

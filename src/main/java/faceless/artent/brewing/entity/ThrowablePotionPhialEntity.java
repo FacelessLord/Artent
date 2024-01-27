@@ -3,10 +3,6 @@ package faceless.artent.brewing.entity;
 import faceless.artent.brewing.api.AlchemicalPotionUtil;
 import faceless.artent.objects.ModEntities;
 import faceless.artent.objects.ModItems;
-import net.minecraft.block.AbstractCandleBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -16,13 +12,10 @@ import net.minecraft.entity.passive.AxolotlEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
@@ -58,14 +51,6 @@ public class ThrowablePotionPhialEntity extends ThrownItemEntity {
 	@Override
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
-		if (this.getWorld().isClient) {
-			return;
-		}
-		ItemStack itemStack = this.getStack();
-		List<StatusEffectInstance> list = AlchemicalPotionUtil.getPotionEffects(itemStack);
-		Direction direction = blockHitResult.getSide();
-		BlockPos blockPos = blockHitResult.getBlockPos();
-		BlockPos blockPos2 = blockPos.offset(direction);
 	}
 
 	@Override
@@ -127,20 +112,6 @@ public class ThrowablePotionPhialEntity extends ThrownItemEntity {
 					livingEntity.addStatusEffect(new StatusEffectInstance(statusEffect, i, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles()), entity2);
 				}
 			}
-		}
-	}
-
-	private void extinguishFire(BlockPos pos) {
-		var world = getWorld();
-		BlockState blockState = world.getBlockState(pos);
-		if (blockState.isIn(BlockTags.FIRE)) {
-			world.removeBlock(pos, false);
-		} else if (AbstractCandleBlock.isLitCandle(blockState)) {
-			AbstractCandleBlock.extinguish(null, blockState, world, pos);
-		} else if (CampfireBlock.isLitCampfire(blockState)) {
-			world.syncWorldEvent(null, WorldEvents.FIRE_EXTINGUISHED, pos, 0);
-			CampfireBlock.extinguish(this.getOwner(), world, pos, blockState);
-			world.setBlockState(pos, blockState.with(CampfireBlock.LIT, false), Block.NOTIFY_ALL);
 		}
 	}
 }

@@ -45,6 +45,9 @@ public class ArtentClientHook {
 
 					// Client sided code
 					client.execute(() -> {
+						if(client.player == null)
+							return;
+
 						var world = client.player.getWorld();
 						if (world == null)
 							return;

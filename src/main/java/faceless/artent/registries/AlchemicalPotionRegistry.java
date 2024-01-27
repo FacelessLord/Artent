@@ -55,10 +55,10 @@ public class AlchemicalPotionRegistry implements IRegistry {
 		RegisteredPotions.put(potion.id, potion);
 		FermentedPotions.put(potion.id, fermented);
 	}
-
-	public static boolean potionIsRegistered(String id) {
-		return RegisteredPotions.containsKey(id);
-	}
+//
+//	public static boolean potionIsRegistered(String id) {
+//		return RegisteredPotions.containsKey(id);
+//	}
 
 	public static boolean fermentedPotionIsRegistered(String id) {
 		return FermentedPotions.containsKey(id);

@@ -38,7 +38,7 @@ public class LivingEntityMixin {
 		if (!living.getWorld().isClient) {
 			var type = effect.getEffectType();
 			if (type instanceof ArtentStatusEffect artentStatusEffect) {
-				artentStatusEffect.onEffectRemoved(living, living.getAttributes(), effect.getAmplifier(), statusEffectQueue);
+				artentStatusEffect.onEffectRemoved(living, effect.getAmplifier(), statusEffectQueue);
 				this.updateAttributes();
 			}
 		}
@@ -52,7 +52,7 @@ public class LivingEntityMixin {
 			if (!(type instanceof ArtentStatusEffect artentStatusEffect)) {
 				return;
 			}
-			artentStatusEffect.onEffectRemoved(living, living.getAttributes(), effect.getAmplifier(), statusEffectQueue);
+			artentStatusEffect.onEffectRemoved(living, effect.getAmplifier(), statusEffectQueue);
 			this.updateAttributes();
 		}
 	}

@@ -13,9 +13,8 @@ public class FeatherFallMixin {
 	@Inject(method = "tick", at = @At("RETURN"))
 	private void onTick(CallbackInfo ci) {
 		var living = (LivingEntity) (Object) this;
-		if (living.hasStatusEffect(ModPotionEffects.FEATHER_FALLING)) {
-			living.fallDistance = 0;
-		}
+
+		// These effects here because they need to be able to remove effects and effectQueue can't help here
 		if (living.hasStatusEffect(ModPotionEffects.ANTIDOTE)) {
 			var potion = living.getStatusEffect(ModPotionEffects.ANTIDOTE);
 			if (potion == null)
