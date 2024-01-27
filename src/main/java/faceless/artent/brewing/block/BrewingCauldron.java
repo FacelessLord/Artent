@@ -145,7 +145,7 @@ public class BrewingCauldron extends BlockWithEntity implements INamed {
 			addFuel(cauldron, player, hand, stack);
 		} else if (stack.getItem() == Items.FLINT_AND_STEEL) {
 			setOnFire(world, pos, state, cauldron, player, stack);
-		} else if (stack.isEmpty() && state.get(IS_BURNING)) {
+		} else if (stack.isEmpty()) {
 			if (player.isSneaking()) {
 				cauldron.clearCauldron();
 			}

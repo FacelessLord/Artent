@@ -31,6 +31,18 @@ public class MiscUtils {
 		}
 		return a;
 	}
+	/**
+	 * Puts number in the limits
+	 */
+	public static float limit(float a, float min, float max) {
+		if (a > max) {
+			a = max;
+		}
+		if (a < min) {
+			a = min;
+		}
+		return a;
+	}
 
 	public static void giveOrDropItem(World world, BlockPos pos, PlayerEntity player, ItemStack droppedStack) {
 		if (!player.giveItemStack(droppedStack)) {

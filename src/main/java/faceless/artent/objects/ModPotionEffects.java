@@ -45,11 +45,6 @@ public class ModPotionEffects {
 	public static final StatusEffect FLIGHT = new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red);
 	public static final StatusEffect SURFACE_TELEPORTATION = new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red, true);
 	public static final StatusEffect LUMBERJACK = new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red);
-	// TODO use vanilla effects if possible
-//	public static final StatusEffect REGENERATION = register("regeneration", new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red));
-
-	//	public static final StatusEffect INSTANT_HEALING = register("instant_healing", new ConcentrateStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red));
-//	public static final StatusEffect INSTANT_HARM = register("instant_harm", new ConcentrateStatusEffect(StatusEffectCategory.HARMFUL, Color.Red));
 	public static final StatusEffect FERMENTED_VAMPIRISM = new ConcentrateStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red, false);
 	public static final StatusEffect FERMENTED_HOLY_WATER = new ConcentrateStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red, false);
 	public static final StatusEffect FERMENTED_ANTIDOTE = new ConcentrateStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red);

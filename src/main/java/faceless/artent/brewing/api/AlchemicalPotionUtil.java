@@ -3,6 +3,7 @@ package faceless.artent.brewing.api;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import faceless.artent.api.item.group.ArtentItemGroupBuilder;
+import faceless.artent.api.math.Color;
 import faceless.artent.registries.AlchemicalPotionRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
@@ -87,7 +88,7 @@ public class AlchemicalPotionUtil {
 
 	public static int getColor(ItemStack itemStack) {
 		var potion = getPotion(itemStack);
-		return potion != null ? potion.color.toHex() : 0;
+		return potion != null ? potion.color.addNoMixing(new Color(40, 40, 40)).toHex() : 0;
 	}
 
 	public static List<StatusEffectInstance> getPotionEffects(ItemStack itemStack) {

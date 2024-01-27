@@ -69,11 +69,18 @@ public class Color {
 	}
 
 	public Color multiply(float mult) {
-		return new Color((int) (red * mult), (int) (green * mult), (int) (blue * mult));
+		return new Color(
+			(int) MiscUtils.limit(red * mult, 0, 255f),
+			(int) MiscUtils.limit(green * mult, 0, 255),
+			(int) MiscUtils.limit(blue * mult, 0, 255));
 	}
 
 	public Color multiplyAlpha(float mult) {
-		return new Color((int) (red * mult), (int) (green * mult), (int) (blue * mult), (int) (alpha * mult));
+		return new Color(
+			(int) MiscUtils.limit(red * mult, 0, 255f),
+			(int) MiscUtils.limit(green * mult, 0, 255),
+			(int) MiscUtils.limit(blue * mult, 0, 255),
+			(int) MiscUtils.limit(alpha * mult, 0, 255));
 	}
 
 	public Color add(Color c) {
@@ -84,10 +91,14 @@ public class Color {
 
 		return new Color(red, green, blue, alpha);
 	}
-// Deprecated
-//    public Color add(Color b) {
-//        return new Color(red + b.red, green + b.green, blue + b.blue);
-//    }
+	public Color addNoMixing(Color c) {
+		int red = MiscUtils.limit(c.red + this.red, 0, 255);
+		int green = MiscUtils.limit(c.green + this.green, 0, 255);
+		int blue = MiscUtils.limit(c.blue + this.blue, 0, 255);
+		int alpha = MiscUtils.limit(c.alpha + this.alpha, 0, 255);
+
+		return new Color(red, green, blue, alpha);
+	}
 
 	public Color addAlpha(Color b) {
 		return new Color(red + b.red, green + b.green, blue + b.blue, alpha + b.alpha);

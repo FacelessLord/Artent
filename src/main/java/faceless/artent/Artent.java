@@ -40,8 +40,8 @@ public class Artent implements ModInitializer {
 	public void registerAll() {
 		StatusEffects.register();
 		Potions.register();
-		Items.register();
 		Blocks.register();
+		Items.register();
 		BlockEntities.register();
 		Entities.register();
 		Transmutations.register();
