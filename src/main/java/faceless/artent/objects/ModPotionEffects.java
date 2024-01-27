@@ -42,6 +42,7 @@ public class ModPotionEffects {
 	public static final StatusEffect FLIGHT = register("flight", new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red));
 	public static final StatusEffect SURFACE_TELEPORTATION = register("surface_teleportation", new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red, true));
 	public static final StatusEffect LUMBERJACK = register("lumberjack", new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red));
+	// TODO use vanilla effects if possible
 	public static final StatusEffect REGENERATION = register("regeneration", new ArtentStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red));
 
 	public static final StatusEffect INSTANT_HEALING = register("instant_healing", new ConcentrateStatusEffect(StatusEffectCategory.BENEFICIAL, Color.Red));

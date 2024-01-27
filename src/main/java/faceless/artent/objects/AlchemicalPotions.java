@@ -16,7 +16,7 @@ public class AlchemicalPotions {
 	public static final AlchemicalPotion FIRE_RESISTANCE = new AlchemicalPotion("fire_resistance", Color.Orange, new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 2 * 1200));
 	public static final AlchemicalPotion FREEZING = new AlchemicalPotion("freezing", Color.Orange, new StatusEffectInstance(ModPotionEffects.FREEZING, 20 * 5));
 	public static final AlchemicalPotion LIQUID_FLAME = new AlchemicalPotion("liquid_flame", Color.Red, new StatusEffectInstance(ModPotionEffects.LIQUID_FLAME, 2 * 1200));
-	public static final AlchemicalPotion HEALING = new AlchemicalPotion("healing", Color.Red, new StatusEffectInstance(ModPotionEffects.REGENERATION, 600, 0));
+	public static final AlchemicalPotion HEALING = new AlchemicalPotion("healing", Color.Red, new StatusEffectInstance(StatusEffects.REGENERATION, 600, 0));
 	public static final AlchemicalPotion ANTIDOTE = new AlchemicalPotion("antidote", Color.Red, new StatusEffectInstance(ModPotionEffects.ANTIDOTE, 1200));
 
 	public static final AlchemicalPotion FAST_SWIMMING = new AlchemicalPotion("fast_swimming", Color.Red, new StatusEffectInstance(ModPotionEffects.FAST_SWIMMING, 1800));
