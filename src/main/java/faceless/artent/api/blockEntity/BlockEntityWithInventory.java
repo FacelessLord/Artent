@@ -43,20 +43,25 @@ public abstract class BlockEntityWithInventory extends BlockEntity implements In
 		if (!canTakeStackFromSlot(slot))
 			return ItemStack.EMPTY;
 		var stack = getStack(slot);
-		if (stack.getCount() < amount) {
-			setStack(slot, ItemStack.EMPTY);
+		if (stack.getCount() <= amount) {
+			removeStack(slot);
 			return stack;
 		}
 		var newStack = stack.copy();
 		newStack.setCount(amount);
 		stack.setCount(stack.getCount() - amount);
+		onContentChanged();
 		markDirty();
 		return newStack;
+	}
+
+	protected void onRemoveStack(int slot) {
 	}
 
 	@Override
 	public ItemStack removeStack(int slot) {
 		var stack = getStack(slot);
+		onRemoveStack(slot);
 		setStack(slot, ItemStack.EMPTY);
 		return stack;
 	}
@@ -66,6 +71,7 @@ public abstract class BlockEntityWithInventory extends BlockEntity implements In
 	@Override
 	public void setStack(int slot, ItemStack stack) {
 		items.set(slot, stack);
+		onContentChanged();
 		markDirty();
 	}
 
@@ -77,13 +83,13 @@ public abstract class BlockEntityWithInventory extends BlockEntity implements In
 	@Override
 	public void clear() {
 		items.clear();
+		onContentChanged();
 		markDirty();
 	}
 
 	@Override
 	public void markDirty() {
 		super.markDirty();
-		onContentChanged();
 		//noinspection DataFlowIssue
 		world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
 	}

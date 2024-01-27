@@ -19,7 +19,7 @@ public class FeatherFallMixin {
 			var potion = living.getStatusEffect(ModPotionEffects.ANTIDOTE);
 			if (potion == null)
 				return;
-			var level = potion.getAmplifier() + 1;
+			var level = potion.getAmplifier();
 			var duration = potion.getDuration();
 			checkAndClearPoison(living, level, duration);
 		}
@@ -27,8 +27,8 @@ public class FeatherFallMixin {
 			var potion = living.getStatusEffect(ModPotionEffects.ANTIDOTE);
 			if (potion == null)
 				return;
-			var level = potion.getAmplifier() + 1;
-			checkAndClearPoison(living, level, 0);
+			var level = potion.getAmplifier();
+			checkAndClearPoison(living, level + 1, 0);
 			living.removeStatusEffect(ModPotionEffects.FERMENTED_ANTIDOTE);
 		}
 	}
@@ -37,7 +37,7 @@ public class FeatherFallMixin {
 		if (!living.hasStatusEffect(StatusEffects.POISON) || duration % 15 != 0)
 			return;
 		var poison = living.getStatusEffect(StatusEffects.POISON);
-		if (poison != null && poison.getAmplifier() + 1 <= level) {
+		if (poison != null && poison.getAmplifier() <= level) {
 			living.removeStatusEffect(StatusEffects.POISON);
 		}
 	}

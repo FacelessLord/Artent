@@ -48,7 +48,6 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 	protected void onTakeOutput(PlayerEntity player, ItemStack stack) {
 		if (!stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable) {
 			var level = sharpenable.getLevel(stack);
-			var hammer = anvil.getStack(2);
 			this.anvil.getStack(0).decrement(1);
 			var modifier = this.anvil.getStack(1);
 			var modifierItem = modifier.getItem();
@@ -57,6 +56,7 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 			} else if (modifierItem instanceof IEnhancer) {
 				this.anvil.getStack(1).decrement(1);
 			}
+			var hammer = anvil.getStack(2);
 			hammer.damage(4, player, p -> {
 			});
 		}
@@ -67,7 +67,6 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 	}
 
 	//	slotId - id of the slot in order: [...this.inventorySlots, ...player.slots]
-//
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slotId) {
 		Slot slot = this.slots.get(slotId);
@@ -76,12 +75,14 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 			var itemStack = slotStack.copy();
 			var item = itemStack.getItem();
 			if (slotId == 3) { // output
-				if (!this.insertItem(slotStack, 4, 39, true)) {
+				if (!this.insertItem(slotStack, 4, 40, true)) {
 					return ItemStack.EMPTY;
 				}
 				slot.onQuickTransfer(slotStack, itemStack);
+				anvil.removeStack(slotId);
+				onTakeOutput(player, itemStack);
 			} else if (slotId >= 0 && slotId <= 3 // shift-click on slots for tool, hammer, catalyst and result
-						   ? !this.insertItem(slotStack, 4, 39, false) // try put into player inventory
+						   ? !this.insertItem(slotStack, 4, 40, false) // try put into player inventory
 						   : (item instanceof SmithingHammer
 								  // Insert hammer into hammer slot. Otherwise, try to insert it as tool
 								  ? !this.insertItem(slotStack, 2, 3, false) || !this.insertItem(slotStack, 0, 1, false)
@@ -90,9 +91,9 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 										 : (item instanceof IEnhancer || Arrays.stream(ModItems.Catalysts).anyMatch(cat -> cat == item)
 												// insert catalyst or enchancer into slot 1
 												? !this.insertItem(slotStack, 1, 2, false)
-												: (slotId >= 4 && slotId < 30
-													   ? !this.insertItem(slotStack, 30, 39, false)
-													   : slotId >= 30 && slotId < 39 && !this.insertItem(slotStack, 3, 30, false)
+												: (slotId >= 4 && slotId < 31
+													   ? !this.insertItem(slotStack, 31, 40, false)
+													   : slotId >= 31 && slotId < 40 && !this.insertItem(slotStack, 3, 31, false)
 			))))) {
 				return ItemStack.EMPTY;
 			}
@@ -152,6 +153,7 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 
 			@Override
 			public void onTakeItem(PlayerEntity player, ItemStack stack) {
+				super.onTakeItem(player, stack);
 				onTakeOutput(player, stack);
 			}
 		});

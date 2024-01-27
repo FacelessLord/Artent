@@ -20,7 +20,7 @@ public final class ModItems {
 	public static final AlchemicalCoal AlchemicalCoal = new AlchemicalCoal();
 	public static final AlchemicalPaper AlchemicalPaper = new AlchemicalPaper();
 
-	public static SmithingHammer SmithingHammer = new SmithingHammer(new FabricItemSettings().maxCount(1));
+	public static SmithingHammer SmithingHammer = new SmithingHammer(new FabricItemSettings().maxCount(1).maxDamage(512));
 	public static Item StoneOfTheSea = new Item(new FabricItemSettings().maxCount(64));
 	public static Item FortitudeSpiritStone = new Item(new FabricItemSettings().maxCount(64));
 	public static Item AmberSphere = new Item(new FabricItemSettings().maxCount(64));

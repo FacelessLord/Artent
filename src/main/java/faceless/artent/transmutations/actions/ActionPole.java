@@ -17,8 +17,8 @@ public class ActionPole extends Transmutation {
 				return;
 
 			for (int j = 1; j <= heightRange; j++) {
-				for (int i = -widthRange + 1; i <= widthRange; i++) {
-					for (int k = -widthRange + 1; k <= widthRange; k++) {
+				for (int i = -widthRange; i <= widthRange; i++) {
+					for (int k = -widthRange; k <= widthRange; k++) {
 						var rotated = DirectionUtils.applyDirection(new int[]{ i, -j, k }, facing);
 
 						var blockPos = circle.add(rotated[0], rotated[1], rotated[2]);
