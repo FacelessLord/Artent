@@ -1,4 +1,4 @@
-package faceless.artent.sharpening.screenHandlers;
+package faceless.artent.trading.screenHandlers;
 
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.objects.ModItems;
@@ -20,14 +20,14 @@ import net.minecraft.screen.slot.Slot;
 
 import java.util.Arrays;
 
-public class SharpeningAnvilScreenHandler extends ScreenHandler {
+public class TraderScreenHandler extends ScreenHandler {
 	private final Inventory anvil;
 	private final ScreenHandlerContext context;
 
 	//This constructor gets called on the client when the server wants it to open the screenHandler,
 	//The client will call the other constructor with an empty Inventory and the screenHandler will automatically
 	//sync this empty inventory with the inventory on the server.
-	public SharpeningAnvilScreenHandler(int syncId, PlayerInventory playerInventory) {
+	public TraderScreenHandler(int syncId, PlayerInventory playerInventory) {
 		this(syncId, playerInventory, new SimpleInventory(4), ScreenHandlerContext.EMPTY);
 	}
 
@@ -115,7 +115,7 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 		return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 16, true);
 	}
 
-	public SharpeningAnvilScreenHandler(int syncId, PlayerInventory inv, Inventory anvil, ScreenHandlerContext context) {
+	public TraderScreenHandler(int syncId, PlayerInventory inv, Inventory anvil, ScreenHandlerContext context) {
 		super(ModScreenHandlers.SHARPENING_ANVIL_HANDLER, syncId);
 		this.context = context;
 		checkSize(anvil, 4);

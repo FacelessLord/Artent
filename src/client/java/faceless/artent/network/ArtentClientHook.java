@@ -1,6 +1,7 @@
 package faceless.artent.network;
 
 import faceless.artent.brewing.blockEntities.BrewingCauldronBlockEntity;
+import faceless.artent.playerData.api.DataUtil;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import faceless.artent.trasmutations.AlchemicalCircleGui;
 import io.netty.buffer.Unpooled;
@@ -37,6 +38,20 @@ public class ArtentClientHook {
 				});
 		ClientPlayNetworking
 			.registerGlobalReceiver(
+				ArtentServerHook.SYNC_PLAYER_DATA_PACKET_ID,
+				(client, handler, buffer, responseHandler) -> {
+					var nbt = buffer.readNbt();
+					if (client.player == null)
+						return;
+//
+					// Client sided code
+					client.execute(() -> {
+						var artentHandler = DataUtil.getHandler(client.player);
+						artentHandler.readFromNbt(nbt);
+					});
+				});
+		ClientPlayNetworking
+			.registerGlobalReceiver(
 				ArtentServerHook.SYNC_CAULDRON_PACKET_ID,
 				(client, handler, buffer, responseHandler) -> {
 
@@ -45,7 +60,7 @@ public class ArtentClientHook {
 
 					// Client sided code
 					client.execute(() -> {
-						if(client.player == null)
+						if (client.player == null)
 							return;
 
 						var world = client.player.getWorld();
@@ -60,29 +75,6 @@ public class ArtentClientHook {
 					});
 				});
 
-//		ClientPlayNetworking.registerGlobalReceiver(ArtentServerHook.EntitySpawnPacketID, (client, handler, byteBuf, responder) -> {
-//			EntityType<?> et = Registries.ENTITY_TYPE.get(byteBuf.readVarInt());
-//			UUID uuid = byteBuf.readUuid();
-//			int entityId = byteBuf.readVarInt();
-//			Vec3d pos = PacketBufUtil.readVec3d(byteBuf);
-//			float pitch = PacketBufUtil.readAngle(byteBuf);
-//			float yaw = PacketBufUtil.readAngle(byteBuf);
-//
-//			client.execute(() -> {
-//				if (MinecraftClient.getInstance().world == null)
-//					throw new IllegalStateException("Tried to spawn entity in a null world!");
-//				Entity e = et.create(MinecraftClient.getInstance().world);
-//				if (e == null)
-//					throw new IllegalStateException("Failed to create instance of entity \"" + Registries.ENTITY_TYPE.getId(et) + "\"!");
-//				e.updateTrackedPosition(pos.x, pos.y, pos.z);
-//				e.setPos(pos.x, pos.y, pos.z);
-//				e.setPitch(pitch);
-//				e.setYaw(yaw);
-//				e.setId(entityId);
-//				e.setUuid(uuid);
-//				MinecraftClient.getInstance().world.addEntity(e);
-//			});
-//		});
 	}
 
 	public static void packetSynchronizeCircle(AlchemicalCircleEntity entity) {
@@ -98,12 +90,12 @@ public class ArtentClientHook {
 	public static void packetDamageChalk(PlayerEntity player) {
 		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 		passedData.writeUuid(player.getUuid());
-		ClientPlayNetworking.send(ArtentServerHook.DAMAGE_CHALK, passedData);
+		ClientPlayNetworking.send(ArtentServerHook.DAMAGE_CHALK_PACKET_ID, passedData);
 	}
 
 	public static void packetRemoveCircle(BlockPos pos) {
 		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 		passedData.writeBlockPos(pos);
-		ClientPlayNetworking.send(ArtentServerHook.REMOVE_CIRCLE, passedData);
+		ClientPlayNetworking.send(ArtentServerHook.REMOVE_CIRCLE_PACKET_ID, passedData);
 	}
 }

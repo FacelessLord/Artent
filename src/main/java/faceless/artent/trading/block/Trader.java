@@ -1,63 +1,46 @@
-package faceless.artent.sharpening.block;
+package faceless.artent.trading.block;
 
 import com.mojang.serialization.MapCodec;
 import faceless.artent.api.item.INamed;
-import faceless.artent.sharpening.blockEntities.SharpeningAnvilBlockEntity;
-import faceless.artent.sharpening.screenHandlers.SharpeningAnvilScreenHandler;
+import faceless.artent.sharpening.block.SharpeningAnvil;
+import faceless.artent.trading.blockEntities.TraderBlockEntity;
+import faceless.artent.trading.screenHandlers.TraderScreenHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class SharpeningAnvil extends BlockWithEntity implements INamed {
-	public static final MapCodec<SharpeningAnvil> CODEC = SharpeningAnvil.createCodec(SharpeningAnvil::new);
-	public BlockItem Item;
-
+public class Trader extends BlockWithEntity implements INamed {
 	@Override
 	protected MapCodec<? extends BlockWithEntity> getCodec() {
 		return CODEC;
 	}
 
+	public static final MapCodec<SharpeningAnvil> CODEC = SharpeningAnvil.createCodec(SharpeningAnvil::new);
+	public BlockItem Item;
+
+	public Trader(Settings settings) {
+		super(settings);
+	}
+
 	@Override
 	public String getId() {
-		return "sharpening_anvil";
-	}
-
-	public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
-
-	public SharpeningAnvil(Settings settings) {
-		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
-	}
-
-	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
-	}
-
-	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(FACING);
+		return "trader";
 	}
 
 	@Override
@@ -83,8 +66,8 @@ public class SharpeningAnvil extends BlockWithEntity implements INamed {
 	@Nullable
 	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
 		var blockEntity = world.getBlockEntity(pos);
-		if (blockEntity instanceof SharpeningAnvilBlockEntity anvil)
-			return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new SharpeningAnvilScreenHandler(syncId, inventory, anvil.inventory, ScreenHandlerContext.create(world, pos)), Text.translatable("gui.artent.sharpening_anvil"));
+		if (blockEntity instanceof TraderBlockEntity trader)
+			return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new TraderScreenHandler(syncId, inventory, trader.inventory, ScreenHandlerContext.create(world, pos)), Text.translatable("gui.artent.trader"));
 		return null;
 	}
 
@@ -100,7 +83,7 @@ public class SharpeningAnvil extends BlockWithEntity implements INamed {
 	@Nullable
 	@Override
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new SharpeningAnvilBlockEntity(pos, state);
+		return new TraderBlockEntity(pos, state);
 	}
 
 	@Override
@@ -112,9 +95,10 @@ public class SharpeningAnvil extends BlockWithEntity implements INamed {
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 		if (state.getBlock() != newState.getBlock()) {
+			// TODO
 			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (blockEntity instanceof SharpeningAnvilBlockEntity anvil) {
-				ItemScatterer.spawn(world, pos, anvil.inventory);
+			if (blockEntity instanceof TraderBlockEntity trader) {
+				ItemScatterer.spawn(world, pos, trader.inventory);
 				// update comparators
 				world.updateComparators(pos, this);
 			}
@@ -123,22 +107,7 @@ public class SharpeningAnvil extends BlockWithEntity implements INamed {
 	}
 
 	@Override
-	public boolean hasComparatorOutput(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
-		return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
-	}
-
-	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		var facing = state.get(FACING);
-		return switch (facing) {
-			case DOWN, UP -> Block.createCuboidShape(0f, 0f, 0, 16, 10, 16);
-			case NORTH, SOUTH -> Block.createCuboidShape(5f, 0f, 0, 11f, 10f, 16f);
-			case EAST, WEST -> Block.createCuboidShape(0f, 0f, 5f, 16f, 10f, 11f);
-		};
+		return Block.createCuboidShape(1, 1, 1, 15, 15, 15);
 	}
 }

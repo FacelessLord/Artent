@@ -4,6 +4,7 @@ import faceless.artent.Artent;
 import faceless.artent.brewing.blockEntities.BrewingCauldronBlockEntity;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.objects.ModItems;
+import faceless.artent.playerData.api.DataUtil;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -23,9 +24,10 @@ public class ArtentServerHook {
 
 	public static final Identifier OPEN_CIRCLE_GUI_PACKET_ID = new Identifier(Artent.MODID, "packet.circle.open");
 	public static final Identifier SYNC_CAULDRON_PACKET_ID = new Identifier(Artent.MODID, "packet.cauldron.sync");
+	public static final Identifier SYNC_PLAYER_DATA_PACKET_ID = new Identifier(Artent.MODID, "packet.player.sync");
 	public static final Identifier SYNCHRONIZE_CIRCLE = new Identifier(Artent.MODID, "packet.circle.sync");
-	public static final Identifier DAMAGE_CHALK = new Identifier(Artent.MODID, "packet.chalk.damage");
-	public static final Identifier REMOVE_CIRCLE = new Identifier(Artent.MODID, "packet.circle.close");
+	public static final Identifier DAMAGE_CHALK_PACKET_ID = new Identifier(Artent.MODID, "packet.chalk.damage");
+	public static final Identifier REMOVE_CIRCLE_PACKET_ID = new Identifier(Artent.MODID, "packet.circle.close");
 
 //	public static final Identifier EntitySpawnPacketID = new Identifier(Artent.MODID, "entity_spawn_packet");
 
@@ -46,7 +48,7 @@ public class ArtentServerHook {
 				blockEntity.markDirty();
 			});
 		});
-		ServerPlayNetworking.registerGlobalReceiver(REMOVE_CIRCLE, (server, player, handler, buffer, sender) -> {
+		ServerPlayNetworking.registerGlobalReceiver(REMOVE_CIRCLE_PACKET_ID, (server, player, handler, buffer, sender) -> {
 			BlockPos pos = buffer.readBlockPos();
 
 			// Server sided code
@@ -61,7 +63,7 @@ public class ArtentServerHook {
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
 			});
 		});
-		ServerPlayNetworking.registerGlobalReceiver(DAMAGE_CHALK, (server, player, handler, buffer, sender) -> {
+		ServerPlayNetworking.registerGlobalReceiver(DAMAGE_CHALK_PACKET_ID, (server, player, handler, buffer, sender) -> {
 			var playerUuid = buffer.readUuid();
 
 			// Server sided code
@@ -107,6 +109,17 @@ public class ArtentServerHook {
 		var nbt = entity.createNbt();
 		passedData.writeNbt(nbt);
 		ServerPlayNetworking.send((ServerPlayerEntity) player, SYNC_CAULDRON_PACKET_ID, passedData);
+	}
+
+	public static void packetSyncPlayerData(PlayerEntity player) {
+		var handler = DataUtil.getHandler(player);
+		var nbt = new NbtCompound();
+		handler.writeToNbt(nbt);
+
+		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+		passedData.writeNbt(nbt);
+
+		ServerPlayNetworking.send((ServerPlayerEntity) player, SYNC_PLAYER_DATA_PACKET_ID, passedData);
 	}
 
 }

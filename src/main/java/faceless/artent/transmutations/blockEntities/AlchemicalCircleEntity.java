@@ -1,6 +1,6 @@
 package faceless.artent.transmutations.blockEntities;
 
-import faceless.artent.api.blockEntity.BlockEntityWithInventory;
+import faceless.artent.api.inventory.InventoryUtils;
 import faceless.artent.api.math.Color;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModBlocks;
@@ -182,7 +182,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		tag.putInt("artentState", state.ordinal());
 		if (alchemist != null) tag.putUuid("artentAlchemist", alchemist.getUuid());
 
-		BlockEntityWithInventory.writeInventoryNbt(tag, this.inventory, true);
+		InventoryUtils.writeInventoryNbt(tag, this.inventory, true);
 
 		tag.put("circleTag", circleTag);
 
