@@ -1,112 +1,48 @@
 package faceless.artent.trading.screenHandlers;
 
-import faceless.artent.objects.ModBlocks;
-import faceless.artent.objects.ModItems;
+import faceless.artent.network.ArtentServerHook;
 import faceless.artent.objects.ModScreenHandlers;
-import faceless.artent.sharpening.api.IEnhancer;
-import faceless.artent.sharpening.api.ISharpenable;
-import faceless.artent.sharpening.inventory.SharpeningAnvilInventory;
-import faceless.artent.sharpening.item.SmithingHammer;
+import faceless.artent.playerData.api.DataUtil;
+import faceless.artent.trading.api.ItemStackPriceDeterminator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
-
-import java.util.Arrays;
+import net.minecraft.screen.slot.SlotActionType;
 
 public class TraderScreenHandler extends ScreenHandler {
-	private final Inventory anvil;
+	public final Inventory traderOffers;
+	public final Inventory traderSell;
+	public final PlayerEntity player;
 	private final ScreenHandlerContext context;
 
 	//This constructor gets called on the client when the server wants it to open the screenHandler,
 	//The client will call the other constructor with an empty Inventory and the screenHandler will automatically
 	//sync this empty inventory with the inventory on the server.
 	public TraderScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(syncId, playerInventory, new SimpleInventory(4), ScreenHandlerContext.EMPTY);
+		this(syncId, playerInventory, new SimpleInventory(18), new SimpleInventory(9), ScreenHandlerContext.EMPTY);
 	}
 
-	protected boolean canTakeOutput(PlayerEntity player, boolean present) {
+	protected boolean canBuyItem(PlayerEntity player, boolean present) {
 		if (!present)
 			return false;
 		if (player.getAbilities().creativeMode)
 			return true;
-		var modifier = anvil.getStack(1);
-		var hammer = anvil.getStack(2);
-		var stack = anvil.getStack(3);
-		return !hammer.isEmpty() && hammer.getItem() == ModBlocks.SharpeningAnvil.Item
-				   && !stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable
-				   && (isCatalyst(modifier.getItem()) && modifier.getCount() <= SharpeningAnvilInventory.getCatalystCount(sharpenable.getLevel(stack)) ||
-						   modifier.getItem() instanceof IEnhancer && modifier.getCount() > 0);
+		// TODO check money
+		return true;
 	}
 
-	protected void onTakeOutput(PlayerEntity player, ItemStack stack) {
-		if (!stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable) {
-			var level = sharpenable.getLevel(stack);
-			this.anvil.getStack(0).decrement(1);
-			var modifier = this.anvil.getStack(1);
-			var modifierItem = modifier.getItem();
-			if (isCatalyst(modifierItem)) {
-				this.anvil.getStack(1).decrement(SharpeningAnvilInventory.getCatalystCount(level));
-			} else if (modifierItem instanceof IEnhancer) {
-				this.anvil.getStack(1).decrement(1);
-			}
-			var hammer = anvil.getStack(2);
-			hammer.damage(4, player, p -> {
-			});
-		}
-	}
-
-	private boolean isCatalyst(Item modifierItem) {
-		return modifierItem == ModItems.StoneOfTheSea || modifierItem == ModItems.FortitudeSpiritStone || modifierItem == ModItems.AmberSphere;
+	protected void onBuyItem(PlayerEntity player, ItemStack stack) {
+		// TODO take money
 	}
 
 	//	slotId - id of the slot in order: [...this.inventorySlots, ...player.slots]
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slotId) {
-		Slot slot = this.slots.get(slotId);
-		if (slot.hasStack()) {
-			ItemStack slotStack = slot.getStack();
-			var itemStack = slotStack.copy();
-			var item = itemStack.getItem();
-			if (slotId == 3) { // output
-				if (!this.insertItem(slotStack, 4, 40, true)) {
-					return ItemStack.EMPTY;
-				}
-				slot.onQuickTransfer(slotStack, itemStack);
-				anvil.removeStack(slotId);
-				onTakeOutput(player, itemStack);
-			} else if (slotId >= 0 && slotId <= 3 // shift-click on slots for tool, hammer, catalyst and result
-						   ? !this.insertItem(slotStack, 4, 40, false) // try put into player inventory
-						   : (item instanceof SmithingHammer
-								  // Insert hammer into hammer slot. Otherwise, try to insert it as tool
-								  ? !this.insertItem(slotStack, 2, 3, false) || !this.insertItem(slotStack, 0, 1, false)
-								  : (item instanceof ToolItem // insert tool into slot 0
-										 ? !this.insertItem(slotStack, 0, 1, false)
-										 : (item instanceof IEnhancer || Arrays.stream(ModItems.Catalysts).anyMatch(cat -> cat == item)
-												// insert catalyst or enchancer into slot 1
-												? !this.insertItem(slotStack, 1, 2, false)
-												: (slotId >= 4 && slotId < 31
-													   ? !this.insertItem(slotStack, 31, 40, false)
-													   : slotId >= 31 && slotId < 40 && !this.insertItem(slotStack, 3, 31, false)
-			))))) {
-				return ItemStack.EMPTY;
-			}
-			if (slotStack.isEmpty()) {
-				slot.setStack(ItemStack.EMPTY);
-			} else {
-				slot.markDirty();
-			}
-			if (slotStack.getCount() == itemStack.getCount()) {
-				return ItemStack.EMPTY;
-			}
-			slot.onTakeItem(player, slotStack);
-		}
 		return ItemStack.EMPTY;
 	}
 
@@ -115,55 +51,107 @@ public class TraderScreenHandler extends ScreenHandler {
 		return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 16, true);
 	}
 
-	public TraderScreenHandler(int syncId, PlayerInventory inv, Inventory anvil, ScreenHandlerContext context) {
-		super(ModScreenHandlers.SHARPENING_ANVIL_HANDLER, syncId);
+	// TODO use dataHandler to store bool `tradeEditing` to unlock offer slots
+	public TraderScreenHandler(int syncId, PlayerInventory inv, Inventory traderOffers, Inventory traderSell, ScreenHandlerContext context) {
+		super(ModScreenHandlers.TRADER_HANDLER, syncId);
 		this.context = context;
-		checkSize(anvil, 4);
-		this.anvil = anvil;
-		anvil.onOpen(inv.player);
-		this.addSlot(new Slot(this.anvil, 0, 27, 47) {
-			@Override
-			public boolean canInsert(ItemStack stack) {
-				return stack.getItem() instanceof ToolItem;
-			}
-		});
-		this.addSlot(new Slot(this.anvil, 1, 76, 47) {
-			@Override
-			public boolean canInsert(ItemStack stack) {
-				return stack.getItem() instanceof IEnhancer || Arrays.stream(ModItems.Catalysts).anyMatch(cat -> cat == stack.getItem());
-			}
-		});
-		this.addSlot(new Slot(this.anvil, 2, 52, 16) {
-			@Override
-			public boolean canInsert(ItemStack stack) {
-				return stack.getItem() instanceof SmithingHammer;
-			}
-		});
-		this.addSlot(new Slot(this.anvil, 3, 134, 47) {
+		this.player = inv.player;
 
-			@Override
-			public boolean canInsert(ItemStack stack) {
-				return false;
-			}
+		checkSize(traderOffers, 18);
+		checkSize(traderSell, 9);
+		this.traderOffers = traderOffers;
+		this.traderOffers.onOpen(inv.player);
 
-			@Override
-			public boolean canTakeItems(PlayerEntity playerEntity) {
-				return canTakeOutput(playerEntity, this.hasStack());
-			}
+		this.traderSell = traderSell;
+		this.traderSell.onOpen(inv.player);
 
-			@Override
-			public void onTakeItem(PlayerEntity player, ItemStack stack) {
-				super.onTakeItem(player, stack);
-				onTakeOutput(player, stack);
+		for (var i = 0; i < 6; ++i) {
+			for (int j = 0; j < 3; ++j) {
+				this.addSlot(new Slot(traderOffers, j + i * 3, 8 + j * 18, -10 + i * 18 + 18) {
+					@Override
+					public boolean canInsert(ItemStack stack) {
+						return false; // TODO make false
+					}
+
+					@Override
+					public boolean canTakeItems(PlayerEntity player) {
+						var pouch = DataUtil.getMoneyPouch(player);
+						var item = this.getStack();
+						var price = ItemStackPriceDeterminator.INSTANCE.getBuyPrice(item, player);
+
+						return pouch.greaterOrEqual(price);
+					}
+
+					@Override
+					public void onTakeItem(PlayerEntity player, ItemStack stack) {
+						var handler = DataUtil.getHandler(player);
+						var price = ItemStackPriceDeterminator.INSTANCE.getBuyPrice(stack, player);
+						handler.addMoney(-price.asLong());
+						ArtentServerHook.packetSyncPlayerData(player);
+						// TODO send addMoneyPacket
+						super.onTakeItem(player, stack);
+					}
+				});
 			}
-		});
+		}
+		for (var i = 0; i < 3; ++i) {
+			for (int j = 0; j < 3; ++j) {
+				this.addSlot(new Slot(traderSell, j + i * 3, 116 + j * 18, -10 + i * 18 + 18));
+			}
+		}
+
 		for (var i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {
-				this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 102 + i * 18 + 18));
 			}
 		}
 		for (var i = 0; i < 9; ++i) {
-			this.addSlot(new Slot(inv, i, 8 + i * 18, 142));
+			this.addSlot(new Slot(inv, i, 8 + i * 18, 142 + 18 + 18));
 		}
+	}
+
+	public long getSellInventoryPrice() {
+		var determinator = ItemStackPriceDeterminator.INSTANCE;
+		var sum = 0L;
+		for (int i = 0; i < traderSell.size(); i++) {
+			var stack = traderSell.getStack(i);
+			if (!stack.isEmpty())
+				sum += determinator.getSellPrice(stack, player).asLong();
+		}
+		return sum;
+	}
+
+	@Override
+	public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+		if (actionType != SlotActionType.PICKUP_ALL) {
+			super.onSlotClick(slotIndex, button, actionType, player);
+			return;
+		}
+		if (slotIndex < 0)
+			return;
+
+		Slot slot = this.slots.get(slotIndex);
+		ItemStack cursorStack = this.getCursorStack();
+		if (cursorStack.isEmpty() || slot.hasStack() && slot.canTakeItems(player))
+			return;
+
+		// button defines order on which items will be collected
+		int k = button == 0 ? traderOffers.size() : this.slots.size() - 1;
+		int p = button == 0 ? 1 : -1;
+
+		for (int o = 0; o < 2; ++o) {
+			// traderOffers.size() - because it's slots are first and we need to skip them when collecting stacks
+			for (int q = k; q >= traderOffers.size() && q < this.slots.size() && cursorStack.getCount() < cursorStack.getMaxCount(); q += p) {
+				Slot slot4 = this.slots.get(q);
+				if (!slot4.hasStack() || !ScreenHandler.canInsertItemIntoSlot(slot4, cursorStack, true) || !slot4.canTakeItems(player) || !this.canInsertIntoSlot(cursorStack, slot4))
+					continue;
+				ItemStack itemStack6 = slot4.getStack();
+				if (o == 0 && itemStack6.getCount() == itemStack6.getMaxCount()) continue;
+				ItemStack itemStack7 = slot4.takeStackRange(itemStack6.getCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				cursorStack.increment(itemStack7.getCount());
+			}
+		}
+
+
 	}
 }

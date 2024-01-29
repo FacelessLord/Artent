@@ -1,5 +1,6 @@
 package faceless.artent.playerData.api;
 
+import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,11 @@ public class DataUtil {
 	public static MoneyPouch getMoneyPouch(PlayerEntity player) {
 		var handler = getHandler(player);
 		var money = handler.getMoney();
-		return new MoneyPouch(money % 100, (money / 100) % 100, money % 10000);
+		return MoneyPouch.fromLong(money);
+	}
+
+	public static TraderSellInventory getTraderSellInventory(PlayerEntity player) {
+		var handler = getHandler(player);
+		return handler.getTraderSellInventory();
 	}
 }

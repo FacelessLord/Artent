@@ -6,6 +6,7 @@ import faceless.artent.brewing.blockEntities.FermentingBarrelBlockEntity;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.sharpening.blockEntities.SharpeningAnvilBlockEntity;
+import faceless.artent.trading.blockEntities.TraderBlockEntity;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
@@ -24,6 +25,7 @@ public class BlockEntityRegistry implements IRegistry {
 			ModBlocks.SharpeningAnvil);
 		ModBlockEntities.BrewingCauldron = register(BrewingCauldronBlockEntity::new, "cauldron_entity", ModBlocks.BrewingCauldron, ModBlocks.BrewingCauldronCopper);
 		ModBlockEntities.FermentingBarrel = register(FermentingBarrelBlockEntity::new, "fermenting_barrel", ModBlocks.FermentingBarrel);
+		ModBlockEntities.Trader = register(TraderBlockEntity::new, "trader", ModBlocks.Trader);
 	}
 
 	public <T extends BlockEntity> BlockEntityType<T> register(FabricBlockEntityTypeBuilder.Factory<T> item, String id,

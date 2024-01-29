@@ -186,5 +186,6 @@
   "artent.chat.circle.bound.circle.cant.bind.two.entities": "Can't bind two blocks",
   "artent.chat.circle.bound.circle.pos.saved": "Position Saved",
   "artent.chat.circle.bound.circle.too.far": "Block is too far",
-  "artent.chat.circle.bound.circle.and.entity": "Block bound to circle"
+  "artent.chat.circle.bound.circle.and.entity": "Block bound to circle",
+  "artent.gui.trader.sell": "Sell"
 }

@@ -47,7 +47,7 @@ public class ArtentClient implements ClientModInitializer {
 		BlockEntityRendererFactories.register(ModBlockEntities.BrewingCauldron, BrewingCauldronRenderer::new);
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ModBlocks.Shroom, ModBlocks.Shadowveil,
 			ModBlocks.berryBush[0], ModBlocks.berryBush[1], ModBlocks.berryBush[2], ModBlocks.berryBush[3],
-			ModBlocks.CrimsonwoodLeaves);
+			ModBlocks.CrimsonwoodLeaves, ModBlocks.Trader);
 		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
 			if (view == null)
 				return 0;

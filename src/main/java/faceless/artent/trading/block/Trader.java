@@ -2,6 +2,7 @@ package faceless.artent.trading.block;
 
 import com.mojang.serialization.MapCodec;
 import faceless.artent.api.item.INamed;
+import faceless.artent.playerData.api.DataUtil;
 import faceless.artent.sharpening.block.SharpeningAnvil;
 import faceless.artent.trading.blockEntities.TraderBlockEntity;
 import faceless.artent.trading.screenHandlers.TraderScreenHandler;
@@ -67,7 +68,15 @@ public class Trader extends BlockWithEntity implements INamed {
 	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
 		var blockEntity = world.getBlockEntity(pos);
 		if (blockEntity instanceof TraderBlockEntity trader)
-			return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new TraderScreenHandler(syncId, inventory, trader.inventory, ScreenHandlerContext.create(world, pos)), Text.translatable("gui.artent.trader"));
+			return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
+				var traderSellInventory = DataUtil.getTraderSellInventory(player);
+				return new TraderScreenHandler(
+					syncId,
+					inventory,
+					trader.offerInventory,
+					traderSellInventory,
+					ScreenHandlerContext.create(world, pos));
+			}, Text.translatable("gui.artent.trader"));
 		return null;
 	}
 
@@ -98,7 +107,7 @@ public class Trader extends BlockWithEntity implements INamed {
 			// TODO
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity instanceof TraderBlockEntity trader) {
-				ItemScatterer.spawn(world, pos, trader.inventory);
+				ItemScatterer.spawn(world, pos, trader.offerInventory);
 				// update comparators
 				world.updateComparators(pos, this);
 			}

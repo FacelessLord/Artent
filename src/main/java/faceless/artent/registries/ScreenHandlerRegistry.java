@@ -11,6 +11,7 @@ public final class ScreenHandlerRegistry implements IRegistry {
 
 	public void register() {
 		register(ModScreenHandlers.SHARPENING_ANVIL_HANDLER, "sharpening_anvil");
+		register(ModScreenHandlers.TRADER_HANDLER, "trader");
 	}
 
 	public void register(ScreenHandlerType<?> item, String screenId) {

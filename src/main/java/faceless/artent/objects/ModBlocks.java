@@ -3,6 +3,7 @@ package faceless.artent.objects;
 import faceless.artent.api.block.ArtentBlock;
 import faceless.artent.brewing.block.*;
 import faceless.artent.sharpening.block.SharpeningAnvil;
+import faceless.artent.trading.block.Trader;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
@@ -115,6 +116,14 @@ public final class ModBlocks {
 		.strength(2.0f, 3.0f)
 		.sounds(BlockSoundGroup.WOOD));
 	public static BlockItem FermentingBarrelItem;
+
+	public static Trader Trader = new Trader(FabricBlockSettings
+		.copyOf(Blocks.IRON_BLOCK)
+		.mapColor(MapColor.WHITE)
+		.nonOpaque()
+		.strength(2.0f, 3.0f)
+		.sounds(BlockSoundGroup.WOOD));
+	public static BlockItem TraderItem;
 
 
 }

@@ -74,7 +74,6 @@ public class ArtentClientHook {
 						cauldron.readNbt(nbt);
 					});
 				});
-
 	}
 
 	public static void packetSynchronizeCircle(AlchemicalCircleEntity entity) {
@@ -98,4 +97,18 @@ public class ArtentClientHook {
 		passedData.writeBlockPos(pos);
 		ClientPlayNetworking.send(ArtentServerHook.REMOVE_CIRCLE_PACKET_ID, passedData);
 	}
+
+	public static void packetSellItems(PlayerEntity player, long money) {
+		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+		passedData.writeUuid(player.getUuid());
+		passedData.writeLong(money);
+		ClientPlayNetworking.send(ArtentServerHook.SELL_ITEMS_PACKET_ID, passedData);
+	}
+
+//	public static void packetBuyItems(PlayerEntity player, long price) {
+//		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+//		passedData.writeUuid(player.getUuid());
+//		passedData.writeLong(price);
+//		ClientPlayNetworking.send(ArtentServerHook.BUY_ITEMS_PACKET_ID, passedData);
+//	}
 }

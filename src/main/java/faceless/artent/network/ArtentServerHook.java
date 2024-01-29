@@ -24,10 +24,12 @@ public class ArtentServerHook {
 
 	public static final Identifier OPEN_CIRCLE_GUI_PACKET_ID = new Identifier(Artent.MODID, "packet.circle.open");
 	public static final Identifier SYNC_CAULDRON_PACKET_ID = new Identifier(Artent.MODID, "packet.cauldron.sync");
-	public static final Identifier SYNC_PLAYER_DATA_PACKET_ID = new Identifier(Artent.MODID, "packet.player.sync");
 	public static final Identifier SYNCHRONIZE_CIRCLE = new Identifier(Artent.MODID, "packet.circle.sync");
 	public static final Identifier DAMAGE_CHALK_PACKET_ID = new Identifier(Artent.MODID, "packet.chalk.damage");
 	public static final Identifier REMOVE_CIRCLE_PACKET_ID = new Identifier(Artent.MODID, "packet.circle.close");
+	public static final Identifier SYNC_PLAYER_DATA_PACKET_ID = new Identifier(Artent.MODID, "packet.player.sync");
+	public static final Identifier SELL_ITEMS_PACKET_ID = new Identifier(Artent.MODID, "packet.player.sell");
+	public static final Identifier BUY_ITEMS_PACKET_ID = new Identifier(Artent.MODID, "packet.player.buy");
 
 //	public static final Identifier EntitySpawnPacketID = new Identifier(Artent.MODID, "entity_spawn_packet");
 
@@ -81,6 +83,37 @@ public class ArtentServerHook {
 				}
 			});
 		});
+		ServerPlayNetworking.registerGlobalReceiver(SELL_ITEMS_PACKET_ID, (server, player, handler, buffer, sender) -> {
+			var playerUuid = buffer.readUuid();
+			var money = buffer.readLong();
+
+			// Server sided code
+			server.execute(() -> {
+				if (!player.getUuid().equals(playerUuid))
+					return;
+
+				var dataHandler = DataUtil.getHandler(player);
+				dataHandler.getTraderSellInventory().clear();
+				dataHandler.addMoney(money);
+
+				packetSyncPlayerData(player);
+			});
+		});
+//		ServerPlayNetworking.registerGlobalReceiver(BUY_ITEMS_PACKET_ID, (server, player, handler, buffer, sender) -> {
+//			var playerUuid = buffer.readUuid();
+//			var price = buffer.readLong();
+//
+//			// Server sided code
+//			server.execute(() -> {
+//				if (!player.getUuid().equals(playerUuid))
+//					return;
+//
+//				var dataHandler = DataUtil.getHandler(player);
+//				dataHandler.addMoney(-price);
+//
+//				packetSyncPlayerData(player);
+//			});
+//		});
 	}
 
 	public static boolean damageChalk(PlayerEntity player, Hand hand) {

@@ -1,7 +1,11 @@
 package faceless.artent.playerData.mixin;
 
+import faceless.artent.api.inventory.InventoryUtils;
+import faceless.artent.network.ArtentServerHook;
 import faceless.artent.playerData.api.ArtentPlayerData;
+import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -13,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerDataMixin implements ArtentPlayerData {
 	@Unique
 	public long artentMoney = 0;
+	@Unique
+	public TraderSellInventory traderSellInventory = new TraderSellInventory((PlayerEntity) (Object) this);
 
 	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
 	private void onWriteEntityToNBT(NbtCompound compound, CallbackInfo ci) {
@@ -23,6 +29,15 @@ public class PlayerDataMixin implements ArtentPlayerData {
 	private void onReadEntityFromNBT(NbtCompound compound, CallbackInfo ci) {
 		this.readFromNbt(compound);
 	}
+
+	@Inject(method = "tick", at = @At("TAIL"))
+	private void tick(CallbackInfo ci) {
+		var player = (PlayerEntity) (Object) this;
+		if (player.getWorld() != null && !player.getWorld().isClient && player.getWorld().getTime() % 10 == 1) {
+			ArtentServerHook.packetSyncPlayerData(player);
+		}
+	}
+
 
 	@Override
 	public long getMoney() {
@@ -40,9 +55,16 @@ public class PlayerDataMixin implements ArtentPlayerData {
 	}
 
 	@Override
+	public TraderSellInventory getTraderSellInventory() {
+		return this.traderSellInventory;
+	}
+
+	@Override
 	public void writeToNbt(NbtCompound compound) {
 		var tag = new NbtCompound();
 		tag.putLong("money", this.getMoney());
+
+		InventoryUtils.writeInventoryNbt(tag, traderSellInventory.items, true);
 
 		compound.put("artent.data", tag);
 	}
@@ -53,6 +75,7 @@ public class PlayerDataMixin implements ArtentPlayerData {
 			return;
 		var tag = compound.getCompound("artent.data");
 
-		setMoney(tag.getLong("artent.money"));
+		setMoney(tag.getLong("money"));
+		Inventories.readNbt(tag, traderSellInventory.items);
 	}
 }

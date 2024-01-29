@@ -39,6 +39,9 @@ public class BlockRegistry implements IRegistry {
 
 		// SHARPENING
 		ModBlocks.SharpeningAnvil.Item = register(ModBlocks.SharpeningAnvil, ModItemGroups.Main);
+
+		// TRADING
+		ModBlocks.TraderItem = register(ModBlocks.Trader, ModItemGroups.Main);
 	}
 
 	public BlockItem register(String blockId, Block block, ArtentItemGroupBuilder groupBuilder) {

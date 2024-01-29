@@ -39,12 +39,13 @@ public class SharpeningAnvilRenderer implements BlockEntityRenderer<SharpeningAn
 
 		matrices.push();
 
+		var inventory = entity.inventory;
 		// Drawing inventory in order [tool, hammer, catalyst]
 		var facing = blockState.get(SharpeningAnvil.FACING);
 		applyFacingRotation(matrices, facing);
 		matrices.scale(0.5f, 0.5f, 0.5f);
 		// Tool
-		if (!entity.getStack(0).isEmpty()) {
+		if (!inventory.getStack(0).isEmpty()) {
 			matrices.push();
 			matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 0, 1, 0)));
 			matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, -1, 0, 0)));
@@ -53,7 +54,7 @@ public class SharpeningAnvilRenderer implements BlockEntityRenderer<SharpeningAn
 				.getInstance()
 				.getItemRenderer()
 				.renderItem(
-					entity.getStack(0),
+					inventory.getStack(0),
 					ModelTransformationMode.GROUND,
 					light,
 					OverlayTexture.DEFAULT_UV,
@@ -64,7 +65,7 @@ public class SharpeningAnvilRenderer implements BlockEntityRenderer<SharpeningAn
 			matrices.pop();
 		}
 		// Catalyst
-		if (!entity.getStack(1).isEmpty()) {
+		if (!inventory.getStack(1).isEmpty()) {
 			matrices.push();
 			matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 0, 1, 0)));
 			matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, -1, 0, 0)));
@@ -73,7 +74,7 @@ public class SharpeningAnvilRenderer implements BlockEntityRenderer<SharpeningAn
 				.getInstance()
 				.getItemRenderer()
 				.renderItem(
-					entity.getStack(1),
+					inventory.getStack(1),
 					ModelTransformationMode.GROUND,
 					light,
 					OverlayTexture.DEFAULT_UV,
@@ -84,7 +85,7 @@ public class SharpeningAnvilRenderer implements BlockEntityRenderer<SharpeningAn
 			matrices.pop();
 		}
 		// Hammer
-		if (!entity.getStack(2).isEmpty()) {
+		if (!inventory.getStack(2).isEmpty()) {
 			matrices.push();
 			matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 0, 0, 1)));
 			matrices.translate(1.375f - 1f / 16f, -1.5, 1.25);
@@ -92,7 +93,7 @@ public class SharpeningAnvilRenderer implements BlockEntityRenderer<SharpeningAn
 				.getInstance()
 				.getItemRenderer()
 				.renderItem(
-					entity.getStack(2),
+					inventory.getStack(2),
 					ModelTransformationMode.GROUND,
 					light,
 					OverlayTexture.DEFAULT_UV,
