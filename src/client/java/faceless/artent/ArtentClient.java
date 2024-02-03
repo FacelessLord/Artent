@@ -11,6 +11,7 @@ import faceless.artent.objects.ModEntities;
 import faceless.artent.objects.ModItems;
 import faceless.artent.registries.ScreenRegistry;
 import faceless.artent.sharpening.SharpeningAnvilRenderer;
+import faceless.artent.trading.CoinEntityRenderer;
 import faceless.artent.trasmutations.AlchemicalCircleRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -63,6 +64,7 @@ public class ArtentClient implements ClientModInitializer {
 			}, ModItems.PotionPhial, ModItems.PotionPhialExplosive, ModItems.GoldenBucketFilled,
 			ModItems.SmallConcentrate, ModItems.MediumConcentrate, ModItems.BigConcentrate);
 		EntityRendererRegistry.register(ModEntities.POTION_PHIAL, FlyingItemEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.COIN_ENTITY, CoinEntityRenderer::new);
 
 		ModelPredicateProviderRegistry.register(ModItems.MediumConcentrate, new Identifier("amount"),
 			(stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 4.0f);

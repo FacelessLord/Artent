@@ -21,7 +21,8 @@ public final class ModItems {
 	public static final AlchemicalCoal AlchemicalCoal = new AlchemicalCoal();
 	public static final AlchemicalPaper AlchemicalPaper = new AlchemicalPaper();
 
-	public static SmithingHammer SmithingHammer = new SmithingHammer(new FabricItemSettings().maxCount(1).maxDamage(512));
+	public static SmithingHammer SmithingHammer = new SmithingHammer(new FabricItemSettings().maxCount(1)
+																		 .maxDamage(512));
 	public static Item StoneOfTheSea = new Item(new FabricItemSettings().maxCount(64));
 	public static Item FortitudeSpiritStone = new Item(new FabricItemSettings().maxCount(64));
 	public static Item AmberSphere = new Item(new FabricItemSettings().maxCount(64));
@@ -49,6 +50,11 @@ public final class ModItems {
 	public static Item BigConcentratePhial = new Item(new Item.Settings().maxCount(64));
 	public static Item BigConcentrate = new BigConcentrate(new Item.Settings().maxCount(1));
 	public static DarkBook DarkBook = new DarkBook(new Item.Settings().maxCount(1));
+
+	public static final ArtentItem[] Coins = new ArtentItem[]{
+		new ArtentItem("coin_bronze"),
+		new ArtentItem("coin_silver"),
+		new ArtentItem("coin_gold") };
 
 	public static Item[] berries = new Item[]{
 		new Item(new Item.Settings().maxCount(64).food(Berry)),
