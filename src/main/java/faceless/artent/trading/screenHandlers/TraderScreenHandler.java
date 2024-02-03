@@ -26,19 +26,6 @@ public class TraderScreenHandler extends ScreenHandler {
 		this(syncId, playerInventory, new SimpleInventory(18), new SimpleInventory(9), ScreenHandlerContext.EMPTY);
 	}
 
-	protected boolean canBuyItem(PlayerEntity player, boolean present) {
-		if (!present)
-			return false;
-		if (player.getAbilities().creativeMode)
-			return true;
-		// TODO check money
-		return true;
-	}
-
-	protected void onBuyItem(PlayerEntity player, ItemStack stack) {
-		// TODO take money
-	}
-
 	//	slotId - id of the slot in order: [...this.inventorySlots, ...player.slots]
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slotId) {
@@ -74,7 +61,6 @@ public class TraderScreenHandler extends ScreenHandler {
 		return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 16, true);
 	}
 
-	// TODO use dataHandler to store bool `tradeEditing` to unlock offer slots
 	public TraderScreenHandler(int syncId, PlayerInventory inv, Inventory traderOffers, Inventory traderSell, ScreenHandlerContext context) {
 		super(ModScreenHandlers.TRADER_HANDLER, syncId);
 		this.context = context;
@@ -185,5 +171,12 @@ public class TraderScreenHandler extends ScreenHandler {
 				cursorStack.increment(itemStack7.getCount());
 			}
 		}
+	}
+
+	@Override
+	public void onClosed(PlayerEntity player) {
+		super.onClosed(player);
+		var handler = DataUtil.getHandler(player);
+		handler.setTradeInfo(null);
 	}
 }

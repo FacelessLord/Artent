@@ -32,7 +32,7 @@ public class TradeOfferSlot extends Slot {
 
 	@Override
 	public boolean canInsert(ItemStack stack) {
-		return canEdit; // TODO make false
+		return canEdit;
 	}
 
 	@Override

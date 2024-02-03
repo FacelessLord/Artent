@@ -25,7 +25,7 @@ public class PlayerDataMixin implements ArtentPlayerData {
 	@Unique
 	public boolean canEditTrades = false;
 	@Unique
-	public TraderSellInventory traderSellInventory = new TraderSellInventory((PlayerEntity) (Object) this);
+	public TraderSellInventory traderSellInventory = new TraderSellInventory();
 	@Unique
 	public TradeInfo tradeInfo = Trader.getTradeInfo();
 
@@ -118,7 +118,7 @@ public class PlayerDataMixin implements ArtentPlayerData {
 		try {
 			Inventories.readNbt(tag, traderSellInventory.items);
 		} catch (Exception e) {
-			traderSellInventory = new TraderSellInventory((PlayerEntity) (Object) this);
+			traderSellInventory = new TraderSellInventory();
 		}
 
 		if (!tag.contains("tradeInfo"))

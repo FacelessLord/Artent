@@ -137,7 +137,6 @@ public class Trader extends BlockWithEntity implements INamed {
 	@Override
 	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 		if (state.getBlock() != newState.getBlock()) {
-			// TODO
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity instanceof TraderBlockEntity trader) {
 				ItemScatterer.spawn(world, pos, trader.offerInventory);
