@@ -20,8 +20,8 @@ import java.util.List;
 public class CoinEntity extends Entity {
 	private static final TrackedData<Integer> COIN_TYPE = DataTracker.registerData(CoinEntity.class,
 		TrackedDataHandlerRegistry.INTEGER);
-	private static final TrackedData<Integer> COUNT = DataTracker.registerData(CoinEntity.class,
-		TrackedDataHandlerRegistry.INTEGER);
+	private static final TrackedData<Long> COUNT = DataTracker.registerData(CoinEntity.class,
+		TrackedDataHandlerRegistry.LONG);
 
 	public final float uniqueOffset;
 	private int pickupDelay = 10;
@@ -38,14 +38,14 @@ public class CoinEntity extends Entity {
 	@Override
 	protected void initDataTracker() {
 		this.getDataTracker().startTracking(COIN_TYPE, 0);
-		this.getDataTracker().startTracking(COUNT, 1);
+		this.getDataTracker().startTracking(COUNT, 1L);
 	}
 
 	public int getCoinType() {
 		return this.getDataTracker().get(COIN_TYPE);
 	}
 
-	public int getCount() {
+	public long getCount() {
 		return this.getDataTracker().get(COUNT);
 	}
 
@@ -53,7 +53,7 @@ public class CoinEntity extends Entity {
 		this.getDataTracker().set(COIN_TYPE, coinType);
 	}
 
-	public void setCoinCount(int count) {
+	public void setCoinCount(long count) {
 		this.getDataTracker().set(COUNT, count);
 	}
 
@@ -63,13 +63,13 @@ public class CoinEntity extends Entity {
 
 	public int getRenderedAmount() {
 		int i = 1;
-		if (getCount() > 48) {
+		if (getCount() > 80) {
 			i = 5;
-		} else if (getCount() > 32) {
+		} else if (getCount() > 56) {
 			i = 4;
-		} else if (getCount() > 16) {
+		} else if (getCount() > 24) {
 			i = 3;
-		} else if (getCount() > 1) {
+		} else if (getCount() > 4) {
 			i = 2;
 		}
 		return i;
@@ -84,7 +84,7 @@ public class CoinEntity extends Entity {
 	@Override
 	protected void writeCustomDataToNbt(NbtCompound nbt) {
 		nbt.putInt("coinType", getCoinType());
-		nbt.putInt("coinCount", getCount());
+		nbt.putLong("coinCount", getCount());
 	}
 
 
