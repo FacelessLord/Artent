@@ -6,12 +6,21 @@ import faceless.artent.network.ArtentClientHook;
 import faceless.artent.playerData.api.MoneyPouch;
 import faceless.artent.trading.screenHandlers.TraderScreenHandler;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.gui.tooltip.TooltipPositioner;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static faceless.artent.hud.ArtentHudRenderer.COINS;
 
@@ -69,6 +78,52 @@ public class TraderScreen extends HandledScreen<TraderScreenHandler> {
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		super.render(context, mouseX, mouseY, delta);
 		drawMouseoverTooltip(context, mouseX, mouseY);
+	}
+
+	private void renderTooltip(DrawContext context,
+		TextRenderer textRenderer,
+		List<TooltipComponent> components,
+		int x,
+		int y) {
+		try {
+			var drawTooltip = DrawContext.class.getDeclaredMethod("drawTooltip",
+				TextRenderer.class,
+				List.class,
+				int.class,
+				int.class,
+				TooltipPositioner.class);
+			drawTooltip.setAccessible(true);
+			drawTooltip.invoke(context, textRenderer, components, x, y, HoveredTooltipPositioner.INSTANCE);
+		} catch (NoSuchMethodException e) {
+			System.out.println("NoSuchMethodException");
+		} catch (InvocationTargetException e) {
+			System.out.println("InvocationTargetException");
+		} catch (IllegalAccessException e) {
+			System.out.println("IllegalAccessException");
+		}
+	}
+
+	@Override
+	protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
+		if (this.handler.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
+			ItemStack itemStack = this.focusedSlot.getStack();
+			var tooltipText = this.getTooltipFromItem(itemStack);
+			var tooltipData = itemStack.getTooltipData(); // абсолютный долбоебизм
+
+			List<TooltipComponent> list =
+				tooltipText.stream()
+					.map(Text::asOrderedText)
+					.map(TooltipComponent::of)
+					.collect(
+						Collectors.toList());
+			tooltipData.ifPresent(data -> list.add(1, TooltipComponent.of(data)));
+
+			var itemPrice = handler.getStackPrice(itemStack);
+			if (itemPrice != null)
+				list.add(new PriceTooltipComponent(itemPrice));
+
+			renderTooltip(context, textRenderer, list, x, y);
+		}
 	}
 
 	@Override

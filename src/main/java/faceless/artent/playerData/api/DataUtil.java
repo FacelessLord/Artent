@@ -28,7 +28,7 @@ public class DataUtil {
 		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
 		var determinatorContext = tradeInfo.priceDeterminatorContext;
 
-		return determinator.getSellPrice(stack, player, determinatorContext);
+		return determinator.getSellPrice(stack, determinatorContext);
 	}
 
 	public static MoneyPouch getBuyPrice(ItemStack stack, PlayerEntity player) {

@@ -9,7 +9,7 @@ import faceless.artent.playerData.api.DataUtil;
 import faceless.artent.sharpening.block.SharpeningAnvil;
 import faceless.artent.trading.api.TradeInfo;
 import faceless.artent.trading.blockEntities.TraderBlockEntity;
-import faceless.artent.trading.priceDeterminators.ItemStackPriceDeterminator;
+import faceless.artent.trading.priceDeterminators.ConstantItemStackPriceDeterminator;
 import faceless.artent.trading.screenHandlers.TraderScreenHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -90,8 +90,8 @@ public class Trader extends BlockWithEntity implements INamed {
 		tradeInfo.offer.set(6, new ItemStack(ModItems.SmithingHammer));
 		tradeInfo.offer.set(7, new ItemStack(ModBlocks.SharpeningAnvil.Item));
 		tradeInfo.offer.set(7, new ItemStack(ModItems.NetherFireStone));
-		tradeInfo.priceDeterminatorContext = new ItemStackPriceDeterminator.ConstantPriceDeterminatorContext();
-		tradeInfo.priceDeterminatorType = ItemStackPriceDeterminator.NAME;
+		tradeInfo.priceDeterminatorContext = new ConstantItemStackPriceDeterminator.ConstantPriceDeterminatorContext();
+		tradeInfo.priceDeterminatorType = ConstantItemStackPriceDeterminator.NAME;
 
 		return tradeInfo;
 	}

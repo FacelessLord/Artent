@@ -3,7 +3,7 @@ package faceless.artent.registries;
 import faceless.artent.api.functions.Factory;
 import faceless.artent.trading.api.IItemStackPriceDeterminator;
 import faceless.artent.trading.api.IPriceDeterminatorContext;
-import faceless.artent.trading.priceDeterminators.ItemStackPriceDeterminator;
+import faceless.artent.trading.priceDeterminators.ConstantItemStackPriceDeterminator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class ItemPriceDeterminatorRegistry implements IRegistry {
 
 	@Override
 	public void register() {
-		register(ItemStackPriceDeterminator.NAME, new ItemStackPriceDeterminator(), ItemStackPriceDeterminator.ConstantPriceDeterminatorContext::new);
+		register(ConstantItemStackPriceDeterminator.NAME, new ConstantItemStackPriceDeterminator(), ConstantItemStackPriceDeterminator.ConstantPriceDeterminatorContext::new);
 	}
 
 	public <T extends IPriceDeterminatorContext> void register(String registryName, IItemStackPriceDeterminator determinator, Factory<T> contextFactory) {

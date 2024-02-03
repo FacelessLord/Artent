@@ -3,6 +3,7 @@ package faceless.artent.trading.screenHandlers;
 import faceless.artent.Artent;
 import faceless.artent.objects.ModScreenHandlers;
 import faceless.artent.playerData.api.DataUtil;
+import faceless.artent.playerData.api.MoneyPouch;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -36,11 +37,17 @@ public class TraderScreenHandler extends ScreenHandler {
 		var itemStack = slotStack.copy();
 
 		if (slotId >= traderOffers.size() + traderSell.size()) {
-			if (!this.insertItem(slotStack, traderOffers.size(), traderOffers.size() + traderSell.size(), false)) // try put into sell inventory
+			if (!this.insertItem(slotStack,
+				traderOffers.size(),
+				traderOffers.size() + traderSell.size(),
+				false)) // try put into sell inventory
 				return ItemStack.EMPTY;
 		}
 		if (slotId >= traderOffers.size() && slotId < traderOffers.size() + traderSell.size()) {
-			if (!this.insertItem(slotStack, traderOffers.size() + traderSell.size(), slots.size(), false)) // try put into player inventory
+			if (!this.insertItem(slotStack,
+				traderOffers.size() + traderSell.size(),
+				slots.size(),
+				false)) // try put into player inventory
 				return ItemStack.EMPTY;
 		}
 
@@ -58,10 +65,16 @@ public class TraderScreenHandler extends ScreenHandler {
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 16, true);
+		return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5,
+			(double) pos.getY() + 0.5,
+			(double) pos.getZ() + 0.5) <= 16, true);
 	}
 
-	public TraderScreenHandler(int syncId, PlayerInventory inv, Inventory traderOffers, Inventory traderSell, ScreenHandlerContext context) {
+	public TraderScreenHandler(int syncId,
+		PlayerInventory inv,
+		Inventory traderOffers,
+		Inventory traderSell,
+		ScreenHandlerContext context) {
 		super(ModScreenHandlers.TRADER_HANDLER, syncId);
 		this.context = context;
 		this.player = inv.player;
@@ -83,7 +96,13 @@ public class TraderScreenHandler extends ScreenHandler {
 		for (var i = 0; i < 6; ++i) {
 			for (int j = 0; j < 3; ++j) {
 				var slotIndex = j + i * 3;
-				this.addSlot(new TradeOfferSlot(traderOffers, slotIndex, 8 + j * 18, -10 + i * 18 + 18, canEdit, determinator, determinatorContext));
+				this.addSlot(new TradeOfferSlot(traderOffers,
+					slotIndex,
+					8 + j * 18,
+					-10 + i * 18 + 18,
+					canEdit,
+					determinator,
+					determinatorContext));
 			}
 		}
 		for (var i = 0; i < 3; ++i) {
@@ -111,7 +130,7 @@ public class TraderScreenHandler extends ScreenHandler {
 		for (int i = 0; i < traderSell.size(); i++) {
 			var stack = traderSell.getStack(i);
 			if (!stack.isEmpty())
-				sum += determinator.getSellPrice(stack, player, determinatorContext).asLong();
+				sum += determinator.getSellPrice(stack, determinatorContext).asLong();
 		}
 		return sum;
 	}
@@ -123,7 +142,9 @@ public class TraderScreenHandler extends ScreenHandler {
 			TradeOfferSlot slot = (TradeOfferSlot) this.slots.get(slotIndex);
 			var slotStack = slot.getStack();
 			if (!cursorStack.isEmpty() && slot.hasStack() && ItemStack.canCombine(cursorStack, slotStack)) {
-				ItemStack itemStack7 = slot.takeStackRange(slotStack.getCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				ItemStack itemStack7 = slot.takeStackRange(slotStack.getCount(),
+					cursorStack.getMaxCount() - cursorStack.getCount(),
+					player);
 				cursorStack.increment(itemStack7.getCount());
 				return;
 			}
@@ -132,12 +153,16 @@ public class TraderScreenHandler extends ScreenHandler {
 			TradeOfferSlot slot = (TradeOfferSlot) this.slots.get(slotIndex);
 			var slotStack = slot.getStack();
 			if (cursorStack.isEmpty() && slot.hasStack()) {
-				ItemStack itemStack7 = slot.shiftTakeStackRange(slotStack.getMaxCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				ItemStack itemStack7 = slot.shiftTakeStackRange(slotStack.getMaxCount(),
+					cursorStack.getMaxCount() - cursorStack.getCount(),
+					player);
 				setCursorStack(itemStack7);
 				return;
 			}
 			if (!cursorStack.isEmpty() && slot.hasStack() && ItemStack.canCombine(cursorStack, slotStack)) {
-				ItemStack itemStack7 = slot.shiftTakeStackRange(slotStack.getMaxCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				ItemStack itemStack7 = slot.shiftTakeStackRange(slotStack.getMaxCount(),
+					cursorStack.getMaxCount() - cursorStack.getCount(),
+					player);
 				cursorStack.increment(itemStack7.getCount());
 				return;
 			}
@@ -161,16 +186,31 @@ public class TraderScreenHandler extends ScreenHandler {
 
 		for (int o = 0; o < 2; ++o) {
 			// traderOffers.size() - because it's slots are first and we need to skip them when collecting stacks
-			for (int q = k; q >= traderOffers.size() && q < this.slots.size() && cursorStack.getCount() < cursorStack.getMaxCount(); q += p) {
+			for (int q = k; q >= traderOffers.size() &&
+								q < this.slots.size() &&
+								cursorStack.getCount() < cursorStack.getMaxCount(); q += p) {
 				Slot slot4 = this.slots.get(q);
-				if (!slot4.hasStack() || !ScreenHandler.canInsertItemIntoSlot(slot4, cursorStack, true) || !slot4.canTakeItems(player) || !this.canInsertIntoSlot(cursorStack, slot4))
+				if (!slot4.hasStack() ||
+						!ScreenHandler.canInsertItemIntoSlot(slot4, cursorStack, true) ||
+						!slot4.canTakeItems(player) ||
+						!this.canInsertIntoSlot(cursorStack, slot4))
 					continue;
 				ItemStack itemStack6 = slot4.getStack();
 				if (o == 0 && itemStack6.getCount() == itemStack6.getMaxCount()) continue;
-				ItemStack itemStack7 = slot4.takeStackRange(itemStack6.getCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				ItemStack itemStack7 = slot4.takeStackRange(itemStack6.getCount(),
+					cursorStack.getMaxCount() - cursorStack.getCount(),
+					player);
 				cursorStack.increment(itemStack7.getCount());
 			}
 		}
+	}
+
+	public MoneyPouch getStackPrice(ItemStack stack) {
+		var tradeInfo = DataUtil.getHandler(player).getTradeInfo();
+		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
+		var determinatorContext = tradeInfo.priceDeterminatorContext;
+
+		return determinator.getSellPrice(stack, determinatorContext);
 	}
 
 	@Override

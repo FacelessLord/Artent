@@ -7,11 +7,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 
-public class ItemStackPriceDeterminator implements IItemStackPriceDeterminator {
+public class ConstantItemStackPriceDeterminator implements IItemStackPriceDeterminator {
 	public static String NAME = "constant";
 
 	@Override
-	public MoneyPouch getSellPrice(ItemStack stack, PlayerEntity player, IPriceDeterminatorContext ctx) {
+	public MoneyPouch getSellPrice(ItemStack stack, IPriceDeterminatorContext ctx) {
 		return MoneyPouch.fromLong(5000L * stack.getCount());
 	}
 
