@@ -53,7 +53,7 @@ public class SharpeningUtils {
 	}
 
 	public static boolean hasSlots(ItemStack stack) {
-		return stack.getOrCreateNbt().contains("artent.slot.length");
+		return stack.hasNbt() && stack.getOrCreateNbt().contains("artent.slot.length");
 	}
 
 	public static Stream<IEnhancer> getNonEmptySlots(ItemStack stack) {

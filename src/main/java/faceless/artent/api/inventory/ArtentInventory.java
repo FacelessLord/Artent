@@ -28,7 +28,7 @@ public abstract class ArtentInventory implements Inventory {
 	}
 
 	public boolean canTakeStackFromSlot(@SuppressWarnings("unused") int slot) {
-		return false;
+		return true;
 	}
 
 	public void onContentChanged() {
@@ -57,8 +57,8 @@ public abstract class ArtentInventory implements Inventory {
 	@Override
 	public ItemStack removeStack(int slot) {
 		var stack = getStack(slot);
-		onRemoveStack(slot);
 		setStack(slot, ItemStack.EMPTY);
+		onRemoveStack(slot);
 		return stack;
 	}
 
@@ -81,7 +81,7 @@ public abstract class ArtentInventory implements Inventory {
 
 	@Override
 	public boolean canPlayerUse(PlayerEntity player) {
-		return false;
+		return true;
 	}
 
 	@Override

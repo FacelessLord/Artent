@@ -3,6 +3,8 @@ package faceless.artent.playerData.mixin;
 import faceless.artent.api.inventory.InventoryUtils;
 import faceless.artent.network.ArtentServerHook;
 import faceless.artent.playerData.api.ArtentPlayerData;
+import faceless.artent.trading.api.TradeInfo;
+import faceless.artent.trading.block.Trader;
 import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -13,12 +15,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@SuppressWarnings("ALL")
 @Mixin(PlayerEntity.class)
 public class PlayerDataMixin implements ArtentPlayerData {
+
 	@Unique
 	public long artentMoney = 0;
+
+	@Unique
+	public boolean canEditTrades = false;
 	@Unique
 	public TraderSellInventory traderSellInventory = new TraderSellInventory((PlayerEntity) (Object) this);
+	@Unique
+	public TradeInfo tradeInfo = Trader.getTradeInfo();
 
 	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
 	private void onWriteEntityToNBT(NbtCompound compound, CallbackInfo ci) {
@@ -34,6 +43,9 @@ public class PlayerDataMixin implements ArtentPlayerData {
 	private void tick(CallbackInfo ci) {
 		var player = (PlayerEntity) (Object) this;
 		if (player.getWorld() != null && !player.getWorld().isClient && player.getWorld().getTime() % 10 == 1) {
+			if (tradeInfo != null && tradeInfo.priceDeterminatorContext == null)
+				setTradeInfo(null);
+
 			ArtentServerHook.packetSyncPlayerData(player);
 		}
 	}
@@ -55,16 +67,42 @@ public class PlayerDataMixin implements ArtentPlayerData {
 	}
 
 	@Override
+	public boolean canEditTrades() {
+		return canEditTrades;
+	}
+
+	@Override
+	public void setCanEditTrades(boolean canEdit) {
+		canEditTrades = canEdit;
+	}
+
+	@Override
 	public TraderSellInventory getTraderSellInventory() {
 		return this.traderSellInventory;
+	}
+
+	@Override
+	public TradeInfo getTradeInfo() {
+		return tradeInfo;
+	}
+
+	@Override
+	public void setTradeInfo(TradeInfo info) {
+		tradeInfo = info;
 	}
 
 	@Override
 	public void writeToNbt(NbtCompound compound) {
 		var tag = new NbtCompound();
 		tag.putLong("money", this.getMoney());
+		tag.putBoolean("canEditTrades", this.canEditTrades());
 
 		InventoryUtils.writeInventoryNbt(tag, traderSellInventory.items, true);
+		if (tradeInfo != null) {
+			var tradeInfoTag = new NbtCompound();
+			tradeInfo.writeToNbt(tradeInfoTag);
+			tag.put("tradeInfo", tradeInfoTag);
+		}
 
 		compound.put("artent.data", tag);
 	}
@@ -76,6 +114,19 @@ public class PlayerDataMixin implements ArtentPlayerData {
 		var tag = compound.getCompound("artent.data");
 
 		setMoney(tag.getLong("money"));
-		Inventories.readNbt(tag, traderSellInventory.items);
+		setCanEditTrades(tag.getBoolean("canEditTrades"));
+		try {
+			Inventories.readNbt(tag, traderSellInventory.items);
+		} catch (Exception e) {
+			traderSellInventory = new TraderSellInventory((PlayerEntity) (Object) this);
+		}
+
+		if (!tag.contains("tradeInfo"))
+			return;
+
+		tradeInfo = new TradeInfo();
+		var tradeInfoTag = tag.getCompound("tradeInfo");
+		tradeInfo.readFromNbt(tradeInfoTag);
+		var x = 1;
 	}
 }

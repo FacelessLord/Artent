@@ -2,9 +2,14 @@ package faceless.artent.trading.block;
 
 import com.mojang.serialization.MapCodec;
 import faceless.artent.api.item.INamed;
+import faceless.artent.network.ArtentServerHook;
+import faceless.artent.objects.ModBlocks;
+import faceless.artent.objects.ModItems;
 import faceless.artent.playerData.api.DataUtil;
 import faceless.artent.sharpening.block.SharpeningAnvil;
+import faceless.artent.trading.api.TradeInfo;
 import faceless.artent.trading.blockEntities.TraderBlockEntity;
+import faceless.artent.trading.priceDeterminators.ItemStackPriceDeterminator;
 import faceless.artent.trading.screenHandlers.TraderScreenHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,6 +17,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
@@ -52,7 +58,19 @@ public class Trader extends BlockWithEntity implements INamed {
 
 	protected void openScreen(World world, BlockState state, BlockPos pos, PlayerEntity player) {
 		if (!world.isClient) {
-			//This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity casted to
+
+			var blockEntity = world.getBlockEntity(pos);
+			if (!(blockEntity instanceof TraderBlockEntity trader))
+				return;
+
+			var tradeInfo = getTradeInfo();
+			var handler = DataUtil.getHandler(player);
+			handler.setTradeInfo(tradeInfo);
+			ArtentServerHook.packetSyncPlayerData(player);
+
+			trader.setTradeInfo(tradeInfo);
+
+			//This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity cast to
 			//a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
 			NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
 
@@ -61,6 +79,21 @@ public class Trader extends BlockWithEntity implements INamed {
 				player.openHandledScreen(screenHandlerFactory);
 			}
 		}
+	}
+
+	public static TradeInfo getTradeInfo() {
+		var tradeInfo = new TradeInfo();
+		tradeInfo.offer.set(0, new ItemStack(ModItems.AmberSphere));
+		tradeInfo.offer.set(1, new ItemStack(ModItems.FortitudeSpiritStone));
+		tradeInfo.offer.set(2, new ItemStack(ModItems.StoneOfTheSea));
+		tradeInfo.offer.set(4, new ItemStack(ModItems.PhiloStone));
+		tradeInfo.offer.set(6, new ItemStack(ModItems.SmithingHammer));
+		tradeInfo.offer.set(7, new ItemStack(ModBlocks.SharpeningAnvil.Item));
+		tradeInfo.offer.set(7, new ItemStack(ModItems.NetherFireStone));
+		tradeInfo.priceDeterminatorContext = new ItemStackPriceDeterminator.ConstantPriceDeterminatorContext();
+		tradeInfo.priceDeterminatorType = ItemStackPriceDeterminator.NAME;
+
+		return tradeInfo;
 	}
 
 	@Override

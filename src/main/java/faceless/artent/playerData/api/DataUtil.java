@@ -1,7 +1,9 @@
 package faceless.artent.playerData.api;
 
+import faceless.artent.Artent;
 import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class DataUtil {
@@ -19,5 +21,21 @@ public class DataUtil {
 	public static TraderSellInventory getTraderSellInventory(PlayerEntity player) {
 		var handler = getHandler(player);
 		return handler.getTraderSellInventory();
+	}
+
+	public static MoneyPouch getSellPrice(ItemStack stack, PlayerEntity player) {
+		var tradeInfo = DataUtil.getHandler(player).getTradeInfo();
+		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
+		var determinatorContext = tradeInfo.priceDeterminatorContext;
+
+		return determinator.getSellPrice(stack, player, determinatorContext);
+	}
+
+	public static MoneyPouch getBuyPrice(ItemStack stack, PlayerEntity player) {
+		var tradeInfo = DataUtil.getHandler(player).getTradeInfo();
+		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
+		var determinatorContext = tradeInfo.priceDeterminatorContext;
+
+		return determinator.getBuyPrice(stack, player, determinatorContext);
 	}
 }

@@ -5,6 +5,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public interface IItemStackPriceDeterminator {
-	MoneyPouch getSellPrice(ItemStack stack, PlayerEntity player);
-	MoneyPouch getBuyPrice(ItemStack stack, PlayerEntity player);
+	MoneyPouch getSellPrice(ItemStack stack, PlayerEntity player, IPriceDeterminatorContext ctx);
+
+	MoneyPouch getBuyPrice(ItemStack stack, PlayerEntity player, IPriceDeterminatorContext ctx);
+
 }

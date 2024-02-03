@@ -1,6 +1,5 @@
 package faceless.artent.trasmutations;
 
-import faceless.artent.api.MiscUtils;
 import faceless.artent.transmutations.api.PartType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,7 +34,7 @@ public class PartTypeButton extends ButtonWidget {
 		var x = getX();
 		var y = getY();
 
-		int selected = MiscUtils.isInRange(mouseX, x, x + width) && MiscUtils.isInRange(mouseY, y, y + height) ? 1 : 0;
+		int selected = this.isMouseOver(mouseX, mouseY) ? 1 : 0;
 
 		context.drawTexture(AlchemicalCircleGui.TEXTURE, x, y, width, height, 128f, selected * 24f, 24, 24, 256, 256);
 		var partTypeTexture = reversed.orElse(hasShiftDown()) ? type.itemTextureRev : type.itemTexture;

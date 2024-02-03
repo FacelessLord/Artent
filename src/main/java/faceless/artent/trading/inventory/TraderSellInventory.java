@@ -7,6 +7,7 @@ public class TraderSellInventory extends ArtentInventory {
 	private final PlayerEntity player;
 
 	public TraderSellInventory(PlayerEntity player) {
+		super();
 		this.player = player;
 	}
 

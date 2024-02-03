@@ -48,6 +48,7 @@ public class ArtentClientHook {
 					client.execute(() -> {
 						var artentHandler = DataUtil.getHandler(client.player);
 						artentHandler.readFromNbt(nbt);
+						var x = 1;
 					});
 				});
 		ClientPlayNetworking
@@ -104,11 +105,4 @@ public class ArtentClientHook {
 		passedData.writeLong(money);
 		ClientPlayNetworking.send(ArtentServerHook.SELL_ITEMS_PACKET_ID, passedData);
 	}
-
-//	public static void packetBuyItems(PlayerEntity player, long price) {
-//		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-//		passedData.writeUuid(player.getUuid());
-//		passedData.writeLong(price);
-//		ClientPlayNetworking.send(ArtentServerHook.BUY_ITEMS_PACKET_ID, passedData);
-//	}
 }

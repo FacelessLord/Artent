@@ -92,7 +92,7 @@ public class SharpeningAnvilInventory extends ArtentInventory {
 	@Override
 	protected void onRemoveStack(int slot) {
 		var stack = getStack(slot);
-		if (!stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable) {
+		if (slot == 3 && !stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable) {
 			var level = sharpenable.getLevel(stack);
 			this.getStack(0).decrement(1);
 			var modifier = this.getStack(1);

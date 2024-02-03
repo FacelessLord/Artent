@@ -5,6 +5,7 @@ import faceless.artent.brewing.item.*;
 import faceless.artent.sharpening.item.EnhancerItem;
 import faceless.artent.sharpening.item.SmithingHammer;
 import faceless.artent.sharpening.item.upgrades.*;
+import faceless.artent.trading.item.DarkBook;
 import faceless.artent.transmutations.item.AlchemicalClock;
 import faceless.artent.transmutations.item.AlchemicalCoal;
 import faceless.artent.transmutations.item.AlchemicalPaper;
@@ -47,6 +48,7 @@ public final class ModItems {
 	public static Item MediumConcentrate = new MediumConcentrate(new Item.Settings().maxCount(1));
 	public static Item BigConcentratePhial = new Item(new Item.Settings().maxCount(64));
 	public static Item BigConcentrate = new BigConcentrate(new Item.Settings().maxCount(1));
+	public static DarkBook DarkBook = new DarkBook(new Item.Settings().maxCount(1));
 
 	public static Item[] berries = new Item[]{
 		new Item(new Item.Settings().maxCount(64).food(Berry)),

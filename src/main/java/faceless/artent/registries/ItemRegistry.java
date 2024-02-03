@@ -37,6 +37,9 @@ public final class ItemRegistry implements IRegistry {
 		registerEnhancer(ModItems.PoisonBottleUpgrade, ModItemGroups.Main);
 		registerEnhancer(ModItems.VampiresFangUpgrade, ModItemGroups.Main);
 
+		// TRADING
+		register(ModItems.DarkBook, ModItemGroups.Main);
+
 		// BREWING
 		for (int i = 0; i < 5; i++) {
 			register(Ingredients.GetBerryName(i), ModItems.berries[i], ModItemGroups.Potions);

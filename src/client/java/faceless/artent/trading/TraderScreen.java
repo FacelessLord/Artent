@@ -27,7 +27,7 @@ public class TraderScreen extends HandledScreen<TraderScreenHandler> {
 		backgroundHeight = (int) (backgroundWidth * 202f / 176f);
 		super.init();
 
-		addDrawable(new SellButton(
+		addDrawableChild(new SellButton(
 			width / 2 + 32, height / 2 - 12, 41, 12, button -> {
 			ArtentClientHook.packetSellItems(handler.player, handler.getSellInventoryPrice());
 		}));

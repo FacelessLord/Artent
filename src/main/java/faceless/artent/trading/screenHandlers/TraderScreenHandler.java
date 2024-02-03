@@ -1,9 +1,8 @@
 package faceless.artent.trading.screenHandlers;
 
-import faceless.artent.network.ArtentServerHook;
+import faceless.artent.Artent;
 import faceless.artent.objects.ModScreenHandlers;
 import faceless.artent.playerData.api.DataUtil;
-import faceless.artent.trading.api.ItemStackPriceDeterminator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -43,6 +42,30 @@ public class TraderScreenHandler extends ScreenHandler {
 	//	slotId - id of the slot in order: [...this.inventorySlots, ...player.slots]
 	@Override
 	public ItemStack quickMove(PlayerEntity player, int slotId) {
+		Slot slot = this.slots.get(slotId);
+		if (!slot.hasStack() || slotId < traderOffers.size())
+			return ItemStack.EMPTY;
+		var slotStack = slot.getStack();
+		var itemStack = slotStack.copy();
+
+		if (slotId >= traderOffers.size() + traderSell.size()) {
+			if (!this.insertItem(slotStack, traderOffers.size(), traderOffers.size() + traderSell.size(), false)) // try put into sell inventory
+				return ItemStack.EMPTY;
+		}
+		if (slotId >= traderOffers.size() && slotId < traderOffers.size() + traderSell.size()) {
+			if (!this.insertItem(slotStack, traderOffers.size() + traderSell.size(), slots.size(), false)) // try put into player inventory
+				return ItemStack.EMPTY;
+		}
+
+		if (slotStack.isEmpty()) {
+			slot.setStack(ItemStack.EMPTY);
+		} else {
+			slot.markDirty();
+		}
+		if (slotStack.getCount() == itemStack.getCount()) {
+			return ItemStack.EMPTY;
+		}
+		slot.onTakeItem(player, slotStack);
 		return ItemStack.EMPTY;
 	}
 
@@ -56,6 +79,8 @@ public class TraderScreenHandler extends ScreenHandler {
 		super(ModScreenHandlers.TRADER_HANDLER, syncId);
 		this.context = context;
 		this.player = inv.player;
+		var handler = DataUtil.getHandler(player);
+		var canEdit = handler.canEditTrades();
 
 		checkSize(traderOffers, 18);
 		checkSize(traderSell, 9);
@@ -65,33 +90,14 @@ public class TraderScreenHandler extends ScreenHandler {
 		this.traderSell = traderSell;
 		this.traderSell.onOpen(inv.player);
 
+		var tradeInfo = DataUtil.getHandler(player).getTradeInfo();
+		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
+		var determinatorContext = tradeInfo.priceDeterminatorContext;
+
 		for (var i = 0; i < 6; ++i) {
 			for (int j = 0; j < 3; ++j) {
-				this.addSlot(new Slot(traderOffers, j + i * 3, 8 + j * 18, -10 + i * 18 + 18) {
-					@Override
-					public boolean canInsert(ItemStack stack) {
-						return false; // TODO make false
-					}
-
-					@Override
-					public boolean canTakeItems(PlayerEntity player) {
-						var pouch = DataUtil.getMoneyPouch(player);
-						var item = this.getStack();
-						var price = ItemStackPriceDeterminator.INSTANCE.getBuyPrice(item, player);
-
-						return pouch.greaterOrEqual(price);
-					}
-
-					@Override
-					public void onTakeItem(PlayerEntity player, ItemStack stack) {
-						var handler = DataUtil.getHandler(player);
-						var price = ItemStackPriceDeterminator.INSTANCE.getBuyPrice(stack, player);
-						handler.addMoney(-price.asLong());
-						ArtentServerHook.packetSyncPlayerData(player);
-						// TODO send addMoneyPacket
-						super.onTakeItem(player, stack);
-					}
-				});
+				var slotIndex = j + i * 3;
+				this.addSlot(new TradeOfferSlot(traderOffers, slotIndex, 8 + j * 18, -10 + i * 18 + 18, canEdit, determinator, determinatorContext));
 			}
 		}
 		for (var i = 0; i < 3; ++i) {
@@ -111,18 +117,46 @@ public class TraderScreenHandler extends ScreenHandler {
 	}
 
 	public long getSellInventoryPrice() {
-		var determinator = ItemStackPriceDeterminator.INSTANCE;
+		var tradeInfo = DataUtil.getHandler(player).getTradeInfo();
+		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
+		var determinatorContext = tradeInfo.priceDeterminatorContext;
+
 		var sum = 0L;
 		for (int i = 0; i < traderSell.size(); i++) {
 			var stack = traderSell.getStack(i);
 			if (!stack.isEmpty())
-				sum += determinator.getSellPrice(stack, player).asLong();
+				sum += determinator.getSellPrice(stack, player, determinatorContext).asLong();
 		}
 		return sum;
 	}
 
 	@Override
 	public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+		var cursorStack = this.getCursorStack();
+		if (actionType == SlotActionType.PICKUP && slotIndex >= 0 && slotIndex < traderOffers.size()) {
+			TradeOfferSlot slot = (TradeOfferSlot) this.slots.get(slotIndex);
+			var slotStack = slot.getStack();
+			if (!cursorStack.isEmpty() && slot.hasStack() && ItemStack.canCombine(cursorStack, slotStack)) {
+				ItemStack itemStack7 = slot.takeStackRange(slotStack.getCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				cursorStack.increment(itemStack7.getCount());
+				return;
+			}
+		}
+		if (actionType == SlotActionType.QUICK_MOVE && slotIndex >= 0 && slotIndex < traderOffers.size()) {
+			TradeOfferSlot slot = (TradeOfferSlot) this.slots.get(slotIndex);
+			var slotStack = slot.getStack();
+			if (cursorStack.isEmpty() && slot.hasStack()) {
+				ItemStack itemStack7 = slot.shiftTakeStackRange(slotStack.getMaxCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				setCursorStack(itemStack7);
+				return;
+			}
+			if (!cursorStack.isEmpty() && slot.hasStack() && ItemStack.canCombine(cursorStack, slotStack)) {
+				ItemStack itemStack7 = slot.shiftTakeStackRange(slotStack.getMaxCount(), cursorStack.getMaxCount() - cursorStack.getCount(), player);
+				cursorStack.increment(itemStack7.getCount());
+				return;
+			}
+		}
+
 		if (actionType != SlotActionType.PICKUP_ALL) {
 			super.onSlotClick(slotIndex, button, actionType, player);
 			return;
@@ -131,7 +165,7 @@ public class TraderScreenHandler extends ScreenHandler {
 			return;
 
 		Slot slot = this.slots.get(slotIndex);
-		ItemStack cursorStack = this.getCursorStack();
+
 		if (cursorStack.isEmpty() || slot.hasStack() && slot.canTakeItems(player))
 			return;
 
@@ -151,7 +185,5 @@ public class TraderScreenHandler extends ScreenHandler {
 				cursorStack.increment(itemStack7.getCount());
 			}
 		}
-
-
 	}
 }

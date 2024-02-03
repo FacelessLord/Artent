@@ -1,6 +1,5 @@
 package faceless.artent.trading;
 
-import faceless.artent.api.MiscUtils;
 import faceless.artent.api.math.Color;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,7 +18,7 @@ public class SellButton extends ButtonWidget {
 	protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
 		var x = getX();
 		var y = getY();
-		int selected = MiscUtils.isInRange(mouseX, x, x + width) && MiscUtils.isInRange(mouseY, y, y + height) ? 1 : 0;
+		int selected = this.isMouseOver(mouseX, mouseY) ? 1 : 0;
 
 		context.drawTexture(TraderScreen.TEXTURE, x, y, width, height, 176, selected * 12, 41, 12, 256, 256);
 		var textRenderer = MinecraftClient.getInstance().textRenderer;

@@ -2,6 +2,7 @@ package faceless.artent.trading.blockEntities;
 
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.playerData.api.DataUtil;
+import faceless.artent.trading.api.TradeInfo;
 import faceless.artent.trading.inventory.TraderOfferInventory;
 import faceless.artent.trading.screenHandlers.TraderScreenHandler;
 import net.minecraft.block.Block;
@@ -71,4 +72,7 @@ public class TraderBlockEntity extends BlockEntity implements NamedScreenHandler
 		return createNbt();
 	}
 
+	public void setTradeInfo(TradeInfo tradeInfo) {
+		offerInventory.setTradeInfo(tradeInfo);
+	}
 }
