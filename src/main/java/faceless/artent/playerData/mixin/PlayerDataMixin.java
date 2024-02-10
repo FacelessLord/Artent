@@ -97,6 +97,8 @@ public class PlayerDataMixin implements ArtentPlayerData {
 		tag.putLong("money", this.getMoney());
 		tag.putBoolean("canEditTrades", this.canEditTrades());
 
+		if (traderSellInventory == null)
+			traderSellInventory = new TraderSellInventory();
 		InventoryUtils.writeInventoryNbt(tag, traderSellInventory.items, true);
 		if (tradeInfo != null) {
 			var tradeInfoTag = new NbtCompound();

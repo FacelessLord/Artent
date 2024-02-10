@@ -1,6 +1,7 @@
 package faceless.artent.objects;
 
 import faceless.artent.brewing.entity.ThrowablePotionPhialEntity;
+import faceless.artent.mobs.entity.WindmillEntity;
 import faceless.artent.trading.entity.CoinEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -24,6 +25,14 @@ public class ModEntities {
 			.<CoinEntity>create(SpawnGroup.MISC,
 				CoinEntity::new)
 			.dimensions(EntityDimensions.fixed(0.25f, 0.25f))
+			.trackRangeBlocks(4)
+			.trackedUpdateRate(10)
+			.build();
+	public static EntityType<? extends WindmillEntity> WINDMILL_ENTITY =
+		FabricEntityTypeBuilder
+			.<WindmillEntity>create(SpawnGroup.MISC,
+				WindmillEntity::new)
+			.dimensions(EntityDimensions.fixed(1, 2))
 			.trackRangeBlocks(4)
 			.trackedUpdateRate(10)
 			.build();

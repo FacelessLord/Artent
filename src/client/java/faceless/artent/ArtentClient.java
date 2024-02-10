@@ -4,6 +4,7 @@ import faceless.artent.api.math.Color;
 import faceless.artent.brewing.BrewingCauldronRenderer;
 import faceless.artent.brewing.api.AlchemicalPotionUtil;
 import faceless.artent.brewing.blockEntities.BrewingCauldronBlockEntity;
+import faceless.artent.mobs.WindmillEntityRenderer;
 import faceless.artent.network.ArtentClientHook;
 import faceless.artent.objects.ModBlockEntities;
 import faceless.artent.objects.ModBlocks;
@@ -65,10 +66,12 @@ public class ArtentClient implements ClientModInitializer {
 			ModItems.SmallConcentrate, ModItems.MediumConcentrate, ModItems.BigConcentrate);
 		EntityRendererRegistry.register(ModEntities.POTION_PHIAL, FlyingItemEntityRenderer::new);
 		EntityRendererRegistry.register(ModEntities.COIN_ENTITY, CoinEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.WINDMILL_ENTITY, WindmillEntityRenderer::new);
 
 		ModelPredicateProviderRegistry.register(ModItems.MediumConcentrate, new Identifier("amount"),
 			(stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 4.0f);
 		ModelPredicateProviderRegistry.register(ModItems.BigConcentrate, new Identifier("amount"),
 			(stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 10.0f);
+
 	}
 }
