@@ -1,7 +1,7 @@
 package faceless.artent.registries;
 
 import faceless.artent.Artent;
-import faceless.artent.mobs.entity.WindmillEntity;
+import faceless.artent.mobs.entity.CrowEntity;
 import faceless.artent.objects.ModEntities;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.entity.Entity;
@@ -15,8 +15,8 @@ public class EntityRegistry implements IRegistry {
 	public void register() {
 		register("potion_phial_entity", ModEntities.POTION_PHIAL);
 		register("coin", ModEntities.COIN_ENTITY);
-		register("windmill", ModEntities.WINDMILL_ENTITY);
-		FabricDefaultAttributeRegistry.register(ModEntities.WINDMILL_ENTITY, WindmillEntity.createLivingAttributes());
+		register("crow", ModEntities.CROW_ENTITY);
+		FabricDefaultAttributeRegistry.register(ModEntities.CROW_ENTITY, CrowEntity.createLivingAttributes());
 	}
 
 	private static <T extends Entity> void register(String id, EntityType<T> type) {

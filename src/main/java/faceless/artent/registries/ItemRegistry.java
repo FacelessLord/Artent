@@ -24,6 +24,7 @@ public final class ItemRegistry implements IRegistry {
 		FuelRegistry.INSTANCE.add(ModItems.AlchemicalCoal, 2400);
 		register(ModItems.Chalk, ModItemGroups.Main);
 		register(ModItems.AlchemicalPaper, ModItemGroups.Main);
+		register(ModItems.CrowStaff, ModItemGroups.Main);
 
 		// SHARPENING
 		register(ModItems.SmithingHammer, ModItemGroups.Main);

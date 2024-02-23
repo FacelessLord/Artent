@@ -40,7 +40,7 @@ public class CoinEntityRenderer extends EntityRenderer<CoinEntity> {
 		var coinType = MiscUtils.limit(coinEntity.getCoinType(), 0, 2);
 		matrixStack.push();
 		ItemStack itemStack = new ItemStack(ModItems.Coins[coinType]);
-		int j = itemStack.isEmpty() ? 187 : Item.getRawId((Item) itemStack.getItem()) + coinEntity.getId();
+		int j = itemStack.isEmpty() ? 187 : Item.getRawId(itemStack.getItem()) + coinEntity.getId();
 		this.random.setSeed(j);
 
 		BakedModel bakedModel = this.itemRenderer.getModel(itemStack, coinEntity.getWorld(), null, coinEntity.getId());
