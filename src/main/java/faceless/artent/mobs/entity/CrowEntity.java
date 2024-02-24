@@ -191,7 +191,7 @@ public class CrowEntity extends AnimalEntity implements GeoEntity {
 	public void updateState() {
 		timeInState++;
 		var state = getAnimationState();
-		if (state == CrowState.Sitting && timeInState >= 3 * 20) // TODO make more
+		if (state == CrowState.Sitting && timeInState >= 60 * 20)
 			setState(CrowState.StartFlight);
 		if (state == CrowState.StartFlight && timeInState >= 20 / 2) {
 			setState(CrowState.Flying);
