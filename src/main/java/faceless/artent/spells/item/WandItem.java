@@ -2,6 +2,7 @@ package faceless.artent.spells.item;
 
 import faceless.artent.api.item.ArtentItem;
 import faceless.artent.playerData.api.DataUtil;
+import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
 import faceless.artent.spells.api.SpellActionResultType;
 import faceless.artent.spells.spells.MakeLight;
@@ -38,12 +39,23 @@ public class WandItem extends ArtentItem {
 			return TypedActionResult.fail(stack);
 		}
 
-		if ((spell.type & Spell.ActionType.SingleCast) > 0) {
-			spell.action(DataUtil.asCaster(player), player.getWorld(), stack, 0);
+		if ((spell.type & (Spell.ActionType.SingleCast | Spell.ActionType.Tick)) > 0) {
 			player.setCurrentHand(hand);
 			return TypedActionResult.consume(stack);
 		}
 		return TypedActionResult.success(stack);
+	}
+
+	@Override
+	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+		if (!(user instanceof ICaster caster))
+			return;
+		var spell = new MakeLight();
+		var actionTime = getMaxUseTime(stack) - remainingUseTicks;
+		if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
+			spell.onRecoil(caster, world, stack, actionTime);
+		} else
+			spell.action(caster, user.getWorld(), stack, actionTime);
 	}
 
 	public void usageTick(World world, LivingEntity living, ItemStack stack, int remainingUseTicks) {

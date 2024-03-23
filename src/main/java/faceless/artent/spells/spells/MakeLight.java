@@ -24,7 +24,8 @@ public class MakeLight extends Spell {
 		lightbulb.setSpellId(this.id);
 		lightbulb.setWandStack(stack);
 		lightbulb.setPosition(entity.getPos().add(entity.getRotationVector()).add(0, 1, 0));
-		lightbulb.setVelocity(entity.getRotationVector().multiply(2));
+		var useTimeCoefficient = 1 + castTime / 60f; // TODO мб поднимать не скорость, а количетсво снарядов
+		lightbulb.setVelocity(entity.getRotationVector().multiply(useTimeCoefficient));
 		world.spawnEntity(lightbulb);
 	}
 
