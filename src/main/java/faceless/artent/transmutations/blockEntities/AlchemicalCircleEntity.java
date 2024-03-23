@@ -218,10 +218,10 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		if (transmutation != null) {
 			if (state == State.Preparation) {
 				float percentage = actionTime / ((float) transmutation.getPrepTime());
-				return transmutation.getPreparationColor().multiply(percentage).add(new Color().multiply(1 - percentage));
+				return transmutation.getActionColor().multiply(percentage).addNoMixing(transmutation.getPreparationColor().multiply(1 - percentage));
 			}
 			if (state == State.Action) {
-				return transmutation.getPreparationColor();
+				return transmutation.getActionColor();
 			}
 		}
 		return new Color();

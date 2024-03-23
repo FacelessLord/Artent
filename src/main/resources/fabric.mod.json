@@ -28,6 +28,7 @@
 		"brewing.mixins.json",
 		"trading.mixins.json",
 		"playerData.mixins.json",
+		"spells.mixins.json",
 		{
 			"config": "artent.client.mixins.json",
 			"environment": "client"

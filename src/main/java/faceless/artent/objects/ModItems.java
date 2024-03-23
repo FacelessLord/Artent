@@ -2,6 +2,7 @@ package faceless.artent.objects;
 
 import faceless.artent.api.item.ArtentItem;
 import faceless.artent.brewing.item.*;
+import faceless.artent.spells.item.StaffOfLight;
 import faceless.artent.item.CrowStaff;
 import faceless.artent.sharpening.item.EnhancerItem;
 import faceless.artent.sharpening.item.SmithingHammer;
@@ -52,6 +53,7 @@ public final class ModItems {
 	public static Item BigConcentrate = new BigConcentrate(new Item.Settings().maxCount(1));
 	public static DarkBook DarkBook = new DarkBook(new Item.Settings().maxCount(1));
 	public static CrowStaff CrowStaff = new CrowStaff(new Item.Settings().maxCount(1));
+	public static StaffOfLight StaffOfLight = new StaffOfLight(new FabricItemSettings().maxCount(1));
 
 	public static final ArtentItem[] Coins = new ArtentItem[]{
 		new ArtentItem("coin_bronze"),

@@ -1,6 +1,7 @@
 package faceless.artent.playerData.api;
 
 import faceless.artent.Artent;
+import faceless.artent.spells.api.ICaster;
 import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -37,5 +38,9 @@ public class DataUtil {
 		var determinatorContext = tradeInfo.priceDeterminatorContext;
 
 		return determinator.getBuyPrice(stack, player, determinatorContext);
+	}
+
+	public static ICaster asCaster(PlayerEntity player) {
+		return (ICaster) player;
 	}
 }

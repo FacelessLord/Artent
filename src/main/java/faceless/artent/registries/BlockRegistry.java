@@ -42,6 +42,9 @@ public class BlockRegistry implements IRegistry {
 
 		// TRADING
 		ModBlocks.TraderItem = register(ModBlocks.Trader, ModItemGroups.Main);
+
+		// MAGIC
+		ModBlocks.LightBlockItem = register(ModBlocks.LightBlock, ModItemGroups.Main);
 	}
 
 	public BlockItem register(String blockId, Block block, ArtentItemGroupBuilder groupBuilder) {

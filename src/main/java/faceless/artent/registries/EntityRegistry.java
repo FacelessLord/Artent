@@ -14,6 +14,7 @@ public class EntityRegistry implements IRegistry {
 	@Override
 	public void register() {
 		register("potion_phial_entity", ModEntities.POTION_PHIAL);
+		register("lightbulb", ModEntities.LIGHTBULB);
 		register("coin", ModEntities.COIN_ENTITY);
 		register("crow", ModEntities.CROW_ENTITY);
 		FabricDefaultAttributeRegistry.register(ModEntities.CROW_ENTITY, CrowEntity.createLivingAttributes());

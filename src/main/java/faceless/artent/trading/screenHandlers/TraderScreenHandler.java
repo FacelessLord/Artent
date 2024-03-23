@@ -205,12 +205,20 @@ public class TraderScreenHandler extends ScreenHandler {
 		}
 	}
 
-	public MoneyPouch getStackPrice(ItemStack stack) {
+	public MoneyPouch getStackSellPrice(ItemStack stack) {
 		var tradeInfo = DataUtil.getHandler(player).getTradeInfo();
 		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
 		var determinatorContext = tradeInfo.priceDeterminatorContext;
 
 		return determinator.getSellPrice(stack, determinatorContext);
+	}
+
+	public MoneyPouch getStackBuyPrice(ItemStack stack) {
+		var tradeInfo = DataUtil.getHandler(player).getTradeInfo();
+		var determinator = Artent.ItemPriceDeterminators.determinators.get(tradeInfo.priceDeterminatorType);
+		var determinatorContext = tradeInfo.priceDeterminatorContext;
+
+		return determinator.getBuyPrice(stack, player, determinatorContext);
 	}
 
 	@Override

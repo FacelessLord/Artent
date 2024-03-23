@@ -24,7 +24,6 @@ public final class ItemRegistry implements IRegistry {
 		FuelRegistry.INSTANCE.add(ModItems.AlchemicalCoal, 2400);
 		register(ModItems.Chalk, ModItemGroups.Main);
 		register(ModItems.AlchemicalPaper, ModItemGroups.Main);
-		register(ModItems.CrowStaff, ModItemGroups.Main);
 
 		// SHARPENING
 		register(ModItems.SmithingHammer, ModItemGroups.Main);
@@ -68,6 +67,11 @@ public final class ItemRegistry implements IRegistry {
 		AlchemicalPotionUtil.appendFermentedPotionStacks(ModItems.MediumConcentrate, 3, ModItemGroups.Potions);
 		register("big_concentrate", ModItems.BigConcentrate);
 		AlchemicalPotionUtil.appendFermentedPotionStacks(ModItems.BigConcentrate, 9, ModItemGroups.Potions);
+
+		// staffs
+		register(ModItems.CrowStaff, ModItemGroups.Main);
+		register(ModItems.StaffOfLight, ModItemGroups.Main);
+
 	}
 
 	public void register(String itemId, Item item, ArtentItemGroupBuilder groupBuilder) {

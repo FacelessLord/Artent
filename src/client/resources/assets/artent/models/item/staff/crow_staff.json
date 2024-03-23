@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "artent:item/crow_staff"
+    "layer0": "artent:item/staff/crow_staff"
   }
 }

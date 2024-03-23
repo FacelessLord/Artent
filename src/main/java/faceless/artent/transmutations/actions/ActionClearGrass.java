@@ -4,6 +4,7 @@ import faceless.artent.api.math.Color;
 import faceless.artent.transmutations.api.Transmutation;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -40,9 +41,9 @@ public class ActionClearGrass extends Transmutation {
 				return false;
 
 			BlockPos entityPos = e.getPos();
-			boolean dirty = randomPoints(world, 64, entityPos, facing, width, height, (pos, state) -> {
+			boolean dirty = randomPoints(world, 64, entityPos.down(), facing, width, height, (pos, state) -> {
 				Block b = state.getBlock();
-				if ((grass.contains(b) || flowers.contains(b) || plants.contains(b))) {
+				if (grass.contains(b) || flowers.contains(b) || plants.contains(b) || b instanceof PlantBlock) {
 					world.breakBlock(pos, true);
 					return true;
 				}

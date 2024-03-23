@@ -5,6 +5,6 @@ import net.minecraft.item.Item;
 
 public class CrowStaff extends ArtentItem {
 	public CrowStaff(Item.Settings settings) {
-		super(settings, "crow_staff");
+		super(settings, "staff/crow_staff");
 	}
 }

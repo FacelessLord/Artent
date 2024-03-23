@@ -254,8 +254,8 @@ public class CrowEntity extends AnimalEntity implements GeoEntity {
 										   .normalize().multiply(this.getMovementSpeed());
 
 				velocity = velocity.multiply(0.5f)
-							   .add(alignmentVelocity.multiply(0.2f))
-							   .add(cohesionVelocity.multiply(0.3f));
+							   .add(alignmentVelocity.multiply(0.3f))
+							   .add(cohesionVelocity.multiply(0.2f));
 			}
 			this.setVelocity(velocity);
 		}

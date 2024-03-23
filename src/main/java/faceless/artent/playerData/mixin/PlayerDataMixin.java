@@ -3,6 +3,9 @@ package faceless.artent.playerData.mixin;
 import faceless.artent.api.inventory.InventoryUtils;
 import faceless.artent.network.ArtentServerHook;
 import faceless.artent.playerData.api.ArtentPlayerData;
+import faceless.artent.playerData.api.HeroInfo;
+import faceless.artent.spells.api.CasterStorage;
+import faceless.artent.spells.api.ICaster;
 import faceless.artent.trading.api.TradeInfo;
 import faceless.artent.trading.block.Trader;
 import faceless.artent.trading.inventory.TraderSellInventory;
@@ -15,9 +18,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.UUID;
+
 @SuppressWarnings("ALL")
 @Mixin(PlayerEntity.class)
-public class PlayerDataMixin implements ArtentPlayerData {
+public class PlayerDataMixin implements ArtentPlayerData, ICaster {
 
 	@Unique
 	public long artentMoney = 0;
@@ -28,6 +33,9 @@ public class PlayerDataMixin implements ArtentPlayerData {
 	public TraderSellInventory traderSellInventory = new TraderSellInventory();
 	@Unique
 	public TradeInfo tradeInfo = Trader.getTradeInfo();
+
+	@Unique
+	public HeroInfo heroInfo = new HeroInfo();
 
 	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
 	private void onWriteEntityToNBT(NbtCompound compound, CallbackInfo ci) {
@@ -92,6 +100,16 @@ public class PlayerDataMixin implements ArtentPlayerData {
 	}
 
 	@Override
+	public HeroInfo getHeroInfo() {
+		return this.heroInfo;
+	}
+
+	@Override
+	public void setHeroInfo(HeroInfo info) {
+		this.heroInfo = info;
+	}
+
+	@Override
 	public void writeToNbt(NbtCompound compound) {
 		var tag = new NbtCompound();
 		tag.putLong("money", this.getMoney());
@@ -101,9 +119,7 @@ public class PlayerDataMixin implements ArtentPlayerData {
 			traderSellInventory = new TraderSellInventory();
 		InventoryUtils.writeInventoryNbt(tag, traderSellInventory.items, true);
 		if (tradeInfo != null) {
-			var tradeInfoTag = new NbtCompound();
-			tradeInfo.writeToNbt(tradeInfoTag);
-			tag.put("tradeInfo", tradeInfoTag);
+			tradeInfo.writeToNbt(tag);
 		}
 
 		compound.put("artent.data", tag);
@@ -123,12 +139,20 @@ public class PlayerDataMixin implements ArtentPlayerData {
 			traderSellInventory = new TraderSellInventory();
 		}
 
-		if (!tag.contains("tradeInfo"))
-			return;
-
 		tradeInfo = new TradeInfo();
-		var tradeInfoTag = tag.getCompound("tradeInfo");
-		tradeInfo.readFromNbt(tradeInfoTag);
-		var x = 1;
+		tradeInfo.readFromNbt(tag);
+		var player = (PlayerEntity) (Object) this;
+		CasterStorage.putCaster(player.getWorld(), this);
+	}
+
+	@Override
+	public boolean consumeMana(int mana) {
+		return false;
+	}
+
+	@Override
+	public UUID getCasterUuid() {
+		var player = (PlayerEntity) (Object) this;
+		return player.getUuid();
 	}
 }

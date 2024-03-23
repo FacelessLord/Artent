@@ -20,6 +20,9 @@ public interface ArtentPlayerData {
 	TradeInfo getTradeInfo();
 
 	void setTradeInfo(TradeInfo info);
+	HeroInfo getHeroInfo();
+
+	void setHeroInfo(HeroInfo info);
 
 	void writeToNbt(NbtCompound compound);
 

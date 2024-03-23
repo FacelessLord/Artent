@@ -118,7 +118,9 @@ public class TraderScreen extends HandledScreen<TraderScreenHandler> {
 						Collectors.toList());
 			tooltipData.ifPresent(data -> list.add(1, TooltipComponent.of(data)));
 
-			var itemPrice = handler.getStackPrice(itemStack);
+			var itemPrice = this.focusedSlot.id < handler.traderOffers.size()
+								? handler.getStackBuyPrice(itemStack)
+								: handler.getStackSellPrice(itemStack);
 			if (itemPrice != null)
 				list.add(new PriceTooltipComponent(itemPrice));
 
