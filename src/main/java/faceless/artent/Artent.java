@@ -27,6 +27,7 @@ public class Artent implements ModInitializer {
 	public static StatusEffectsRegistry StatusEffects = new StatusEffectsRegistry();
 	public static CommandRegistry Commands = new CommandRegistry();
 	public static ItemPriceDeterminatorRegistry ItemPriceDeterminators = new ItemPriceDeterminatorRegistry();
+	public static SpellRegistry SpellRegistry = new SpellRegistry();
 
 	@Override
 	public void onInitialize() {
@@ -51,6 +52,7 @@ public class Artent implements ModInitializer {
 		Enhancers.register();
 		Brewing.register();
 		ItemPriceDeterminators.register();
+		SpellRegistry.register();
 
 		Commands.register();
 		ServerHook.load();

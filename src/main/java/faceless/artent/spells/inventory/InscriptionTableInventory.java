@@ -14,4 +14,10 @@ public class InscriptionTableInventory extends ArtentInventory {
     public int size() {
         return 3;
     }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        table.markDirty();
+    }
 }

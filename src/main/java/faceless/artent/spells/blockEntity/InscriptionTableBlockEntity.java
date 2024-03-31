@@ -2,8 +2,8 @@ package faceless.artent.spells.blockEntity;
 
 import faceless.artent.api.inventory.ArtentInventory;
 import faceless.artent.objects.ModBlockEntities;
-import faceless.artent.sharpening.screenHandlers.SharpeningAnvilScreenHandler;
 import faceless.artent.spells.inventory.InscriptionTableInventory;
+import faceless.artent.spells.screenhandlers.InscriptionTableScreenHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -60,12 +60,12 @@ public class InscriptionTableBlockEntity extends BlockEntity implements NamedScr
 
 	@Override
 	public Text getDisplayName() {
-		return Text.translatable("sharpening_anvil");
+		return Text.translatable("inscription_table");
 	}
 
 	@Nullable
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-		return new SharpeningAnvilScreenHandler(syncId, playerInventory, this.inventory, ScreenHandlerContext.create(world, pos));
+		return new InscriptionTableScreenHandler(syncId, playerInventory, this.inventory, ScreenHandlerContext.create(world, pos));
 	}
 }

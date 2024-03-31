@@ -114,12 +114,8 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         checkSize(table, 3);
         this.table = table;
         table.onOpen(inv.player);
-//		this.addSlot(new Slot(this.table, 0, 27, 47) {
-//			@Override
-//			public boolean canInsert(ItemStack stack) {
-//				return stack.getItem() instanceof ToolItem;
-//			}
-//		});
+		this.addSlot(new Slot(this.table, 0, 15 + 9 * 18, 84 + 18 * 2 ) {
+		});
 //		this.addSlot(new Slot(this.table, 1, 76, 47) {
 //			@Override
 //			public boolean canInsert(ItemStack stack) {
@@ -152,11 +148,11 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 //		});
         for (var i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inv, j + i * 9 + 9 + 25, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 88 + 18 * 3 + i * 18));
             }
         }
         for (var i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(inv, i, i * 18 + 8 + 25, 142));
+            this.addSlot(new Slot(inv, i, i * 18 + 8, 146 + 18 * 3));
         }
     }
 }
