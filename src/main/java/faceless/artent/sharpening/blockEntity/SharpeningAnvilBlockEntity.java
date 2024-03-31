@@ -1,4 +1,4 @@
-package faceless.artent.sharpening.blockEntities;
+package faceless.artent.sharpening.blockEntity;
 
 import faceless.artent.api.inventory.ArtentInventory;
 import faceless.artent.objects.ModBlockEntities;

@@ -2,7 +2,7 @@ package faceless.artent.sharpening;
 
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.sharpening.block.SharpeningAnvil;
-import faceless.artent.sharpening.blockEntities.SharpeningAnvilBlockEntity;
+import faceless.artent.sharpening.blockEntity.SharpeningAnvilBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

@@ -116,7 +116,7 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 	}
 
 	public SharpeningAnvilScreenHandler(int syncId, PlayerInventory inv, Inventory anvil, ScreenHandlerContext context) {
-		super(ModScreenHandlers.SHARPENING_ANVIL_HANDLER, syncId);
+		super(ModScreenHandlers.SHARPENING_ANVIL, syncId);
 		this.context = context;
 		checkSize(anvil, 4);
 		this.anvil = anvil;

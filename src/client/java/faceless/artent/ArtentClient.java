@@ -36,6 +36,8 @@ public class ArtentClient implements ClientModInitializer {
 
 		// ALCHEMY
 		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.AlchemicalCircle, RenderLayer.getCutoutMipped());
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.InscriptionTable, RenderLayer.getCutoutMipped());
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.InscriptionTable2, RenderLayer.getCutoutMipped());
 		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
 			if (view == null || view.getBlockEntityRenderData(pos) == null)
 				return new Color().asInt();

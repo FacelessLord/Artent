@@ -2,7 +2,7 @@ package faceless.artent.sharpening.block;
 
 import com.mojang.serialization.MapCodec;
 import faceless.artent.api.item.INamed;
-import faceless.artent.sharpening.blockEntities.SharpeningAnvilBlockEntity;
+import faceless.artent.sharpening.blockEntity.SharpeningAnvilBlockEntity;
 import faceless.artent.sharpening.screenHandlers.SharpeningAnvilScreenHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;

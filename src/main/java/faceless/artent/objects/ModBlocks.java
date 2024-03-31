@@ -3,6 +3,8 @@ package faceless.artent.objects;
 import faceless.artent.api.block.ArtentBlock;
 import faceless.artent.brewing.block.*;
 import faceless.artent.sharpening.block.SharpeningAnvil;
+import faceless.artent.spells.block.InscriptionTable;
+import faceless.artent.spells.block.InscriptionTablePt2;
 import faceless.artent.spells.block.LightBlock;
 import faceless.artent.trading.block.Trader;
 import faceless.artent.transmutations.block.AlchemicalCircleBlock;
@@ -176,5 +178,18 @@ public final class ModBlocks {
 				.luminance(15));
 	public static BlockItem LightBlockItem;
 
+	public static InscriptionTable InscriptionTable =
+			new InscriptionTable(FabricBlockSettings
+					.copyOf(Blocks.OAK_PLANKS)
+					.nonOpaque()
+					.strength(2.0f, 3.0f)
+					.sounds(BlockSoundGroup.WOOD));
+	public static BlockItem InscriptionTableItem;
 
+	public static InscriptionTablePt2 InscriptionTable2 =
+			new InscriptionTablePt2(FabricBlockSettings
+					.copyOf(Blocks.OAK_PLANKS)
+					.nonOpaque()
+					.strength(2.0f, 3.0f)
+					.sounds(BlockSoundGroup.WOOD));
 }

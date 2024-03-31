@@ -9,7 +9,7 @@ public class ScreenRegistry implements IRegistry {
 
 	@Override
 	public void register() {
-		HandledScreens.register(ModScreenHandlers.SHARPENING_ANVIL_HANDLER, SharpeningAnvilScreen::new);
+		HandledScreens.register(ModScreenHandlers.SHARPENING_ANVIL, SharpeningAnvilScreen::new);
 		HandledScreens.register(ModScreenHandlers.TRADER_HANDLER, TraderScreen::new);
 	}
 

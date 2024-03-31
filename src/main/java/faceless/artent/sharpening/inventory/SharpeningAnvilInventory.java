@@ -5,7 +5,7 @@ import faceless.artent.objects.ModItems;
 import faceless.artent.sharpening.api.IEnhancer;
 import faceless.artent.sharpening.api.ISharpenable;
 import faceless.artent.sharpening.api.SharpeningUtils;
-import faceless.artent.sharpening.blockEntities.SharpeningAnvilBlockEntity;
+import faceless.artent.sharpening.blockEntity.SharpeningAnvilBlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
