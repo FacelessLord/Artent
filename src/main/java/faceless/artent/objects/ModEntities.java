@@ -2,7 +2,7 @@ package faceless.artent.objects;
 
 import faceless.artent.brewing.entity.ThrowablePotionPhialEntity;
 import faceless.artent.mobs.entity.CrowEntity;
-import faceless.artent.spells.entity.LightbulbEntity;
+import faceless.artent.spells.entity.SpellParticleEntity;
 import faceless.artent.trading.entity.CoinEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -36,10 +36,10 @@ public class ModEntities {
 			.dimensions(EntityDimensions.fixed(1, 1))
 			.trackRangeChunks(10)
 			.build();
-	public static EntityType<? extends LightbulbEntity> LIGHTBULB =
+	public static EntityType<? extends SpellParticleEntity> SPELL_PARTICLE =
 		FabricEntityTypeBuilder
 			.create(SpawnGroup.MISC,
-				LightbulbEntity::new)
+				SpellParticleEntity::new)
 			.dimensions(EntityDimensions.fixed(0.5f, 0.5f))
 			.trackRangeChunks(10)
 			.build();

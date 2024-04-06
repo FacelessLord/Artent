@@ -9,6 +9,7 @@ import faceless.artent.spells.screenhandlers.InscriptionTableScreenHandler;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -61,12 +62,19 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+
+    }
+
     protected void drawMouseoverTooltip(DrawContext context, int x, int y) {
-        super.drawMouseoverTooltip(context, x, y);
-//        if (this.handler.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
-//            ItemStack itemStack = this.focusedSlot.getStack();
-//            context.drawTooltip(this.textRenderer, this.getTooltipFromItem(itemStack), itemStack.getTooltipData(), x, y);
-//        }
+//        super.drawMouseoverTooltip(context, x, y);
+        if (this.handler.getCursorStack().isEmpty() && this.focusedSlot != null && this.focusedSlot.hasStack()) {
+            ItemStack itemStack = this.focusedSlot.getStack();
+            var tooltip = this.getTooltipFromItem(itemStack);
+            if (!(focusedSlot.inventory instanceof PlayerInventory) && focusedSlot.id > 3)
+                tooltip.remove(0);
+            context.drawTooltip(this.textRenderer, tooltip, itemStack.getTooltipData(), x, y);
+        }
     }
 
     @Override
@@ -93,10 +101,6 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         context.getMatrices().scale(0.5f, 0.5f, 1);
         context.drawTexture(spellIconPath, 0, 0, 0, 0, 0, 32, 32, 32, 32);
         context.getMatrices().pop();
-    }
-
-    public void drawSpelloverTooltip(DrawContext context, int mouseX, int mouseY, float delta) {
-
     }
 
     @Override

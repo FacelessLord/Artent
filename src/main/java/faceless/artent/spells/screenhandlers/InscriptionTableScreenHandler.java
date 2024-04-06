@@ -18,59 +18,20 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class InscriptionTableScreenHandler extends ScreenHandler {
 
     private final Inventory table;
     private final ScreenHandlerContext context;
 
-    private List<Slot> bookSlots = new ArrayList<>(9);
-
-    //This constructor gets called on the client when the server wants it to open the screenHandler,
-    //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
-    //sync this empty inventory with the inventory on the server.
     public InscriptionTableScreenHandler(int syncId, PlayerInventory playerInventory) {
         this(syncId, playerInventory, new SimpleInventory(13), ScreenHandlerContext.EMPTY);
     }
 
-    protected boolean canTakeOutput(PlayerEntity player, boolean present) {
-        if (!present)
-            return false;
-        if (player.getAbilities().creativeMode)
-            return true;
-//		var modifier = anvil.getStack(1);
-//		var hammer = anvil.getStack(2);
-//		var stack = anvil.getStack(3);
-//		return !hammer.isEmpty() && hammer.getItem() == ModBlocks.SharpeningAnvil.Item
-//				   && !stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable
-//				   && (isCatalyst(modifier.getItem()) && modifier.getCount() <= SharpeningAnvilInventory.getCatalystCount(sharpenable.getLevel(stack)) ||
-//						   modifier.getItem() instanceof IEnhancer && modifier.getCount() > 0);
-        return true;
-    }
-
-    protected void onTakeOutput(PlayerEntity player, ItemStack stack) {
-//		if (!stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable) {
-//			var level = sharpenable.getLevel(stack);
-//			this.anvil.getStack(0).decrement(1);
-//			var modifier = this.anvil.getStack(1);
-//			var modifierItem = modifier.getItem();
-//			if (isCatalyst(modifierItem)) {
-//				this.anvil.getStack(1).decrement(SharpeningAnvilInventory.getCatalystCount(level));
-//			} else if (modifierItem instanceof IEnhancer) {
-//				this.anvil.getStack(1).decrement(1);
-//			}
-//			var hammer = anvil.getStack(2);
-//			hammer.damage(4, player, p -> {
-//			});
-//		}
-    }
-
     //	slotId - id of the slot in order: [...this.inventorySlots, ...player.slots]
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slotId) {
+    public ItemStack quickMove(PlayerEntity player, int slotId) { // TODO
         Slot slot = this.slots.get(slotId);
         if (slot.hasStack()) {
             ItemStack slotStack = slot.getStack();
@@ -82,7 +43,6 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
                 }
                 slot.onQuickTransfer(slotStack, itemStack);
                 table.removeStack(slotId);
-                onTakeOutput(player, itemStack);
             } else if (slotId >= 0 && slotId <= 3 // shift-click on slots for tool, hammer, catalyst and result
                     ? !this.insertItem(slotStack, 4, 40, false) // try put into player inventory
                     : (item instanceof SmithingHammer

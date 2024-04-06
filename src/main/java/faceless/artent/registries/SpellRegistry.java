@@ -17,6 +17,7 @@ public class SpellRegistry implements IRegistry {
     @Override
     public void register() {
         register(ModSpells.MakeLight);
+        register(ModSpells.Nox);
     }
 
     private void register(Spell spell) {

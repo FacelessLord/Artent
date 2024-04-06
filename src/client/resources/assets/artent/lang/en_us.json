@@ -16,6 +16,8 @@
   "block.artent.cauldron_fluid": "Cauldron Fluid",
   "block.artent.fermenting_barrel": "Fermenting Barrel",
   "block.artent.sharpening_anvil": "Sharpening Anvil",
+  "block.artent.inscription_table": "Inscription Table",
+  "block.artent.trader": "Trader Block",
   "item.artent.alchemical_clock": "Alchemical Clock",
   "item.artent.empty_phial": "Empty Phial",
   "item.artent.empty_phial_explosive": "Empty Explosive Phial",
@@ -44,6 +46,12 @@
   "item.artent.alchemical_coal": "Alchemical Coal",
   "item.artent.chalk.chalk": "Alchemical Chalk",
   "item.artent.alchemical_paper": "Alchemical Paper",
+  "item.artent.spell_book_1": "Novice Spell Book",
+  "item.artent.spell_book_2": "Apprentice Spell Book",
+  "item.artent.spell_book_3": "Master Spell book",
+  "item.artent.staff.crow_staff": "Staff of Crows",
+  "item.artent.staff.staff_of_light": "Staff of Light",
+  "item.artent.spell_scroll": "Spell Scroll",
   "item.concentrate.small.artent.liquid_flame": "Small Liquid Flame Potion Concentrate",
   "item.concentrate.small.artent.holy_water": "Small Holy Water Concentrate",
   "item.concentrate.small.artent.poison": "Small Poison Concentrate",
@@ -187,5 +195,7 @@
   "artent.chat.circle.bound.circle.pos.saved": "Position Saved",
   "artent.chat.circle.bound.circle.too.far": "Block is too far",
   "artent.chat.circle.bound.circle.and.entity": "Block bound to circle",
-  "artent.gui.trader.sell": "Sell"
+  "artent.gui.trader.sell": "Sell",
+  "artent.spell.lightbulb": "Lightbulb",
+  "artent.spell.nox": "Nox"
 }

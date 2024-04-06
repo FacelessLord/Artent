@@ -32,7 +32,7 @@ public class ItemSpellInventory implements ISpellInventory {
         var spellId = tag.getString(INVENTORY_SLOT_SPELL_KEY + slot);
         var scrollTypeId = tag.getInt(INVENTORY_SLOT_TYPE_KEY + slot);
         var spell = SpellRegistry.getSpell(spellId);
-        var scrollType = scrollTypeId < ScrollTypes.ScrollTypes.length ? ScrollTypes.ScrollTypes[scrollTypeId] : ScrollType.Common;
+        var scrollType = scrollTypeId < ScrollUtils.ScrollTypes.length ? ScrollUtils.ScrollTypes[scrollTypeId] : ScrollType.Common;
 
         return new ScrollStack(spell, scrollType);
     }
@@ -46,7 +46,7 @@ public class ItemSpellInventory implements ISpellInventory {
         }
         if (stack != null) {
             tag.putString(INVENTORY_SLOT_SPELL_KEY + slot, stack.spell.id);
-            tag.putInt(INVENTORY_SLOT_TYPE_KEY + slot, ScrollTypes.getId(stack.scrollType));
+            tag.putInt(INVENTORY_SLOT_TYPE_KEY + slot, ScrollUtils.getId(stack.scrollType));
         } else {
             tag.remove(INVENTORY_SLOT_SPELL_KEY + slot);
             tag.remove(INVENTORY_SLOT_TYPE_KEY + slot);

@@ -57,7 +57,7 @@ public class InscriptionTableInventory extends ArtentInventory {
             var bookInventory = new ItemSpellInventory(bookStack);
             for (int i = 0; i < bookInventory.getSize(); i++) {
                 var scrollStack = getStack(SPELL_SLOTS_OFFSET + i);
-                var scroll = ScrollTypes.createScrollFromItem(scrollStack);
+                var scroll = ScrollUtils.createScrollFromItem(scrollStack);
                 bookInventory.setSpell(i, scroll);
 
                 setStack(SPELL_SLOTS_OFFSET + i, ItemStack.EMPTY);
@@ -72,7 +72,7 @@ public class InscriptionTableInventory extends ArtentInventory {
 
             for (int i = 0; i < bookInventory.getSize(); i++) {
                 var spellStack = bookInventory.getSpell(i);
-                var scrollStack = ScrollTypes.createItemFromScroll(spellStack);
+                var scrollStack = ScrollUtils.createItemFromScroll(spellStack);
 
                 setStack(SPELL_SLOTS_OFFSET + i, scrollStack);
             }

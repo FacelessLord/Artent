@@ -73,7 +73,7 @@ public class ArtentClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.POTION_PHIAL, FlyingItemEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.COIN_ENTITY, CoinEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.CROW_ENTITY, CrowEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LIGHTBULB, LightbulbRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SPELL_PARTICLE, LightbulbRenderer::new);
 
         ModelPredicateProviderRegistry.register(ModItems.MediumConcentrate, new Identifier("amount"),
                 (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 4.0f);

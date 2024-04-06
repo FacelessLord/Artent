@@ -5,7 +5,7 @@ import faceless.artent.spells.item.SpellScroll;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ScrollTypes {
+public class ScrollUtils {
     public static ScrollType[] ScrollTypes = {ScrollType.Common, ScrollType.Forbidden, ScrollType.Holy};
     public static Item[] ScrollItems = {ModItems.SpellScroll, ModItems.SpellScroll, ModItems.SpellScroll};
 
