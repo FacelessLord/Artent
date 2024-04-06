@@ -12,7 +12,7 @@ public class TradeInfo {
 	public IPriceDeterminatorContext priceDeterminatorContext;
 	public String priceDeterminatorType;
 
-	public void writeToNbt(NbtCompound tag) {
+	public void writeNbt(NbtCompound tag) {
 		var tradeInfoTag = new NbtCompound();
 
 		var contextTag = new NbtCompound();
@@ -29,7 +29,7 @@ public class TradeInfo {
 		tag.put("tradeInfo", tradeInfoTag);
 	}
 
-	public void readFromNbt(NbtCompound tag) throws NullPointerException {
+	public void readNbt(NbtCompound tag) throws NullPointerException {
 		if (!tag.contains("tradeInfo"))
 			return;
 		var tradeInfoTag = tag.getCompound("tradeInfo");

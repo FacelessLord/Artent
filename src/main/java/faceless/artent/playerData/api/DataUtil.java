@@ -1,6 +1,7 @@
 package faceless.artent.playerData.api;
 
 import faceless.artent.Artent;
+import faceless.artent.spells.api.CasterInfo;
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.player.PlayerEntity;
@@ -42,5 +43,9 @@ public class DataUtil {
 
 	public static ICaster asCaster(PlayerEntity player) {
 		return (ICaster) player;
+	}
+
+	public static CasterInfo getCasterInfo(PlayerEntity player) {
+		return DataUtil.getHandler(player).getCasterInfo();
 	}
 }

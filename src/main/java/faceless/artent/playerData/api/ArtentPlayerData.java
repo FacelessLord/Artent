@@ -1,5 +1,6 @@
 package faceless.artent.playerData.api;
 
+import faceless.artent.spells.api.CasterInfo;
 import faceless.artent.trading.api.TradeInfo;
 import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.nbt.NbtCompound;
@@ -23,6 +24,9 @@ public interface ArtentPlayerData {
 	HeroInfo getHeroInfo();
 
 	void setHeroInfo(HeroInfo info);
+	CasterInfo getCasterInfo();
+
+	void setCasterInfo(CasterInfo info);
 
 	void writeToNbt(NbtCompound compound);
 

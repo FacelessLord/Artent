@@ -105,4 +105,17 @@ public class ArtentClientHook {
 		passedData.writeLong(money);
 		ClientPlayNetworking.send(ArtentServerHook.SELL_ITEMS_PACKET_ID, passedData);
 	}
+
+	public static void packetSpellIndexLeft(PlayerEntity player) {
+		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+		passedData.writeUuid(player.getUuid());
+
+		ClientPlayNetworking.send(ArtentServerHook.SPELL_INDEX_LEFT, passedData);
+	}
+	public static void packetSpellIndexRight(PlayerEntity player) {
+		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+		passedData.writeUuid(player.getUuid());
+
+		ClientPlayNetworking.send(ArtentServerHook.SPELL_INDEX_RIGHT, passedData);
+	}
 }
