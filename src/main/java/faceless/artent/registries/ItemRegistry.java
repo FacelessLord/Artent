@@ -44,9 +44,9 @@ public final class ItemRegistry implements IRegistry {
 
         // TRADING
         register(ModItems.DarkBook, ModItemGroups.Main);
-        register(ModItems.Coins[0], ModItemGroups.Main); // TODO remove from group
-        register(ModItems.Coins[1], ModItemGroups.Main);
-        register(ModItems.Coins[2], ModItemGroups.Main);
+        register(ModItems.Coins[0]);
+        register(ModItems.Coins[1]);
+        register(ModItems.Coins[2]);
 
         // BREWING
         for (int i = 0; i < 5; i++) {

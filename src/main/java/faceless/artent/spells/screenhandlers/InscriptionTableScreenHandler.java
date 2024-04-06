@@ -5,11 +5,13 @@ import faceless.artent.objects.ModScreenHandlers;
 import faceless.artent.sharpening.api.IEnhancer;
 import faceless.artent.sharpening.item.SmithingHammer;
 import faceless.artent.spells.api.ISpellInventoryItem;
+import faceless.artent.spells.api.ISpellScroll;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.ToolItem;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -131,15 +133,40 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         checkSize(table, 3);
         this.table = table;
         table.onOpen(inv.player);
-        this.addSlot(new Slot(this.table, 0, 15 + 9 * 18, 84 + 18 * 2));
-        this.addSlot(new Slot(this.table, 1, 15 + 9 * 18, 80 + 18));
-        this.addSlot(new Slot(this.table, 2, 8, 80 + 18));
-        this.addSlot(new Slot(this.table, 3, 8 + 18 * 2, 80 + 18));
+        this.addSlot(new Slot(this.table, 0, 15 + 9 * 18, 84 + 18 * 2) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.isEmpty() || stack.getItem() instanceof ISpellInventoryItem;
+            }
+        });
+        this.addSlot(new Slot(this.table, 1, 15 + 9 * 18, 80 + 18) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.isEmpty() || stack.getItem() == Items.PAPER;
+            }
+        });
+        this.addSlot(new Slot(this.table, 2, 8, 80 + 18) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return stack.isEmpty() || stack.getItem() instanceof ISpellScroll;
+            }
+        });
+        this.addSlot(new Slot(this.table, 3, 8 + 18 * 2, 80 + 18) {
+            @Override
+            public boolean canInsert(ItemStack stack) {
+                return false;
+            }
+        });
 
         // book slots
         for (int j = 0; j < 9; ++j) {
             var k = j;
             this.addSlot(new Slot(this.table, j + 4, 8 + j * 18, 84 + 18 * 2) {
+                @Override
+                public boolean canInsert(ItemStack stack) {
+                    return stack.isEmpty() || stack.getItem() instanceof ISpellScroll;
+                }
+
                 @Override
                 public boolean isEnabled() {
                     var bookStack = table.getStack(0);
