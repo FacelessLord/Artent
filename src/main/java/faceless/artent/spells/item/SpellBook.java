@@ -1,6 +1,8 @@
 package faceless.artent.spells.item;
+
 import faceless.artent.api.item.ArtentItem;
 import faceless.artent.spells.api.ISpellInventoryItem;
+import net.minecraft.item.ItemStack;
 
 public class SpellBook extends ArtentItem implements ISpellInventoryItem {
     public final int level;
@@ -11,7 +13,7 @@ public class SpellBook extends ArtentItem implements ISpellInventoryItem {
     }
 
     @Override
-    public int getLevel() {
+    public int getSize(ItemStack stack) {
         return level * 3;
     }
 }

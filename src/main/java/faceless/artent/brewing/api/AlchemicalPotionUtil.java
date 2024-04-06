@@ -177,7 +177,6 @@ public class AlchemicalPotionUtil {
 		}
 		return stack;
 	}
-
 	public static void appendFermentedPotionStacks(Item base, int size, ArtentItemGroupBuilder group) {
 		List<ItemStack> stacks = new ArrayList<>();
 		for (var key : AlchemicalPotionRegistry.getRegisteredPotions().keySet()) {

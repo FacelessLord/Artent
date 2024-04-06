@@ -7,15 +7,15 @@ import net.minecraft.nbt.NbtCompound;
 public class ItemSpellInventory implements ISpellInventory {
     public static final String SPELL_INVENTORY_KEY = "spell_inventory";
     public static final String INVENTORY_SIZE_KEY = "inventory_size";
-    public static final String INVENTORY_SLOT_KEY = "spell_";
+    public static final String INVENTORY_SLOT_SPELL_KEY = "spell_";
+    public static final String INVENTORY_SLOT_TYPE_KEY = "spell_type_";
     private NbtCompound tag;
     private boolean dirty = false;
 
     public ItemSpellInventory(ItemStack stack) {
         if (!(stack.getItem() instanceof ISpellInventoryItem spellInventoryItem))
             return;
-        this.tag = getOrInitSpellNbt(stack.getOrCreateNbt(), spellInventoryItem.getLevel());
-
+        this.tag = getOrInitSpellNbt(stack.getOrCreateNbt(), spellInventoryItem.getSize(stack));
     }
 
     @Override
@@ -26,21 +26,31 @@ public class ItemSpellInventory implements ISpellInventory {
     }
 
     @Override
-    public Spell getSpell(int slot) {
-        if (tag == null)
+    public ScrollStack getSpell(int slot) {
+        if (tag == null || !tag.contains(INVENTORY_SLOT_SPELL_KEY + slot))
             return null;
-        var spellId = tag.getString(INVENTORY_SLOT_KEY + slot);
-        return SpellRegistry.getSpell(spellId);
+        var spellId = tag.getString(INVENTORY_SLOT_SPELL_KEY + slot);
+        var scrollTypeId = tag.getInt(INVENTORY_SLOT_TYPE_KEY + slot);
+        var spell = SpellRegistry.getSpell(spellId);
+        var scrollType = scrollTypeId < ScrollTypes.ScrollTypes.length ? ScrollTypes.ScrollTypes[scrollTypeId] : ScrollType.Common;
+
+        return new ScrollStack(spell, scrollType);
     }
 
     @Override
-    public void setSpell(Spell spell, int slot) {
+    public void setSpell(int slot, ScrollStack stack) {
         var size = getSize();
         if (slot > size) {
             System.err.println("Spell Inventory slot overflow. Slot: " + slot + ", inventorySize: " + size);
             return;
         }
-        tag.putString(INVENTORY_SLOT_KEY + slot, spell.id);
+        if (stack != null) {
+            tag.putString(INVENTORY_SLOT_SPELL_KEY + slot, stack.spell.id);
+            tag.putInt(INVENTORY_SLOT_TYPE_KEY + slot, ScrollTypes.getId(stack.scrollType));
+        } else {
+            tag.remove(INVENTORY_SLOT_SPELL_KEY + slot);
+            tag.remove(INVENTORY_SLOT_TYPE_KEY + slot);
+        }
         markDirty();
     }
 
@@ -51,7 +61,8 @@ public class ItemSpellInventory implements ISpellInventory {
             System.err.println("Spell Inventory slot overflow. Slot: " + slot + ", inventorySize: " + size);
             return;
         }
-        tag.remove(INVENTORY_SLOT_KEY + slot);
+        tag.remove(INVENTORY_SLOT_SPELL_KEY + slot);
+        tag.remove(INVENTORY_SLOT_TYPE_KEY + slot);
         markDirty();
     }
 
@@ -85,7 +96,9 @@ public class ItemSpellInventory implements ISpellInventory {
             return tag.getCompound(SPELL_INVENTORY_KEY);
         var spellTag = new NbtCompound();
         spellTag.putInt(INVENTORY_SIZE_KEY, baseSize);
+
         tag.put(SPELL_INVENTORY_KEY, spellTag);
+
         return spellTag;
     }
 }

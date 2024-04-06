@@ -10,9 +10,14 @@ import faceless.artent.objects.ModItems;
 import faceless.artent.sharpening.item.EnhancerItem;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ItemRegistry implements IRegistry {
 
@@ -75,6 +80,8 @@ public final class ItemRegistry implements IRegistry {
         register(ModItems.Spellbook2, ModItemGroups.Main);
         register(ModItems.Spellbook3, ModItemGroups.Main);
 
+        register(ModItems.SpellScroll);
+        appendSpellScrollStacks(ModItems.SpellScroll, ModItemGroups.Main);
     }
 
     public void register(String itemId, Item item, ArtentItemGroupBuilder groupBuilder) {
@@ -99,4 +106,17 @@ public final class ItemRegistry implements IRegistry {
     public <T extends Item & INamed> void register(T item) {
         Registry.register(Registries.ITEM, new Identifier(Artent.MODID, item.getId()), item);
     }
+
+    public static void appendSpellScrollStacks(Item base, ArtentItemGroupBuilder group) {
+        List<ItemStack> stacks = new ArrayList<>();
+        for (var spell : SpellRegistry.getAllSpells()) {
+            var stack = new ItemStack(base);
+            var tag = new NbtCompound();
+            tag.putString("spell_id", spell.id);
+            stack.setNbt(tag);
+            stacks.add(stack);
+        }
+        group.Items.addAll(stacks);
+    }
+
 }

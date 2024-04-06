@@ -43,6 +43,7 @@ public class Artent implements ModInitializer {
 	public void registerAll() {
 		StatusEffects.register();
 		Potions.register();
+		SpellRegistry.register();
 		Blocks.register();
 		Items.register();
 		BlockEntities.register();
@@ -52,7 +53,6 @@ public class Artent implements ModInitializer {
 		Enhancers.register();
 		Brewing.register();
 		ItemPriceDeterminators.register();
-		SpellRegistry.register();
 
 		Commands.register();
 		ServerHook.load();

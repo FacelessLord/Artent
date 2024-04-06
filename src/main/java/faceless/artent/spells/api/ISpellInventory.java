@@ -5,9 +5,9 @@ import net.minecraft.nbt.NbtCompound;
 public interface ISpellInventory {
 
     int getSize();
-    Spell getSpell(int slot);
+    ScrollStack getSpell(int slot);
 
-    void setSpell(Spell spell, int slot);
+    void setSpell(int slot, ScrollStack spell);
 
     void removeSpell(int slot);
 

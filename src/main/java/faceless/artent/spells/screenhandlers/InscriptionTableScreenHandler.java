@@ -4,6 +4,7 @@ import faceless.artent.objects.ModItems;
 import faceless.artent.objects.ModScreenHandlers;
 import faceless.artent.sharpening.api.IEnhancer;
 import faceless.artent.sharpening.item.SmithingHammer;
+import faceless.artent.spells.api.ISpellInventoryItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -13,18 +14,24 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class InscriptionTableScreenHandler extends ScreenHandler {
+
     private final Inventory table;
     private final ScreenHandlerContext context;
+
+    private List<Slot> bookSlots = new ArrayList<>(9);
 
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
     public InscriptionTableScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new SimpleInventory(3), ScreenHandlerContext.EMPTY);
+        this(syncId, playerInventory, new SimpleInventory(13), ScreenHandlerContext.EMPTY);
     }
 
     protected boolean canTakeOutput(PlayerEntity player, boolean present) {
@@ -104,6 +111,16 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
     }
 
     @Override
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+        super.onSlotClick(slotIndex, button, actionType, player);
+    }
+
+    @Override
+    public boolean canInsertIntoSlot(Slot slot) {
+        return super.canInsertIntoSlot(slot);
+    }
+
+    @Override
     public boolean canUse(PlayerEntity player) {
         return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 16, true);
     }
@@ -114,38 +131,23 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
         checkSize(table, 3);
         this.table = table;
         table.onOpen(inv.player);
-		this.addSlot(new Slot(this.table, 0, 15 + 9 * 18, 84 + 18 * 2 ) {
-		});
-//		this.addSlot(new Slot(this.table, 1, 76, 47) {
-//			@Override
-//			public boolean canInsert(ItemStack stack) {
-//				return stack.getItem() instanceof IEnhancer || Arrays.stream(ModItems.Catalysts).anyMatch(cat -> cat == stack.getItem());
-//			}
-//		});
-//		this.addSlot(new Slot(this.table, 2, 52, 16) {
-//			@Override
-//			public boolean canInsert(ItemStack stack) {
-//				return stack.getItem() instanceof SmithingHammer;
-//			}
-//		});
-//		this.addSlot(new Slot(this.table, 3, 134, 47) {
-//
-//			@Override
-//			public boolean canInsert(ItemStack stack) {
-//				return false;
-//			}
-//
-//			@Override
-//			public boolean canTakeItems(PlayerEntity playerEntity) {
-//				return canTakeOutput(playerEntity, this.hasStack());
-//			}
-//
-//			@Override
-//			public void onTakeItem(PlayerEntity player, ItemStack stack) {
-//				super.onTakeItem(player, stack);
-//				onTakeOutput(player, stack);
-//			}
-//		});
+        this.addSlot(new Slot(this.table, 0, 15 + 9 * 18, 84 + 18 * 2));
+        this.addSlot(new Slot(this.table, 1, 15 + 9 * 18, 80 + 18));
+        this.addSlot(new Slot(this.table, 2, 8, 80 + 18));
+        this.addSlot(new Slot(this.table, 3, 8 + 18 * 2, 80 + 18));
+
+        // book slots
+        for (int j = 0; j < 9; ++j) {
+            var k = j;
+            this.addSlot(new Slot(this.table, j + 4, 8 + j * 18, 84 + 18 * 2) {
+                @Override
+                public boolean isEnabled() {
+                    var bookStack = table.getStack(0);
+                    return !bookStack.isEmpty() && bookStack.getItem() instanceof ISpellInventoryItem book && k < book.getSize(bookStack);
+                }
+            });
+        }
+
         for (var i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(inv, j + i * 9 + 9, 8 + j * 18, 88 + 18 * 3 + i * 18));

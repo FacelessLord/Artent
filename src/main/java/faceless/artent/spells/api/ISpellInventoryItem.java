@@ -1,5 +1,7 @@
 package faceless.artent.spells.api;
 
+import net.minecraft.item.ItemStack;
+
 public interface ISpellInventoryItem {
-    int getLevel();
+    int getSize(ItemStack stack);
 }
