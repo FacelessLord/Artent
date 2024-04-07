@@ -130,7 +130,7 @@ public class PlayerDataMixin implements ArtentPlayerData, ICaster {
 
         if (traderSellInventory == null)
             traderSellInventory = new TraderSellInventory();
-        InventoryUtils.writeInventoryNbt(tag, traderSellInventory.items, true);
+        InventoryUtils.writeNbt(tag, traderSellInventory.items, true);
         if (tradeInfo != null) {
             tradeInfo.writeNbt(tag);
         }

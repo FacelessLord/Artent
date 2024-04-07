@@ -19,7 +19,7 @@ public class TradeInfo {
 		priceDeterminatorContext.writeToNbt(contextTag);
 
 		var offerTag = new NbtCompound();
-		InventoryUtils.writeInventoryNbt(offerTag, offer, true);
+		InventoryUtils.writeNbt(offerTag, offer, true);
 
 		tradeInfoTag.put("context", contextTag);
 		tradeInfoTag.put("offer", offerTag);

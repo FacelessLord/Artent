@@ -31,7 +31,8 @@ public class InscriptionTablePt2 extends ArtentBlock {
         super.onBroken(world, pos, state);
         var facing = getFacing(state);
         var directionToMain = facing.rotateClockwise(Direction.Axis.Y);
-        world.breakBlock(pos.offset(directionToMain), true);
+        if(!world.isClient())
+            world.breakBlock(pos.offset(directionToMain), true);
     }
 
     @Override

@@ -24,6 +24,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -124,7 +125,8 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
         super.onBroken(world, pos, state);
         var facing = getFacing(state);
         var directionToPt2 = facing.rotateCounterclockwise(Direction.Axis.Y);
-        world.setBlockState(pos.offset(directionToPt2), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+        if(!world.isClient())
+            world.breakBlock(pos.offset(directionToPt2), false);
     }
 
     //This method will drop all items onto the ground when the block is broken
@@ -133,7 +135,11 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof InscriptionTableBlockEntity table) {
-                ItemScatterer.spawn(world, pos, table.inventory);
+                var dropStacks = DefaultedList.ofSize(3, ItemStack.EMPTY);
+                dropStacks.set(0, table.inventory.getStack(0));
+                dropStacks.set(1, table.inventory.getStack(1));
+                dropStacks.set(2, table.inventory.getStack(2));
+                ItemScatterer.spawn(world, pos, dropStacks);
                 // update comparators
                 world.updateComparators(pos, this);
             }
@@ -161,7 +167,7 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
         var facing = getFacing(state);
         var directionToPt2 = facing.rotateCounterclockwise(Direction.Axis.Y);
         var pt2Pos = pos.offset(directionToPt2);
-        if(world.getBlockState(pt2Pos).isAir())
+        if (world.getBlockState(pt2Pos).isAir())
             world.setBlockState(pt2Pos, ModBlocks.InscriptionTable2.getDefaultState().with(FACING, facing), Block.NOTIFY_ALL_AND_REDRAW);
     }
 
@@ -183,14 +189,4 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
     public Direction getFacing(BlockState state) {
         return state.get(FACING);
     }
-
-    //    @Override
-//    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-//        var facing = state.get(FACING);
-//        return switch (facing) {
-//            case DOWN, UP -> Block.createCuboidShape(0f, 0f, 0, 16, 10, 16);
-//            case NORTH, SOUTH -> Block.createCuboidShape(5f, 0f, 0, 11f, 10f, 16f);
-//            case EAST, WEST -> Block.createCuboidShape(0f, 0f, 5f, 16f, 10f, 11f);
-//        };
-//    }
 }

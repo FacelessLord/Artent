@@ -1,9 +1,6 @@
 package faceless.artent.spells.screenhandlers;
 
-import faceless.artent.objects.ModItems;
 import faceless.artent.objects.ModScreenHandlers;
-import faceless.artent.sharpening.api.IEnhancer;
-import faceless.artent.sharpening.item.SmithingHammer;
 import faceless.artent.spells.api.ISpellInventoryItem;
 import faceless.artent.spells.api.ISpellScroll;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,13 +9,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.ToolItem;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-
-import java.util.Arrays;
 
 public class InscriptionTableScreenHandler extends ScreenHandler {
 
@@ -37,27 +31,38 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
             ItemStack slotStack = slot.getStack();
             var itemStack = slotStack.copy();
             var item = itemStack.getItem();
-            if (slotId == 3) { // output
-                if (!this.insertItem(slotStack, 4, 40, true)) {
+            if (slotId < 14) { // output
+                if(slotId == 0)
+                    table.setStack(0, slotStack);
+                if (!this.insertItem(slotStack, 14, 40, true)) {
                     return ItemStack.EMPTY;
+                }
+                if(slotId == 0) {
+                    table.setStack(0, ItemStack.EMPTY);
                 }
                 slot.onQuickTransfer(slotStack, itemStack);
                 table.removeStack(slotId);
-            } else if (slotId >= 0 && slotId <= 3 // shift-click on slots for tool, hammer, catalyst and result
-                    ? !this.insertItem(slotStack, 4, 40, false) // try put into player inventory
-                    : (item instanceof SmithingHammer
-                    // Insert hammer into hammer slot. Otherwise, try to insert it as tool
-                    ? !this.insertItem(slotStack, 2, 3, false) || !this.insertItem(slotStack, 0, 1, false)
-                    : (item instanceof ToolItem // insert tool into slot 0
-                    ? !this.insertItem(slotStack, 0, 1, false)
-                    : (item instanceof IEnhancer || Arrays.stream(ModItems.Catalysts).anyMatch(cat -> cat == item)
-                    // insert catalyst or enchancer into slot 1
-                    ? !this.insertItem(slotStack, 1, 2, false)
-                    : (slotId >= 4 && slotId < 31
-                    ? !this.insertItem(slotStack, 31, 40, false)
-                    : slotId >= 31 && slotId < 40 && !this.insertItem(slotStack, 3, 31, false)
-            ))))) {
                 return ItemStack.EMPTY;
+            } else if (item instanceof ISpellInventoryItem) {
+                if (table.getStack(0).isEmpty()) {
+                    slotStack.setCount(0);
+                    table.setStack(0, itemStack);
+                } else {
+                    return ItemStack.EMPTY;
+                }
+            } else if (item == Items.PAPER) {
+                if (!this.insertItem(slotStack, 1, 2, false))
+                    return ItemStack.EMPTY;
+            } else if (item instanceof ISpellScroll) {
+                if (!table.getStack(0).isEmpty() && table.getStack(0).getItem() instanceof ISpellInventoryItem) {
+                    if (!this.insertItem(slotStack, 4, 14, false)) {
+                        if (!this.insertItem(slotStack, 2, 3, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }
+                } else if (!this.insertItem(slotStack, 2, 3, false)) {
+                    return ItemStack.EMPTY;
+                }
             }
             if (slotStack.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);

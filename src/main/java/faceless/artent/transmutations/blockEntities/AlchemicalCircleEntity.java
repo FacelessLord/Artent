@@ -182,7 +182,7 @@ public class AlchemicalCircleEntity extends BlockEntity implements RenderDataBlo
 		tag.putInt("artentState", state.ordinal());
 		if (alchemist != null) tag.putUuid("artentAlchemist", alchemist.getUuid());
 
-		InventoryUtils.writeInventoryNbt(tag, this.inventory, true);
+		InventoryUtils.writeNbt(tag, this.inventory, true);
 
 		tag.put("circleTag", circleTag);
 

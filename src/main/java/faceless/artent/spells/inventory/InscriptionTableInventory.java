@@ -50,22 +50,10 @@ public class InscriptionTableInventory extends ArtentInventory {
     }
 
     private void onUpdateBookSlot(int slot, ItemStack stack) {
-        var bookStack = getStack(slot);
-
-        // Save spells into book taken
-        if (!bookStack.isEmpty() && bookStack.getItem() instanceof ISpellInventoryItem) {
-            var bookInventory = new ItemSpellInventory(bookStack);
-            for (int i = 0; i < bookInventory.getSize(); i++) {
-                var scrollStack = getStack(SPELL_SLOTS_OFFSET + i);
-                var scroll = ScrollUtils.createScrollFromItem(scrollStack);
-                bookInventory.setSpell(i, scroll);
-
-                setStack(SPELL_SLOTS_OFFSET + i, ItemStack.EMPTY);
-            }
-        }
+        saveSpellBook(true);
         super.setStack(slot, stack);
 
-        bookStack = getStack(slot);
+        var bookStack = getStack(slot);
         // Fill inventory from inserted book
         if (!bookStack.isEmpty() && bookStack.getItem() instanceof ISpellInventoryItem) {
             var bookInventory = new ItemSpellInventory(bookStack);
@@ -76,6 +64,22 @@ public class InscriptionTableInventory extends ArtentInventory {
 
                 setStack(SPELL_SLOTS_OFFSET + i, scrollStack);
             }
+        }
+    }
+
+    private void saveSpellBook(boolean clearScrolls) {
+        var bookStack = getStack(0);
+        if (bookStack.isEmpty() || !(bookStack.getItem() instanceof ISpellInventoryItem))
+            return;
+
+        var bookInventory = new ItemSpellInventory(bookStack);
+        for (int i = 0; i < bookInventory.getSize(); i++) {
+            var scrollStack = getStack(SPELL_SLOTS_OFFSET + i);
+            var scroll = ScrollUtils.createScrollFromItem(scrollStack);
+            bookInventory.setSpell(i, scroll);
+
+            if (clearScrolls)
+                setStack(SPELL_SLOTS_OFFSET + i, ItemStack.EMPTY);
         }
     }
 

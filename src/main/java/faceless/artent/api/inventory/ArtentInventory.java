@@ -92,10 +92,10 @@ public abstract class ArtentInventory implements Inventory {
 	}
 
 	public void readNbt(NbtCompound nbt) {
-		Inventories.readNbt(nbt, items);
+		Inventories.readNbt(nbt, this.items);
 	}
 
 	public void writeNbt(NbtCompound tag) {
-		InventoryUtils.writeInventoryNbt(tag, items, true);
+		InventoryUtils.writeNbt(tag, items, true);
 	}
 }
