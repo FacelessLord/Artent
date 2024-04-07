@@ -8,9 +8,9 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class LightbulbRenderer extends EntityRenderer<SpellParticleEntity> {
+public class SpellParticleRenderer extends EntityRenderer<SpellParticleEntity> {
 
-	public LightbulbRenderer(EntityRendererFactory.Context context) {
+	public SpellParticleRenderer(EntityRendererFactory.Context context) {
 		super(context);
 	}
 

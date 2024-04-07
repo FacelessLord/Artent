@@ -22,7 +22,7 @@ public class MakeLight extends ProjectileSpell {
             Direction hitSide,
             int actionTime) {
         var blockPos = hitPos.offset(hitSide);
-        var lightBlockState = ModBlocks.LightBlock.getDefaultState();
-        world.setBlockState(blockPos, lightBlockState);
+        if (world.getBlockState(blockPos).isAir())
+            world.setBlockState(blockPos, ModBlocks.LightBlock.getDefaultState());
     }
 }

@@ -9,6 +9,7 @@ import faceless.artent.sharpening.item.upgrades.*;
 import faceless.artent.spells.item.SpellBook;
 import faceless.artent.spells.item.SpellScroll;
 import faceless.artent.spells.item.StaffOfLight;
+import faceless.artent.spells.item.special.LightSword;
 import faceless.artent.trading.item.DarkBook;
 import faceless.artent.transmutations.item.AlchemicalClock;
 import faceless.artent.transmutations.item.AlchemicalCoal;
@@ -60,6 +61,7 @@ public final class ModItems {
 	public static SpellBook Spellbook3 = new SpellBook(3, new Item.Settings().maxCount(1));
 	public static StaffOfLight StaffOfLight = new StaffOfLight(new FabricItemSettings().maxCount(1));
 	public static SpellScroll SpellScroll = new SpellScroll(new FabricItemSettings().maxCount(1));
+	public static LightSword LightSword_SPECIAL = new LightSword();
 
 	public static final ArtentItem[] Coins = new ArtentItem[]{
 		new ArtentItem("coin_bronze"),

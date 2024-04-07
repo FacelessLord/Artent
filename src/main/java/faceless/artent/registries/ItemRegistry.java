@@ -82,6 +82,8 @@ public final class ItemRegistry implements IRegistry {
 
         register(ModItems.SpellScroll);
         appendSpellScrollStacks(ModItems.SpellScroll, ModItemGroups.Main);
+
+        register(ModItems.LightSword_SPECIAL);
     }
 
     public void register(String itemId, Item item, ArtentItemGroupBuilder groupBuilder) {
