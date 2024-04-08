@@ -14,7 +14,11 @@ import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WandItem extends ArtentItem {
+    public List<Affinity> affinities = new ArrayList<>();
 
     public WandItem(Settings settings, String itemId) {
         super(settings, itemId);
@@ -79,11 +83,14 @@ public class WandItem extends ArtentItem {
         var spell = getActiveEntitySpell(user);
         if (spell == null) return;
 
-        var actionTime = getMaxUseTime(stack) - remainingUseTicks;
+        var actionTime = getMaxUseTime(stack) - remainingUseTicks; // TODO minimal spellcast time
         if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
             spell.onRecoil(caster, world, stack, actionTime);
-        } else
-            spell.action(caster, user.getWorld(), stack, actionTime);
+        } else {
+            var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+            if (caster.consumeMana(manaToConsume))
+                spell.action(caster, user.getWorld(), stack, actionTime);
+        }
     }
 
     public void usageTick(World world, LivingEntity living, ItemStack stack, int remainingUseTicks) {
@@ -95,15 +102,20 @@ public class WandItem extends ArtentItem {
             var caster = DataUtil.asCaster(player);
 
             if ((spell.type & Spell.ActionType.Tick) > 0) {
-                var result = spell.spellTick(caster,
-                        world,
-                        stack,
-                        actionTime);
+                var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+                SpellActionResult result = null;
+
+                if (caster.consumeMana(manaToConsume))
+                    result = spell.spellTick(caster,
+                            world,
+                            stack,
+                            actionTime);
+                if (result == null) {
+                    player.stopUsingItem();
+                    return;
+                }
                 if (result.type == SpellActionResultType.Stop || result.type == SpellActionResultType.Recoil) {
                     player.clearActiveItem();
-                }
-                if (result.manaToConsume > 0) {
-                    caster.consumeMana(result.manaToConsume);
                 }
                 if (result.type == SpellActionResultType.Recoil) {
                     spell.onRecoil(caster, world, stack, actionTime);
@@ -144,9 +156,14 @@ public class WandItem extends ArtentItem {
         if (spell == null)
             return ActionResult.FAIL;
 
-        if ((spell.type & Spell.ActionType.BlockCast) > 0) {
-            spell.blockCast(DataUtil.asCaster(player), player.getWorld(), stack, blockPos, side, 0);
-            return ActionResult.SUCCESS;
+        if ((spell.type & Spell.ActionType.BlockCast) > 0) { // TODO recoil
+            var caster = DataUtil.asCaster(player);
+            var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+            if (caster.consumeMana(manaToConsume)) {
+                spell.blockCast(caster, player.getWorld(), stack, blockPos, side, 0);
+                return ActionResult.SUCCESS;
+            }
+            return ActionResult.FAIL;
         }
         return ActionResult.PASS;
     }

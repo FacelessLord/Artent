@@ -1,5 +1,6 @@
 package faceless.artent.hud;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import faceless.artent.Artent;
 import faceless.artent.api.math.Color;
 import faceless.artent.playerData.api.DataUtil;
@@ -48,36 +49,63 @@ public class ArtentHudRenderer {
         matrices.pop();
 
         var bookStack = getBookStack(ctx);
-        if (bookStack.isEmpty())
-            return;
+        if (!bookStack.isEmpty()) {
 
-        var spellInventory = new ItemSpellInventory(bookStack);
-        var spellInventorySize = spellInventory.getSize();
+            var spellInventory = new ItemSpellInventory(bookStack);
+            var spellInventorySize = spellInventory.getSize();
 
-        matrices.push();
-        matrices.translate(42, 0, -90.0f);
-
-        context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 0, 168, 24, 256, 256);
-
-        for (int j = 0; j < spellInventorySize; j++) {
             matrices.push();
-            matrices.translate(3 + 18 * j, 3, 0);
+            matrices.translate(42, 0, -90.0f);
 
-            context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 24, 18, 18, 256, 256);
+            context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 0, 168, 24, 256, 256);
 
-            var spell = spellInventory.getSpell(j);
-            if (spell != null) {
-                var spellIconPath = new Identifier(Artent.MODID, "textures/spell/" + spell.spell.id + ".png");
-                context.drawTexture(spellIconPath, 0, 0, 18, 18, 0, 0, 32, 32, 32, 32);
+            for (int j = 0; j < spellInventorySize; j++) {
+                matrices.push();
+                matrices.translate(3 + 18 * j, 3, 0);
+
+                context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 24, 18, 18, 256, 256);
+
+                var spell = spellInventory.getSpell(j);
+                if (spell != null) {
+                    var spellIconPath = new Identifier(Artent.MODID, "textures/spell/" + spell.spell.id + ".png");
+                    context.drawTexture(spellIconPath, 0, 0, 18, 18, 0, 0, 32, 32, 32, 32);
+                }
+                matrices.pop();
             }
+            var spellIndex = DataUtil.getCasterInfo(ctx.player()).getSpellBookIndex() % spellInventory.getSize();
+
+            context.drawTexture(SPELL_BOOK_HUD, 1 + 18 * spellIndex, 0, 168, 0, 22, 32, 256, 256);
+
             matrices.pop();
         }
-        var spellIndex = DataUtil.getCasterInfo(ctx.player()).getSpellBookIndex() % spellInventory.getSize();
 
-        context.drawTexture(SPELL_BOOK_HUD, 1 + 18 * spellIndex, 0, 168, 0, 22, 32, 256, 256);
+        var casterInfo = DataUtil.getCasterInfo(ctx.player());
+        var maxMana = casterInfo.getMaxMana(ctx.player());
+        var mana = casterInfo.mana;
+        if (maxMana != 0) {
+            matrices.push();
 
-        matrices.pop();
+            matrices.translate(0, 42, -90.0f);
 
+            context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 42, 18, 127, 256, 256);
+
+            if (mana == maxMana) // filled mana ball
+                context.drawTexture(SPELL_BOOK_HUD, 0, -2, 32, 42, 18, 18, 256, 256);
+            var fillPercentage = 1f * mana / maxMana;
+            var manaHeight = (int) (109 * fillPercentage);
+            var manaOffset = 214 - (int) (ctx.player().getWorld().getTime() % 214);
+            // pt1
+            var pt1Height = Math.min(manaOffset + manaHeight, 214) - manaOffset;
+            context.drawTexture(SPELL_BOOK_HUD, 2, 125 - manaHeight, 18, 42 + manaOffset, 18, pt1Height, 256, 256);
+            if (pt1Height < manaHeight) {
+                var pt2Height = manaHeight - pt1Height;
+                context.drawTexture(SPELL_BOOK_HUD, 2, 125 - manaHeight + pt1Height, 18, 42, 18, pt2Height, 256, 256);
+            }
+            RenderSystem.enableBlend();
+            context.drawTexture(SPELL_BOOK_HUD, 0, 0, 50, 42, 18, 127, 256, 256);
+            RenderSystem.disableBlend();
+            matrices.pop();
+        }
     }
 
     private static ItemStack getBookStack(ArtentHudContext ctx) {

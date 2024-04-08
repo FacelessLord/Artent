@@ -4,9 +4,7 @@ import faceless.artent.api.inventory.InventoryUtils;
 import faceless.artent.network.ArtentServerHook;
 import faceless.artent.playerData.api.ArtentPlayerData;
 import faceless.artent.playerData.api.HeroInfo;
-import faceless.artent.spells.api.CasterInfo;
-import faceless.artent.spells.api.CasterStorage;
-import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.*;
 import faceless.artent.trading.api.TradeInfo;
 import faceless.artent.trading.block.Trader;
 import faceless.artent.trading.inventory.TraderSellInventory;
@@ -56,6 +54,7 @@ public class PlayerDataMixin implements ArtentPlayerData, ICaster {
         if (player.getWorld() != null && !player.getWorld().isClient && player.getWorld().getTime() % 10 == 1) {
             if (tradeInfo != null && tradeInfo.priceDeterminatorContext == null)
                 setTradeInfo(null);
+            getCasterInfo().tickCaster(player.getWorld(), player);
 
             ArtentServerHook.packetSyncPlayerData(player);
         }
@@ -165,6 +164,10 @@ public class PlayerDataMixin implements ArtentPlayerData, ICaster {
 
     @Override
     public boolean consumeMana(int mana) {
+        if (getCasterInfo().mana >= mana) {
+            getCasterInfo().mana -= mana;
+            return true;
+        }
         return false;
     }
 

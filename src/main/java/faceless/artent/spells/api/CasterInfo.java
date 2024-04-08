@@ -1,6 +1,8 @@
 package faceless.artent.spells.api;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.World;
 
 public class CasterInfo {
     public int level = 1;
@@ -8,7 +10,7 @@ public class CasterInfo {
 
     private int spellBookIndex = 0;
 
-    public int getMaxManaBase() {
+    public int getMaxMana(PlayerEntity player) {
         return level * 40; // TODO
     }
 
@@ -25,6 +27,10 @@ public class CasterInfo {
 
     public void setSpellBookIndex(int value) {
         spellBookIndex = value;
+    }
+
+    public void tickCaster(World world, PlayerEntity player) {
+        mana = Math.min(mana + getManaRegenBase(), getMaxMana(player));
     }
 
     public void writeNbt(NbtCompound nbt) {

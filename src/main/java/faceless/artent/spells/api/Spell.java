@@ -13,6 +13,8 @@ public class Spell {
     public int baseCost;
     public Vector3f color = new Vector3f(1, 1, 1);
 
+    public AffinityType affinityType = AffinityType.None;
+
     public Spell(String id, int type, int baseCost) {
         this.type = type;
         this.id = id;
@@ -21,6 +23,11 @@ public class Spell {
 
     public Spell setColor(float r, float g, float b) {
         this.color = new Vector3f(r, g, b);
+        return this;
+    }
+
+    public Spell setAffinity(AffinityType affinityType) {
+        this.affinityType = affinityType;
         return this;
     }
 
