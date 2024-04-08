@@ -90,7 +90,7 @@ public class SpellParticleEntity extends ThrownEntity {
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
         var spell = SpellRegistry.getSpell(this.getSpellId());
-        if (spell == null) {
+        if (spell == null || getCaster() == null) {
             discard();
             return;
         }

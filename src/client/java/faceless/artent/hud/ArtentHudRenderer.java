@@ -93,7 +93,7 @@ public class ArtentHudRenderer {
                 context.drawTexture(SPELL_BOOK_HUD, 0, -2, 32, 42, 18, 18, 256, 256);
             var fillPercentage = 1f * mana / maxMana;
             var manaHeight = (int) (109 * fillPercentage);
-            var manaOffset = 214 - (int) (ctx.player().getWorld().getTime() % 214);
+            var manaOffset = 214 - (int) ((ctx.player().getWorld().getTime() + fillPercentage * 112) % 214);
             // pt1
             var pt1Height = Math.min(manaOffset + manaHeight, 214) - manaOffset;
             context.drawTexture(SPELL_BOOK_HUD, 2, 125 - manaHeight, 18, 42 + manaOffset, 18, pt1Height, 256, 256);

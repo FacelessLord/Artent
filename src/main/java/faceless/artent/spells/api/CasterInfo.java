@@ -30,7 +30,7 @@ public class CasterInfo {
     }
 
     public void tickCaster(World world, PlayerEntity player) {
-        mana = Math.min(mana + getManaRegenBase(), getMaxMana(player));
+        mana = Math.min(mana + getManaRegenBase()*2, getMaxMana(player));
     }
 
     public void writeNbt(NbtCompound nbt) {

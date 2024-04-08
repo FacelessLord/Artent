@@ -1,5 +1,6 @@
 package faceless.artent.playerData.mixin;
 
+import faceless.artent.api.MiscUtils;
 import faceless.artent.api.inventory.InventoryUtils;
 import faceless.artent.network.ArtentServerHook;
 import faceless.artent.playerData.api.ArtentPlayerData;
@@ -164,8 +165,10 @@ public class PlayerDataMixin implements ArtentPlayerData, ICaster {
 
     @Override
     public boolean consumeMana(int mana) {
-        if (getCasterInfo().mana >= mana) {
-            getCasterInfo().mana -= mana;
+        var player = (PlayerEntity) (Object) this;
+        var casterInfo = getCasterInfo();
+        if (casterInfo.mana >= mana) {
+            casterInfo.mana = MiscUtils.clamp(casterInfo.mana - mana, 0, casterInfo.getMaxMana(player));
             return true;
         }
         return false;

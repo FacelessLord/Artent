@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 
 public class Nox extends ProjectileSpell {
     public Nox() {
-        super("nox", -2);
+        super("nox", 1);
     }
 
     @Override
@@ -32,10 +32,12 @@ public class Nox extends ProjectileSpell {
                     var blockState = world.getBlockState(pos);
                     var block = blockState.getBlock();
                     if (block == ModBlocks.LightBlock) {
-                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        if (caster.consumeMana(-2))
+                            world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                     if (block == Blocks.TORCH || block == Blocks.WALL_TORCH || block == Blocks.GLOWSTONE) {
-                        world.breakBlock(pos, true);
+                        if (caster.consumeMana(2))
+                            world.breakBlock(pos, true);
                     }
                 }
             }
