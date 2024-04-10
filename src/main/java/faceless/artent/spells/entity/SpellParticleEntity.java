@@ -89,19 +89,22 @@ public class SpellParticleEntity extends ThrownEntity {
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
-        var spell = SpellRegistry.getSpell(this.getSpellId());
-        if (spell == null || getCaster() == null) {
-            discard();
-            return;
-        }
+        var world = getWorld();
+        if (!world.isClient) {
+            var spell = SpellRegistry.getSpell(this.getSpellId());
+            if (spell == null || getCaster() == null) {
+                discard();
+                return;
+            }
 
-        spell.blockCast(getCaster(),
-                getWorld(),
-                getWandStack(),
-                blockHitResult.getBlockPos(),
-                blockHitResult.getSide(),
-                1);
-        this.discard();
+            spell.blockCast(getCaster(),
+                    getWorld(),
+                    getWandStack(),
+                    blockHitResult.getBlockPos(),
+                    blockHitResult.getSide(),
+                    1);
+            this.discard();
+        }
     }
 
     @Override

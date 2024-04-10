@@ -137,6 +137,9 @@ public class PlayerDataMixin implements ArtentPlayerData, ICaster {
         if (casterInfo != null) {
             casterInfo.writeNbt(tag);
         }
+        if (heroInfo != null) {
+            heroInfo.writeNbt(tag);
+        }
 
         compound.put("artent.data", tag);
     }
@@ -159,6 +162,8 @@ public class PlayerDataMixin implements ArtentPlayerData, ICaster {
         tradeInfo.readNbt(tag);
         casterInfo = new CasterInfo();
         casterInfo.readNbt(tag);
+        heroInfo = new HeroInfo();
+        heroInfo.readNbt(tag);
         var player = (PlayerEntity) (Object) this;
         CasterStorage.putCaster(player.getWorld(), this);
     }

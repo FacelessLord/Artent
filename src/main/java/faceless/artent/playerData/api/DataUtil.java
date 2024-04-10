@@ -48,4 +48,11 @@ public class DataUtil {
 	public static CasterInfo getCasterInfo(PlayerEntity player) {
 		return DataUtil.getHandler(player).getCasterInfo();
 	}
+	public static HeroInfo getHeroInfo(PlayerEntity player) {
+		return DataUtil.getHandler(player).getHeroInfo();
+	}
+
+	public static void addExperience(PlayerEntity player, int experience) {
+		getHeroInfo(player).addExperience(player, experience);
+	}
 }

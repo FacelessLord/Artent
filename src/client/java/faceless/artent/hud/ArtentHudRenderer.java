@@ -90,7 +90,7 @@ public class ArtentHudRenderer {
             context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 42, 18, 127, 256, 256);
 
             if (mana == maxMana) // filled mana ball
-                context.drawTexture(SPELL_BOOK_HUD, 0, -2, 32, 42, 18, 18, 256, 256);
+                context.drawTexture(SPELL_BOOK_HUD, 0, 2, 32, 42, 18, 18, 256, 256);
             var fillPercentage = 1f * mana / maxMana;
             var manaHeight = (int) (109 * fillPercentage);
             var manaOffset = 214 - (int) ((ctx.player().getWorld().getTime() + fillPercentage * 112) % 214);
@@ -104,6 +104,24 @@ public class ArtentHudRenderer {
             RenderSystem.enableBlend();
             context.drawTexture(SPELL_BOOK_HUD, 0, 0, 50, 42, 18, 127, 256, 256);
             RenderSystem.disableBlend();
+            matrices.pop();
+        }
+
+        {
+            var heroInfo = DataUtil.getHeroInfo(ctx.player());
+
+            matrices.push();
+
+            matrices.translate(18, 42, -90.0f);
+
+            var levelString = String.valueOf(heroInfo.level);
+            context.drawTextWithShadow(ctx.textRenderer(), levelString, 4 - 2 * levelString.length(), 2, 0xe9c02e);
+
+            context.drawTexture(SPELL_BOOK_HUD, 0, 14, 68, 42 + 14, 9, 113, 256, 256);
+
+            var fillPercentage = 1f * heroInfo.experience / heroInfo.getExperienceToLevel(ctx.player());
+            var experienceHeight = (int) Math.min(109 * fillPercentage, 109);
+            context.drawTexture(SPELL_BOOK_HUD, 2, 125 - experienceHeight, 77, 42 + 14 + 2 + 109 - experienceHeight, 5, experienceHeight, 256, 256);
             matrices.pop();
         }
     }

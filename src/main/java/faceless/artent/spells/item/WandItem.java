@@ -77,8 +77,8 @@ public class WandItem extends ArtentItem {
 
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (!(user instanceof ICaster caster))
-            return;
+        if (!(user instanceof ICaster caster)) return;
+        if (world.isClient) return;
 
         var spell = getActiveEntitySpell(user);
         if (spell == null) return;
@@ -96,6 +96,8 @@ public class WandItem extends ArtentItem {
     public void usageTick(World world, LivingEntity living, ItemStack stack, int remainingUseTicks) {
         var spell = getActiveEntitySpell(living);
         if (spell == null) return;
+
+        if (world.isClient) return;
 
         if (living instanceof PlayerEntity player) {
             var actionTime = getMaxUseTime(stack) - remainingUseTicks;
@@ -156,7 +158,7 @@ public class WandItem extends ArtentItem {
         if (spell == null)
             return ActionResult.FAIL;
 
-        if ((spell.type & Spell.ActionType.BlockCast) > 0) { // TODO recoil
+        if (!context.getWorld().isClient && (spell.type & Spell.ActionType.BlockCast) > 0) { // TODO recoil
             var caster = DataUtil.asCaster(player);
             var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
             if (caster.consumeMana(manaToConsume)) {

@@ -102,13 +102,18 @@ public class LightSwordProjectileEntity extends ThrownEntity {
         super.onEntityHit(entityHitResult);
         // Player is LivingEntity and ICaster
         //noinspection EqualsBetweenInconvertibleTypes
-        if (entityHitResult.getEntity() != caster) {
+        if (!entityHitResult.getEntity().getWorld().isClient && entityHitResult.getEntity() != caster) {
             if (!(entityHitResult.getEntity() instanceof LivingEntity living))
                 return;
 
-            living.damage(this.getDamageSources().hotFloor(), 7);
+            var damageSources = this.getDamageSources();
+            var damageSource = this.caster instanceof LivingEntity casterAttacker
+                    ? damageSources.mobProjectile(this, casterAttacker)
+                    : damageSources.magic();
+
+            living.damage(damageSource, 7);
             if (living instanceof MobEntity mob && mob.isUndead())
-                living.damage(this.getDamageSources().magic(), 3);
+                living.damage(damageSource, 3);
 
             if (getWorld().getBlockState(getBlockPos()).isAir())
                 getWorld().setBlockState(this.getBlockPos(), ModBlocks.LightBlock.getDefaultState());
