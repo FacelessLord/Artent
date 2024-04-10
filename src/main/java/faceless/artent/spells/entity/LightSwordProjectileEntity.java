@@ -1,6 +1,5 @@
 package faceless.artent.spells.entity;
 
-import faceless.artent.objects.ModBlocks;
 import faceless.artent.objects.ModEntities;
 import faceless.artent.objects.ModSpells;
 import faceless.artent.registries.SpellRegistry;
@@ -20,6 +19,8 @@ import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
+
+import java.util.Objects;
 
 public class LightSwordProjectileEntity extends ThrownEntity {
     private ICaster caster;
@@ -110,13 +111,16 @@ public class LightSwordProjectileEntity extends ThrownEntity {
             var damageSource = this.caster instanceof LivingEntity casterAttacker
                     ? damageSources.mobProjectile(this, casterAttacker)
                     : damageSources.magic();
+            var damageCoeff = 1;
+            if (Objects.equals(this.getSpellId(), ModSpells.GilgameshLightStorm.id))
+                damageCoeff = 4;
 
-            living.damage(damageSource, 7);
+            living.damage(damageSource, 7 * damageCoeff);
             if (living instanceof MobEntity mob && mob.isUndead())
-                living.damage(damageSource, 3);
+                living.damage(damageSource, 3 * damageCoeff);
 
-            if (getWorld().getBlockState(getBlockPos()).isAir())
-                getWorld().setBlockState(this.getBlockPos(), ModBlocks.LightBlock.getDefaultState());
+//            if (getWorld().getBlockState(getBlockPos()).isAir())
+//                getWorld().setBlockState(this.getBlockPos(), ModBlocks.LightBlock.getDefaultState());
             this.discard();
         }
     }
@@ -125,8 +129,8 @@ public class LightSwordProjectileEntity extends ThrownEntity {
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
         var pos = blockHitResult.getBlockPos().offset(blockHitResult.getSide());
-        if (getWorld().getBlockState(pos).isAir())
-            getWorld().setBlockState(pos, ModBlocks.LightBlock.getDefaultState());
+//        if (getWorld().isClient && getWorld().getBlockState(pos).isAir())
+//            getWorld().setBlockState(pos, ModBlocks.LightBlock.getDefaultState());
         this.discard();
     }
 

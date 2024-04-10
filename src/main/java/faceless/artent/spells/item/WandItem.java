@@ -2,6 +2,7 @@ package faceless.artent.spells.item;
 
 import faceless.artent.api.item.ArtentItem;
 import faceless.artent.playerData.api.DataUtil;
+import faceless.artent.sharpening.api.ISharpenable;
 import faceless.artent.spells.api.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WandItem extends ArtentItem {
+public class WandItem extends ArtentItem implements ISharpenable {
     public List<Affinity> affinities = new ArrayList<>();
 
     public WandItem(Settings settings, String itemId) {
@@ -82,6 +83,8 @@ public class WandItem extends ArtentItem {
 
         var spell = getActiveEntitySpell(user);
         if (spell == null) return;
+        if ((spell.type & Spell.ActionType.SingleCast) == 0)
+            return;
 
         var actionTime = getMaxUseTime(stack) - remainingUseTicks; // TODO minimal spellcast time
         if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
@@ -103,25 +106,26 @@ public class WandItem extends ArtentItem {
             var actionTime = getMaxUseTime(stack) - remainingUseTicks;
             var caster = DataUtil.asCaster(player);
 
-            if ((spell.type & Spell.ActionType.Tick) > 0) {
-                var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
-                SpellActionResult result = null;
+            if ((spell.type & Spell.ActionType.Tick) == 0)
+                return;
 
-                if (caster.consumeMana(manaToConsume))
-                    result = spell.spellTick(caster,
-                            world,
-                            stack,
-                            actionTime);
-                if (result == null) {
-                    player.stopUsingItem();
-                    return;
-                }
-                if (result.type == SpellActionResultType.Stop || result.type == SpellActionResultType.Recoil) {
-                    player.clearActiveItem();
-                }
-                if (result.type == SpellActionResultType.Recoil) {
-                    spell.onRecoil(caster, world, stack, actionTime);
-                }
+            var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+            SpellActionResult result = null;
+
+            if (caster.consumeMana(manaToConsume))
+                result = spell.spellTick(caster,
+                        world,
+                        stack,
+                        actionTime);
+            if (result == null) {
+                player.stopUsingItem();
+                return;
+            }
+            if (result.type == SpellActionResultType.Stop || result.type == SpellActionResultType.Recoil) {
+                player.clearActiveItem();
+            }
+            if (result.type == SpellActionResultType.Recoil) {
+                spell.onRecoil(caster, world, stack, actionTime);
             }
         }
     }
@@ -158,15 +162,16 @@ public class WandItem extends ArtentItem {
         if (spell == null)
             return ActionResult.FAIL;
 
-        if (!context.getWorld().isClient && (spell.type & Spell.ActionType.BlockCast) > 0) { // TODO recoil
-            var caster = DataUtil.asCaster(player);
-            var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
-            if (caster.consumeMana(manaToConsume)) {
-                spell.blockCast(caster, player.getWorld(), stack, blockPos, side, 0);
-                return ActionResult.SUCCESS;
-            }
-            return ActionResult.FAIL;
+        if (context.getWorld().isClient || (spell.type & Spell.ActionType.BlockCast) == 0) {
+            return ActionResult.PASS;
+        } // TODO recoil
+
+        var caster = DataUtil.asCaster(player);
+        var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+        if (caster.consumeMana(manaToConsume)) {
+            spell.blockCast(caster, player.getWorld(), stack, blockPos, side, 0);
+            return ActionResult.SUCCESS;
         }
-        return ActionResult.PASS;
+        return ActionResult.FAIL;
     }
 }

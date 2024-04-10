@@ -13,7 +13,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
@@ -46,20 +45,20 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 	}
 
 	protected void onTakeOutput(PlayerEntity player, ItemStack stack) {
-		if (!stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable) {
-			var level = sharpenable.getLevel(stack);
-			this.anvil.getStack(0).decrement(1);
-			var modifier = this.anvil.getStack(1);
-			var modifierItem = modifier.getItem();
-			if (isCatalyst(modifierItem)) {
-				this.anvil.getStack(1).decrement(SharpeningAnvilInventory.getCatalystCount(level));
-			} else if (modifierItem instanceof IEnhancer) {
-				this.anvil.getStack(1).decrement(1);
-			}
-			var hammer = anvil.getStack(2);
-			hammer.damage(4, player, p -> {
-			});
-		}
+//		if (!stack.isEmpty() && stack.getItem() instanceof ISharpenable sharpenable) {
+//			var level = sharpenable.getLevel(stack);
+//			this.anvil.getStack(0).decrement(1);
+//			var modifier = this.anvil.getStack(1);
+//			var modifierItem = modifier.getItem();
+//			if (isCatalyst(modifierItem)) {
+//				this.anvil.getStack(1).decrement(SharpeningAnvilInventory.getCatalystCount(level));
+//			} else if (modifierItem instanceof IEnhancer) {
+//				this.anvil.getStack(1).decrement(1);
+//			}
+//			var hammer = anvil.getStack(2);
+//			hammer.damage(4, player, p -> {
+//			});
+//		}
 	}
 
 	private boolean isCatalyst(Item modifierItem) {
@@ -86,7 +85,7 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 						   : (item instanceof SmithingHammer
 								  // Insert hammer into hammer slot. Otherwise, try to insert it as tool
 								  ? !this.insertItem(slotStack, 2, 3, false) || !this.insertItem(slotStack, 0, 1, false)
-								  : (item instanceof ToolItem // insert tool into slot 0
+								  : (item instanceof ISharpenable // insert tool into slot 0
 										 ? !this.insertItem(slotStack, 0, 1, false)
 										 : (item instanceof IEnhancer || Arrays.stream(ModItems.Catalysts).anyMatch(cat -> cat == item)
 												// insert catalyst or enchancer into slot 1
@@ -124,7 +123,7 @@ public class SharpeningAnvilScreenHandler extends ScreenHandler {
 		this.addSlot(new Slot(this.anvil, 0, 27, 47) {
 			@Override
 			public boolean canInsert(ItemStack stack) {
-				return stack.getItem() instanceof ToolItem;
+				return stack.getItem() instanceof ISharpenable;
 			}
 		});
 		this.addSlot(new Slot(this.anvil, 1, 76, 47) {

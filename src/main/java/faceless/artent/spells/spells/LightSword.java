@@ -22,9 +22,6 @@ public class LightSword extends Spell {
             projectile.setWandStack(stack);
             projectile.setPosition(entity.getPos().add(entity.getRotationVector().multiply(-0.25f)).add(0, 1.5f, 0));
             var useTimeCoefficient = 1 + castTime / 20f; // TODO мб поднимать не скорость, а количетсво снарядов
-
-            projectile.setYaw(entity.getYaw());
-            projectile.setPitch(entity.getPitch());
             projectile.setVelocity(entity.getRotationVector().multiply(useTimeCoefficient));
             world.spawnEntity(projectile);
         }

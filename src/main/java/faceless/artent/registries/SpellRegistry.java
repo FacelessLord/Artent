@@ -19,6 +19,7 @@ public class SpellRegistry implements IRegistry {
         register(ModSpells.MakeLight);
         register(ModSpells.Nox);
         register(ModSpells.LightSword);
+        register(ModSpells.GilgameshLightStorm);
     }
 
     private void register(Spell spell) {
