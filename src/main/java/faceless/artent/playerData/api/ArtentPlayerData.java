@@ -6,29 +6,33 @@ import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.nbt.NbtCompound;
 
 public interface ArtentPlayerData {
-	long getMoney();
+    ArtentPlayerState getPlayerState();
 
-	void setMoney(long money);
+    long getMoney();
 
-	void addMoney(long money);
+    void setMoney(long money);
 
-	boolean canEditTrades();
+    void addMoney(long money);
 
-	void setCanEditTrades(boolean canEdit);
+    boolean canEditTrades();
 
-	TraderSellInventory getTraderSellInventory();
+    void setCanEditTrades(boolean canEdit);
 
-	TradeInfo getTradeInfo();
+    TraderSellInventory getTraderSellInventory();
 
-	void setTradeInfo(TradeInfo info);
-	HeroInfo getHeroInfo();
+    TradeInfo getTradeInfo();
 
-	void setHeroInfo(HeroInfo info);
-	CasterInfo getCasterInfo();
+    void setTradeInfo(TradeInfo info);
 
-	void setCasterInfo(CasterInfo info);
+    HeroInfo getHeroInfo();
 
-	void writeToNbt(NbtCompound compound);
+    void setHeroInfo(HeroInfo info);
 
-	void readFromNbt(NbtCompound compound);
+    CasterInfo getCasterInfo();
+
+    void setCasterInfo(CasterInfo info);
+
+    void writeToNbt(NbtCompound compound);
+
+    void readFromNbt(NbtCompound compound);
 }

@@ -4,6 +4,7 @@ import faceless.artent.Artent;
 import faceless.artent.brewing.blockEntities.BrewingCauldronBlockEntity;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.objects.ModItems;
+import faceless.artent.playerData.PersistentPlayersState;
 import faceless.artent.playerData.api.DataUtil;
 import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import io.netty.buffer.Unpooled;
@@ -33,8 +34,7 @@ public class ArtentServerHook {
     public static final Identifier SPELL_INDEX_RIGHT = new Identifier(Artent.MODID, "packet.caster.spell_index.right");
 
     public void load() {
-        System.out.println("AlchemicalNetworkHook server side load");
-
+        System.out.println("ArtentServerHook load");
         ServerPlayNetworking.registerGlobalReceiver(SYNCHRONIZE_CIRCLE, (server, player, handler, buffer, sender) -> {
             BlockPos pos = buffer.readBlockPos();
             NbtCompound tag = buffer.readNbt();
@@ -156,12 +156,24 @@ public class ArtentServerHook {
     public static void packetSyncPlayerData(PlayerEntity player) {
         var handler = DataUtil.getHandler(player);
         var nbt = new NbtCompound();
+
         handler.writeToNbt(nbt);
 
         PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
         passedData.writeNbt(nbt);
 
         ServerPlayNetworking.send((ServerPlayerEntity) player, SYNC_PLAYER_DATA_PACKET_ID, passedData);
+
+        if (player.getWorld().isClient) {
+            return;
+        }
+
+        var server = player.getWorld().getServer();
+        if (server == null)
+            return;
+
+        var serverState = PersistentPlayersState.getServerState(server);
+        serverState.setPlayerState(player, handler.getPlayerState());
     }
 
 }

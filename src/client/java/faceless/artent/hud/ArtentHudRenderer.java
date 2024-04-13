@@ -114,7 +114,7 @@ public class ArtentHudRenderer {
 
             matrices.translate(18, 42, -90.0f);
 
-            var levelString = String.valueOf(heroInfo.level);
+            var levelString = String.valueOf(heroInfo.getLevel());
             context.drawTextWithShadow(ctx.textRenderer(), levelString, 4 - 2 * levelString.length(), 2, 0xe9c02e);
 
             context.drawTexture(SPELL_BOOK_HUD, 0, 14, 68, 42 + 14, 9, 113, 256, 256);

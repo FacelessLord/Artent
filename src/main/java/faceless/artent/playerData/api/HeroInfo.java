@@ -8,7 +8,7 @@ public class HeroInfo {
     public HeroClass heroClass = HeroClass.NotSelected;
     public SkillElement element = SkillElement.NotSelected;
 
-    public int level = 1;
+    private int level = 1;
     public int experience = 0;
 
     public void writeNbt(NbtCompound nbt) {
@@ -48,5 +48,13 @@ public class HeroInfo {
             if (!player.getWorld().isClient)
                 ArtentServerHook.packetSyncPlayerData(player);
         }
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

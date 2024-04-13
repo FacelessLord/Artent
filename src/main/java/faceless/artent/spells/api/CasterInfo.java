@@ -12,7 +12,7 @@ public class CasterInfo {
 
     public int getMaxMana(PlayerEntity player) {
         var heroInfo = DataUtil.getHeroInfo(player);
-        return heroInfo.level * 40; // TODO
+        return heroInfo.getLevel() * 40; // TODO
     }
 
     /**
@@ -20,7 +20,7 @@ public class CasterInfo {
      */
     public int getManaRegenBase(PlayerEntity player) {
         var heroInfo = DataUtil.getHeroInfo(player);
-        return heroInfo.level; // TODO
+        return heroInfo.getLevel(); // TODO
     }
 
     public int getSpellBookIndex() {

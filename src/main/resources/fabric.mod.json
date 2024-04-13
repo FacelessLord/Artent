@@ -1,46 +1,51 @@
 {
-	"schemaVersion": 1,
-	"id": "artent",
-	"version": "${version}",
-	"name": "Artent",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Lord_Faceless"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/artent/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"faceless.artent.Artent"
-		],
-		"client": [
-			"faceless.artent.ArtentClient"
-		]
-	},
-	"mixins": [
-		"artent.mixins.json",
-		"sharpening.mixins.json",
-		"brewing.mixins.json",
-		"trading.mixins.json",
-		"playerData.mixins.json",
-		"spells.mixins.json",
-		{
-			"config": "artent.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.15.3",
-		"minecraft": "~1.20.4",
-		"java": ">=17",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "artent",
+  "version": "${version}",
+  "name": "Artent",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Lord_Faceless"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/artent/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "faceless.artent.Artent"
+    ],
+    "client": [
+      "faceless.artent.ArtentClient"
+    ]
+  },
+  "mixins": [
+    "artent.mixins.json",
+    "sharpening.mixins.json",
+    "brewing.mixins.json",
+    "trading.mixins.json",
+    "playerData.mixins.json",
+    "spells.mixins.json",
+    "leveling.mixins.json",
+    {
+      "config": "artent.client.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "artent.client.playerData.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.3",
+    "minecraft": "~1.20.4",
+    "java": ">=17",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
 }
