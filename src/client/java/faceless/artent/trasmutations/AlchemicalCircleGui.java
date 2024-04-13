@@ -43,13 +43,15 @@ public class AlchemicalCircleGui extends Screen {
 		int j = 0;
 		for (PartType type : types) {
 			var button = new PartTypeButton(k + j * 24 * scaleFactor, l + 24 * i, 24, type,
-				b -> {
-					circle.addPart(type, (type.itemTexture != type.itemTextureRev) && hasShiftDown());
-					ArtentClientHook.packetSynchronizeCircle(circle);
-					var player = MinecraftClient.getInstance().player;
-					if (player == null || !damageChalk(player))
-						updateCurrentParts();
-				});
+			  b -> {
+				  if (circle == null)
+					  return;
+				  circle.addPart(type, (type.itemTexture != type.itemTextureRev) && hasShiftDown());
+				  ArtentClientHook.packetSynchronizeCircle(circle);
+				  var player = MinecraftClient.getInstance().player;
+				  if (player == null || !damageChalk(player))
+					  updateCurrentParts();
+			  });
 			addDrawableChild(button);
 			i++;
 			if (i > 6) {
@@ -73,6 +75,8 @@ public class AlchemicalCircleGui extends Screen {
 
 	@Override
 	public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+		if (circle == null)
+			return;
 		super.renderBackground(context, mouseX, mouseY, delta);
 		this.drawBackground(context);
 	}
@@ -97,11 +101,11 @@ public class AlchemicalCircleGui extends Screen {
 		int u = (width - range) / 2;
 		for (CirclePart part : drawnParts) {
 			var button = new PartTypeButton(u - (1 + j) * 24 * scaleFactor, l + 24 * i, 24, part.part,
-				b -> {
-					circle.removePart(part);
-					ArtentClientHook.packetSynchronizeCircle(circle);
-					updateCurrentParts();
-				}, part.reverse);
+			  b -> {
+				  circle.removePart(part);
+				  ArtentClientHook.packetSynchronizeCircle(circle);
+				  updateCurrentParts();
+			  }, part.reverse);
 			addDrawableChild(button);
 			currentParts.add(button);
 			i++;

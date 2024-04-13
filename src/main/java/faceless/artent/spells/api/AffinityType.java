@@ -4,5 +4,5 @@ public enum AffinityType {
     None,
     Mana,
     Light,
-    Darkness
+    Void
 }

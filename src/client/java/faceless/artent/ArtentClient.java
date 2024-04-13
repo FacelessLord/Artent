@@ -15,6 +15,7 @@ import faceless.artent.registries.ScreenRegistry;
 import faceless.artent.sharpening.SharpeningAnvilRenderer;
 import faceless.artent.spells.LightSwordProjectileEntityRenderer;
 import faceless.artent.spells.SpellParticleRenderer;
+import faceless.artent.spells.VoidBlockRenderer;
 import faceless.artent.trading.CoinEntityRenderer;
 import faceless.artent.trasmutations.AlchemicalCircleRenderer;
 import net.fabricmc.api.ClientModInitializer;
@@ -28,59 +29,63 @@ import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.util.Identifier;
 
 public class ArtentClient implements ClientModInitializer {
-    public ScreenRegistry Screens = new ScreenRegistry();
-    public ModKeyBindings keyBindings = new ModKeyBindings();
-    public ArtentClientHook ClientHook = new ArtentClientHook();
+	public ScreenRegistry Screens = new ScreenRegistry();
+	public ModKeyBindings keyBindings = new ModKeyBindings();
+	public ArtentClientHook ClientHook = new ArtentClientHook();
 
-    @Override
-    public void onInitializeClient() {
-        Screens.register();
-        keyBindings.register();
-        ClientHook.loadClient();
+	@Override
+	public void onInitializeClient() {
+		Screens.register();
+		keyBindings.register();
+		ClientHook.loadClient();
 
-        // ALCHEMY
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.AlchemicalCircle, RenderLayer.getCutoutMipped());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.InscriptionTable, RenderLayer.getCutoutMipped());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.InscriptionTable2, RenderLayer.getCutoutMipped());
-        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
-            if (view == null || view.getBlockEntityRenderData(pos) == null)
-                return new Color().asInt();
-            //noinspection DataFlowIssue
-            return (int) view.getBlockEntityRenderData(pos);
-        }, ModBlocks.AlchemicalCircle);
+		// ALCHEMY
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.AlchemicalCircle, RenderLayer.getCutoutMipped());
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.InscriptionTable, RenderLayer.getCutoutMipped());
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.InscriptionTable2, RenderLayer.getCutoutMipped());
+		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
+			if (view == null || view.getBlockEntityRenderData(pos) == null)
+				return new Color().asInt();
+			//noinspection DataFlowIssue
+			return (int) view.getBlockEntityRenderData(pos);
+		}, ModBlocks.AlchemicalCircle);
 //		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.alchemicalPaper, new AlchemicalPaperRenderer()); TODO
-        BlockEntityRendererFactories.register(ModBlockEntities.AlchemicalCircle, AlchemicalCircleRenderer::new);
-        BlockEntityRendererFactories.register(ModBlockEntities.SharpeningAnvil, SharpeningAnvilRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntities.AlchemicalCircle, AlchemicalCircleRenderer::new);
+		BlockEntityRendererFactories.register(ModBlockEntities.SharpeningAnvil, SharpeningAnvilRenderer::new);
 
-        // BREWING
-        BlockEntityRendererFactories.register(ModBlockEntities.BrewingCauldron, BrewingCauldronRenderer::new);
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ModBlocks.Shroom, ModBlocks.Shadowveil,
-                ModBlocks.berryBush[0], ModBlocks.berryBush[1], ModBlocks.berryBush[2], ModBlocks.berryBush[3],
-                ModBlocks.CrimsonwoodLeaves, ModBlocks.Trader);
-        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
-            if (view == null)
-                return 0;
-            var be = view.getBlockEntity(pos);
-            if (be instanceof BrewingCauldronBlockEntity cauldron) {
-                return cauldron.color.toHex();
-            }
-            return 0;
-        }, ModBlocks.CauldronFluid);
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
-                    if (tintIndex == 0) return -1;
-                    return AlchemicalPotionUtil.getColor(stack);
-                }, ModItems.PotionPhial, ModItems.PotionPhialExplosive, ModItems.GoldenBucketFilled,
-                ModItems.SmallConcentrate, ModItems.MediumConcentrate, ModItems.BigConcentrate);
-        EntityRendererRegistry.register(ModEntities.POTION_PHIAL, FlyingItemEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.COIN_ENTITY, CoinEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.CROW_ENTITY, CrowEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SPELL_PARTICLE, SpellParticleRenderer::new);
-        EntityRendererRegistry.register(ModEntities.LIGHT_SWORD, LightSwordProjectileEntityRenderer::new);
 
-        ModelPredicateProviderRegistry.register(ModItems.MediumConcentrate, new Identifier("amount"),
-                (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 4.0f);
-        ModelPredicateProviderRegistry.register(ModItems.BigConcentrate, new Identifier("amount"),
-                (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 10.0f);
+		BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.VoidBlock, RenderLayer.getEndPortal());
+		BlockEntityRendererFactories.register(ModBlockEntities.VoidBlock, VoidBlockRenderer::new);
 
-    }
+		// BREWING
+		BlockEntityRendererFactories.register(ModBlockEntities.BrewingCauldron, BrewingCauldronRenderer::new);
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ModBlocks.Shroom, ModBlocks.Shadowveil,
+		  ModBlocks.berryBush[0], ModBlocks.berryBush[1], ModBlocks.berryBush[2], ModBlocks.berryBush[3],
+		  ModBlocks.CrimsonwoodLeaves, ModBlocks.Trader);
+		ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> {
+			if (view == null)
+				return 0;
+			var be = view.getBlockEntity(pos);
+			if (be instanceof BrewingCauldronBlockEntity cauldron) {
+				return cauldron.color.toHex();
+			}
+			return 0;
+		}, ModBlocks.CauldronFluid);
+		ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
+			  if (tintIndex == 0) return -1;
+			  return AlchemicalPotionUtil.getColor(stack);
+		  }, ModItems.PotionPhial, ModItems.PotionPhialExplosive, ModItems.GoldenBucketFilled,
+		  ModItems.SmallConcentrate, ModItems.MediumConcentrate, ModItems.BigConcentrate);
+		EntityRendererRegistry.register(ModEntities.POTION_PHIAL, FlyingItemEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.COIN_ENTITY, CoinEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.CROW_ENTITY, CrowEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.SPELL_PARTICLE, SpellParticleRenderer::new);
+		EntityRendererRegistry.register(ModEntities.LIGHT_SWORD, LightSwordProjectileEntityRenderer::new);
+
+		ModelPredicateProviderRegistry.register(ModItems.MediumConcentrate, new Identifier("amount"),
+		  (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 4.0f);
+		ModelPredicateProviderRegistry.register(ModItems.BigConcentrate, new Identifier("amount"),
+		  (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 10.0f);
+
+	}
 }

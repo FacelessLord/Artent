@@ -21,7 +21,7 @@ public class EnderInversion extends EnhancerItem {
 
 	@Override
 	public void beforeEndermanTeleported(ItemStack tool, LivingEntity attacker, EndermanEntity enderman, CancellationToken cancellationToken) {
-		enderman.damage(attacker.getDamageSources().magic(), 2);
+		enderman.damage(attacker.getDamageSources().mobAttack(attacker), 2);
 		cancellationToken.setCancelled();
 	}
 }

@@ -45,6 +45,7 @@ public class BlockRegistry implements IRegistry {
 
 		// MAGIC
 		register(ModBlocks.LightBlock);
+		register(ModBlocks.VoidBlock);
 		ModBlocks.InscriptionTableItem = register(ModBlocks.InscriptionTable, ModItemGroups.Main);
 		register(ModBlocks.InscriptionTable2);
 	}
