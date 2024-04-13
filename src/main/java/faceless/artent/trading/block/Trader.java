@@ -24,7 +24,6 @@ import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -104,11 +103,11 @@ public class Trader extends BlockWithEntity implements INamed {
 			return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
 				var traderSellInventory = DataUtil.getTraderSellInventory(player);
 				return new TraderScreenHandler(
-					syncId,
-					inventory,
-					trader.offerInventory,
-					traderSellInventory,
-					ScreenHandlerContext.create(world, pos));
+				  syncId,
+				  inventory,
+				  trader.offerInventory,
+				  traderSellInventory,
+				  ScreenHandlerContext.create(world, pos));
 			}, Text.translatable("gui.artent.trader"));
 		return null;
 	}
@@ -131,20 +130,6 @@ public class Trader extends BlockWithEntity implements INamed {
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
 		return null;//validateTicker(type, ModBlockEntities.SHARPENING_ANVIL, (world1, pos, state1, be) -> be.tick(world1, pos, state1));
-	}
-
-	//This method will drop all items onto the ground when the block is broken
-	@Override
-	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		if (state.getBlock() != newState.getBlock()) {
-			BlockEntity blockEntity = world.getBlockEntity(pos);
-			if (blockEntity instanceof TraderBlockEntity trader) {
-				ItemScatterer.spawn(world, pos, trader.offerInventory);
-				// update comparators
-				world.updateComparators(pos, this);
-			}
-			super.onStateReplaced(state, world, pos, newState, moved);
-		}
 	}
 
 	@Override

@@ -20,17 +20,17 @@ public class WormHole extends Spell {
 
 	@Override
 	public void blockCast(ICaster caster, World world, ItemStack stack, BlockPos blockPos, Direction hitSide, int actionTime) {
-		voidLayer(world, blockPos, hitSide.getOpposite());
+		voidLayer(world, blockPos, hitSide.getOpposite(), 8);
 	}
 
-	public static void voidLayer(World world, BlockPos blockPos, Direction hitSide) {
+	public static void voidLayer(World world, BlockPos blockPos, Direction hitSide, int depth) {
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
 				var baseVec = new int[]{i, 0, j};
 				var transformedVec = DirectionUtils.applyDirection(baseVec, hitSide);
 				var offsetPos = blockPos.add(transformedVec[0], transformedVec[1], transformedVec[2]);
 
-				voidBlock(world, offsetPos, hitSide, 8, blockPos);
+				voidBlock(world, offsetPos, hitSide, depth, blockPos);
 			}
 		}
 	}

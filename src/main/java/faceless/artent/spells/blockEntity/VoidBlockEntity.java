@@ -49,7 +49,7 @@ public class VoidBlockEntity extends BlockEntity {
 		if (ticksLeft % 4 == 0) {
 			var offsetPos = pos.offset(direction);
 			if (depth > 0)
-				WormHole.voidLayer(world, centerPos, direction);
+				WormHole.voidLayer(world, centerPos, direction, depth);
 			if (depth <= 1 || world.getBlockState(offsetPos).getBlock() == ModBlocks.VoidBlock || !world.getBlockState(offsetPos).isOpaqueFullCube(world, offsetPos)) {
 				depth = 0;
 				return;
