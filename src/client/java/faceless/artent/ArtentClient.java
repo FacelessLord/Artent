@@ -13,25 +13,27 @@ import faceless.artent.objects.ModEntities;
 import faceless.artent.objects.ModItems;
 import faceless.artent.registries.ScreenRegistry;
 import faceless.artent.sharpening.SharpeningAnvilRenderer;
-import faceless.artent.spells.LightSwordProjectileEntityRenderer;
-import faceless.artent.spells.SpellParticleRenderer;
-import faceless.artent.spells.VoidBlockRenderer;
+import faceless.artent.spells.*;
 import faceless.artent.trading.CoinEntityRenderer;
 import faceless.artent.trasmutations.AlchemicalCircleRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
 public class ArtentClient implements ClientModInitializer {
 	public ScreenRegistry Screens = new ScreenRegistry();
 	public ModKeyBindings keyBindings = new ModKeyBindings();
 	public ArtentClientHook ClientHook = new ArtentClientHook();
+
+	public static final EntityModelLayer SPRAY_PARTICLE_LAYER = new EntityModelLayer(new Identifier(Artent.MODID, "spray_particle"), "main");
 
 	@Override
 	public void onInitializeClient() {
@@ -81,6 +83,8 @@ public class ArtentClient implements ClientModInitializer {
 		EntityRendererRegistry.register(ModEntities.CROW_ENTITY, CrowEntityRenderer::new);
 		EntityRendererRegistry.register(ModEntities.SPELL_PARTICLE, SpellParticleRenderer::new);
 		EntityRendererRegistry.register(ModEntities.LIGHT_SWORD, LightSwordProjectileEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.SPRAY_ELEMENT_ENTITY, SprayParticleEntityRenderer::new);
+		EntityModelLayerRegistry.registerModelLayer(SPRAY_PARTICLE_LAYER, SprayParticleEntityModel::getTexturedModelData);
 
 		ModelPredicateProviderRegistry.register(ModItems.MediumConcentrate, new Identifier("amount"),
 		  (stack, world, entity, seed) -> stack.getOrCreateNbt().getInt("amount") / 4.0f);

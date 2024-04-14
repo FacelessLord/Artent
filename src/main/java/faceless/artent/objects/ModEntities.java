@@ -4,6 +4,7 @@ import faceless.artent.brewing.entity.ThrowablePotionPhialEntity;
 import faceless.artent.mobs.entity.CrowEntity;
 import faceless.artent.spells.entity.LightSwordProjectileEntity;
 import faceless.artent.spells.entity.SpellParticleEntity;
+import faceless.artent.spells.entity.SprayElementEntity;
 import faceless.artent.trading.entity.CoinEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -50,6 +51,13 @@ public class ModEntities {
 			.create(SpawnGroup.MISC,
 					(EntityType<LightSwordProjectileEntity> type, World world) -> new LightSwordProjectileEntity(type, world))
 			.dimensions(EntityDimensions.fixed(0.5f, 0.5f))
+			.trackRangeChunks(10)
+			.build();
+	public static EntityType<? extends SprayElementEntity> SPRAY_ELEMENT_ENTITY =
+		FabricEntityTypeBuilder
+			.create(SpawnGroup.MISC,
+			  SprayElementEntity::new)
+			.dimensions(EntityDimensions.fixed(0.25f, 0.25f))
 			.trackRangeChunks(10)
 			.build();
 }

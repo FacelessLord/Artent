@@ -23,6 +23,8 @@ public class SpellRegistry implements IRegistry {
 		register(ModSpells.Wormhole);
 		register(ModSpells.LightSword);
 		register(ModSpells.GilgameshLightStorm);
+		register(ModSpells.Flamethrower);
+		register(ModSpells.WaterJet);
 	}
 
 	private void register(Spell spell) {

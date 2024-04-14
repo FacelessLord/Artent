@@ -181,11 +181,9 @@ public final class ModBlocks {
 	  new VoidBlock(
 		FabricBlockSettings
 		  .copyOf(Blocks.STONE)
-		  .notSolid()
 		  .nonOpaque()
 		  .noCollision()
 		  .collidable(false)
-		  .pistonBehavior(PistonBehavior.DESTROY)
 		  .luminance(15));
 
 	public static InscriptionTable InscriptionTable =

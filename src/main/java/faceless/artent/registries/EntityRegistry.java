@@ -18,6 +18,7 @@ public class EntityRegistry implements IRegistry {
 		register("coin", ModEntities.COIN_ENTITY);
 		register("crow", ModEntities.CROW_ENTITY);
 		register("light_sword", ModEntities.LIGHT_SWORD);
+		register("spray_element", ModEntities.SPRAY_ELEMENT_ENTITY);
 		FabricDefaultAttributeRegistry.register(ModEntities.CROW_ENTITY, CrowEntity.createLivingAttributes());
 	}
 

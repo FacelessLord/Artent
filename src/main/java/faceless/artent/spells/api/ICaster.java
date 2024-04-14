@@ -5,5 +5,6 @@ import java.util.UUID;
 public interface ICaster {
     boolean consumeMana(int mana);
 
+    int getPotency();
     UUID getCasterUuid();
 }

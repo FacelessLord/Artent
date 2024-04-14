@@ -164,6 +164,11 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
 	}
 
 	@Override
+	public int getPotency() {
+		return (getHeroInfo().getLevel() + 1) / 2;
+	}
+
+	@Override
 	public UUID getCasterUuid() {
 		var player = (PlayerEntity) (Object) this;
 		return player.getUuid();
