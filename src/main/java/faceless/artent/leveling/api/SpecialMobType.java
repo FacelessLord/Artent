@@ -5,14 +5,14 @@ public enum SpecialMobType {
     Cursed,
     Demonic,
     Eldritch,
-    Weakened;
+    Wounded;
 
     public static SpecialMobType fromInt(int ord) {
         return switch (ord) {
             case 2 -> Cursed;
             case 3 -> Demonic;
             case 4 -> Eldritch;
-            case 5 -> Weakened;
+            case 5 -> Wounded;
             default -> Common;
         };
     }

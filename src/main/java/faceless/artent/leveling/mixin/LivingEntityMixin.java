@@ -74,6 +74,16 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 	}
 
 	@Override
+	public float getLevelHealthModifier() {
+		return getLevelModifier();
+	}
+
+	@Override
+	public float getLevelArmorModifier() {
+		return getLevelModifier();
+	}
+
+	@Override
 	public void makeLevelDrops(List<ItemStack> drops) {
 
 	}
@@ -120,6 +130,16 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 	}
 
 	@Override
+	public float getSpecialHealthModifier() {
+		return getSpecialMobModifier();
+	}
+
+	@Override
+	public float getSpecialArmorModifier() {
+		return getSpecialMobModifier();
+	}
+
+	@Override
 	public void makeSpecialDrops(List<ItemStack> drops) {
 
 	}
@@ -136,7 +156,7 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 		var specialType = SpecialMobType.Common;
 
 		if (specialTypeRandom > 0.8 && specialTypeRandom < 0.9)
-			specialType = SpecialMobType.Weakened;
+			specialType = SpecialMobType.Wounded;
 		if (specialTypeRandom > 0.9 && specialTypeRandom < 0.95)
 			specialType = SpecialMobType.Cursed;
 		if (specialTypeRandom > 0.95 && specialTypeRandom < 0.985)
@@ -179,16 +199,21 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 		dataTracker.startTracking(SPECIAL_MOB_TYPE, SpecialMobType.Common.ordinal());
 	}
 
-	//    @Inject(method = "updateAttributes", at = @At("TAIL"))
 	@Unique
 	public void setupAttributes() {
 		var levelSpeedModifier = new EntityAttributeModifier(LevelingConstants.MOB_LEVEL_SPEED_MODIFIER, "ARTENT.MOB_LEVEL_SPEED_MODIFIER", getLevelSpeedModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 		var levelAttackModifier = new EntityAttributeModifier(LevelingConstants.MOB_LEVEL_ATTACK_MODIFIER, "ARTENT.MOB_LEVEL_ATTACK_MODIFIER", getLevelAttackModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+		var levelHealthModifier = new EntityAttributeModifier(LevelingConstants.MOB_LEVEL_HEALTH_MODIFIER, "ARTENT.MOB_LEVEL_HEALTH_MODIFIER", getLevelHealthModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+		var levelArmorModifier = new EntityAttributeModifier(LevelingConstants.MOB_LEVEL_ARMOR_MODIFIER, "ARTENT.MOB_LEVEL_ARMOR_MODIFIER", getLevelArmorModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 		var specialTypeSpeedModifier = new EntityAttributeModifier(LevelingConstants.SPECIAL_MOB_SPEED_MODIFIER, "ARTENT.SPECIAL_MOB_SPEED_MODIFIER", getSpecialSpeedModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 		var specialTypeAttackModifier = new EntityAttributeModifier(LevelingConstants.SPECIAL_MOB_ATTACK_MODIFIER, "ARTENT.SPECIAL_MOB_ATTACK_MODIFIER", getSpecialAttackModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+		var specialTypeHealthModifier = new EntityAttributeModifier(LevelingConstants.SPECIAL_MOB_HEALTH_MODIFIER, "ARTENT.SPECIAL_MOB_HEALTH_MODIFIER", getSpecialHealthModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+		var specialTypeArmorModifier = new EntityAttributeModifier(LevelingConstants.SPECIAL_MOB_ARMOR_MODIFIER, "ARTENT.SPECIAL_MOB_ARMOR_MODIFIER", getSpecialArmorModifier(), EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
 
 		var speedAttributeInstance = this.asEntity().getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
 		var attackAttributeInstance = this.asEntity().getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+		var healthAttributeInstance = this.asEntity().getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+		var armorAttributeInstance = this.asEntity().getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
 
 		if (speedAttributeInstance != null) {
 			speedAttributeInstance.addPersistentModifier(levelSpeedModifier);
@@ -197,6 +222,14 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 		if (attackAttributeInstance != null) {
 			attackAttributeInstance.addPersistentModifier(levelAttackModifier);
 			attackAttributeInstance.addPersistentModifier(specialTypeAttackModifier);
+		}
+		if (healthAttributeInstance != null) {
+			healthAttributeInstance.addPersistentModifier(levelHealthModifier);
+			healthAttributeInstance.addPersistentModifier(specialTypeHealthModifier);
+		}
+		if (armorAttributeInstance != null) {
+			armorAttributeInstance.addPersistentModifier(levelArmorModifier);
+			armorAttributeInstance.addPersistentModifier(specialTypeArmorModifier);
 		}
 	}
 

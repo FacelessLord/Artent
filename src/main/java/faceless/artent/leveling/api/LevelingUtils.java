@@ -124,7 +124,7 @@ public class LevelingUtils {
 			case Cursed -> 1.3f;
 			case Demonic -> 1.7f;
 			case Eldritch -> 2.3f;
-			case Weakened -> 0.7f;
+			case Wounded -> 0.7f;
 			default -> 1;
 		};
 	}

@@ -15,6 +15,8 @@ public interface ILeveledMob {
     float getLevelAttackModifier();
 
     float getLevelSpeedModifier();
+    float getLevelHealthModifier();
+    float getLevelArmorModifier();
 
     void makeLevelDrops(List<ItemStack> drops);
 

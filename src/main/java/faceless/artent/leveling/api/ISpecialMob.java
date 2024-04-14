@@ -14,6 +14,8 @@ public interface ISpecialMob {
     float getSpecialAttackModifier();
 
     float getSpecialSpeedModifier();
+    float getSpecialHealthModifier();
+    float getSpecialArmorModifier();
 
     void makeSpecialDrops(List<ItemStack> drops);
 
