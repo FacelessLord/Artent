@@ -1,5 +1,6 @@
 package faceless.artent;
 
+import faceless.artent.leveling.api.LevelingUtils;
 import faceless.artent.network.ArtentServerHook;
 import faceless.artent.registries.*;
 import net.fabricmc.api.ModInitializer;
@@ -58,5 +59,6 @@ public class Artent implements ModInitializer {
 		ServerHook.load();
 
 		ItemGroups.register();
+		LevelingUtils.setupMobBaseLevels();
 	}
 }

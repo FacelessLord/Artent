@@ -1,11 +1,9 @@
 package faceless.artent.trading.mixin;
 
-import faceless.artent.playerData.api.DataUtil;
 import faceless.artent.playerData.api.MoneyPouch;
 import faceless.artent.trading.entity.CoinEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,10 +28,6 @@ public class LivingEntityMixin {
             spawnCoin(1, (int) pouch.silver(), world, pos);
         if (pouch.gold() != 0)
             spawnCoin(2, (int) pouch.gold(), world, pos);
-
-        if (damageSource.getAttacker() instanceof PlayerEntity player) {
-            DataUtil.getHeroInfo(player).addExperience(player, (int) (living.getMaxHealth() / 2));
-        }
     }
 
     @Unique

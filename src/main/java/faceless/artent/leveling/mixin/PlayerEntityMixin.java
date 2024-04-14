@@ -2,6 +2,7 @@ package faceless.artent.leveling.mixin;
 
 import faceless.artent.leveling.api.SpecialMobType;
 import faceless.artent.playerData.api.DataUtil;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;

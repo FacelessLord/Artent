@@ -119,7 +119,7 @@ public class ArtentHudRenderer {
 
             context.drawTexture(SPELL_BOOK_HUD, 0, 14, 68, 42 + 14, 9, 113, 256, 256);
 
-            var fillPercentage = 1f * heroInfo.experience / heroInfo.getExperienceToLevel(ctx.player());
+            var fillPercentage = 1f * heroInfo.experience / heroInfo.getExperienceToLevel();
             var experienceHeight = (int) Math.min(109 * fillPercentage, 109);
             context.drawTexture(SPELL_BOOK_HUD, 2, 125 - experienceHeight, 77, 42 + 14 + 2 + 109 - experienceHeight, 5, experienceHeight, 256, 256);
             matrices.pop();
