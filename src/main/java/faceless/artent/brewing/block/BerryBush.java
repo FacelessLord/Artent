@@ -5,6 +5,7 @@ import faceless.artent.brewing.ingridients.Ingredients;
 import faceless.artent.objects.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Fertilizable;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,8 +22,9 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 
-public class BerryBush extends Block implements INamed {
+public class BerryBush extends Block implements INamed, Fertilizable {
 	public final int type;
 	public static final IntProperty AGE = IntProperty.of("age", 0, 2);
 
@@ -45,8 +47,8 @@ public class BerryBush extends Block implements INamed {
 	@Override
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		super.randomTick(state, world, pos, random);
-		if (world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2) {
-			world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), Block.NOTIFY_LISTENERS);
+		if (canGrow(world, random, pos, state)) {
+			grow(world, random, pos, state);
 		}
 	}
 
@@ -84,5 +86,21 @@ public class BerryBush extends Block implements INamed {
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		return SHAPE;
+	}
+
+	@Override
+	public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+		return true;
+	}
+
+	@Override
+	public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
+		return world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2;
+	}
+
+	@Override
+	public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
+		if (state.get(AGE) < 2)
+			world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), Block.NOTIFY_LISTENERS);
 	}
 }

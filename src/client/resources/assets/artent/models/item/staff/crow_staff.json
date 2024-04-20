@@ -1,6 +1,21 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "artent:item/staff/crow_staff"
-  }
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "artent:item/staff/crow_staff"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [45, 90, 0]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-45, 90, 0]
+		},
+		"firstperson_righthand": {
+			"rotation": [45, 90, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-45, 90, 0]
+		}
+	}
 }

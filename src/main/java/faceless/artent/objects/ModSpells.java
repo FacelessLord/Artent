@@ -14,5 +14,6 @@ public class ModSpells {
 	public static final Spell WaterJet = new WaterJet().setColor(0.05f, 0.45f, 0.70f).setAffinity(AffinityType.Void);
 	public static final Spell Dash = new Dash().setAffinity(AffinityType.Air);
 	public static final Spell Gust = new Gust().setAffinity(AffinityType.Air);
+	public static final Spell FireHurricane = new FireHurricane().setColor(0.70f, 0.05f, 0.05f).setAffinity(AffinityType.Void);
 
 }
