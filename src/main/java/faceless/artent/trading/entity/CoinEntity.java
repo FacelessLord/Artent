@@ -113,7 +113,7 @@ public class CoinEntity extends Entity {
 		if (this.getWorld().isClient) {
 			this.noClip = false;
 		} else {
-			boolean bl = this.noClip = !this.getWorld().isSpaceEmpty(this, this.getBoundingBox().contract(1.0E-7));
+			this.noClip = !this.getWorld().isSpaceEmpty(this, this.getBoundingBox().contract(1.0E-7));
 			if (this.noClip) {
 				this.pushOutOfBlocks(this.getX(),
 					(this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0,
@@ -139,8 +139,8 @@ public class CoinEntity extends Entity {
 		boolean bl = MathHelper.floor(this.prevX) != MathHelper.floor(this.getX()) ||
 						 MathHelper.floor(this.prevY) != MathHelper.floor(this.getY()) ||
 						 MathHelper.floor(this.prevZ) != MathHelper.floor(this.getZ());
-		int i = bl ? 2 : 40;
-		if (this.age % i == 0 && !this.getWorld().isClient && this.canMerge()) {
+		int i = bl ? 2 : 10;
+		if (this.age % i == 1 && !this.getWorld().isClient) {
 			this.tryMerge();
 		}
 		if (this.age != Short.MIN_VALUE) {
@@ -162,7 +162,7 @@ public class CoinEntity extends Entity {
 		List<CoinEntity> list =
 			this.getWorld()
 				.getEntitiesByClass(CoinEntity.class,
-					this.getBoundingBox().expand(0.5, 0.0, 0.5),
+					this.getBoundingBox().expand(0.75, 0.25, 0.75),
 					otherCoinEntity -> otherCoinEntity != this && otherCoinEntity.canMerge());
 		for (CoinEntity coinEntity : list) {
 			if (getCoinType() != coinEntity.getCoinType()) continue;

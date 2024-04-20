@@ -25,6 +25,8 @@ public class SpellRegistry implements IRegistry {
 		register(ModSpells.GilgameshLightStorm);
 		register(ModSpells.Flamethrower);
 		register(ModSpells.WaterJet);
+		register(ModSpells.Dash);
+		register(ModSpells.Gust);
 	}
 
 	private void register(Spell spell) {

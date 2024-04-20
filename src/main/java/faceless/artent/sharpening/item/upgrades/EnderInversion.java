@@ -23,7 +23,7 @@ public class EnderInversion extends EnhancerItem {
 	@Override
 	public void beforeEndermanTeleported(ItemStack tool, LivingEntity attacker, EndermanEntity enderman, CancellationToken cancellationToken) {
 		var toolLevel = SharpeningUtils.getItemLevel(tool);
-		enderman.damage(attacker.getDamageSources().mobAttack(attacker), 2 * (1 + toolLevel));
+		enderman.damage(attacker.getDamageSources().mobAttack(attacker), (1 + toolLevel));
 		cancellationToken.setCancelled();
 	}
 }

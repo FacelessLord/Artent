@@ -79,7 +79,6 @@ public class WandItem extends ArtentItem implements ISharpenable {
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (!(user instanceof ICaster caster)) return;
-        if (world.isClient) return;
 
         var spell = getActiveEntitySpell(user);
         if (spell == null) return;
@@ -99,8 +98,6 @@ public class WandItem extends ArtentItem implements ISharpenable {
     public void usageTick(World world, LivingEntity living, ItemStack stack, int remainingUseTicks) {
         var spell = getActiveEntitySpell(living);
         if (spell == null) return;
-
-        if (world.isClient) return;
 
         if (living instanceof PlayerEntity player) {
             var actionTime = getMaxUseTime(stack) - remainingUseTicks;
@@ -162,7 +159,7 @@ public class WandItem extends ArtentItem implements ISharpenable {
         if (spell == null)
             return ActionResult.FAIL;
 
-        if (context.getWorld().isClient || (spell.type & Spell.ActionType.BlockCast) == 0) {
+        if ((spell.type & Spell.ActionType.BlockCast) == 0) {
             return ActionResult.PASS;
         } // TODO recoil
 
