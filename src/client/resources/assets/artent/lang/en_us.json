@@ -203,6 +203,8 @@
   "artent.spell.wormhole": "Wormhole",
   "artent.spell.flamethrower": "Flamethrower",
   "artent.spell.water_jet": "Water jet",
+  "artent.spell.dash": "Dash",
+  "artent.spell.gust": "Gust",
   "artent.specialType.common": "Common",
   "artent.specialType.cursed": "Common",
   "artent.specialType.demonic": "Demonic",
