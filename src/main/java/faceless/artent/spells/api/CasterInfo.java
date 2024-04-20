@@ -23,6 +23,10 @@ public class CasterInfo {
         return heroInfo.getLevel(); // TODO
     }
 
+    public void restoreMana(PlayerEntity player){
+        mana = getMaxMana(player);
+    }
+
     public int getSpellBookIndex() {
         return spellBookIndex;
     }

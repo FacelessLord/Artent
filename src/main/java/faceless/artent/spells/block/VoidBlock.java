@@ -29,8 +29,6 @@ public class VoidBlock extends BlockWithEntity implements INamed {
 		return CODEC;
 	}
 
-
-
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 //		return super.getOutlineShape(state, world, pos, context);

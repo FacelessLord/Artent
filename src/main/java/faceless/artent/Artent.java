@@ -29,6 +29,7 @@ public class Artent implements ModInitializer {
 	public static CommandRegistry Commands = new CommandRegistry();
 	public static ItemPriceDeterminatorRegistry ItemPriceDeterminators = new ItemPriceDeterminatorRegistry();
 	public static SpellRegistry SpellRegistry = new SpellRegistry();
+	public static ArgumentTypesRegistry ArgumentTypes = new ArgumentTypesRegistry();
 
 	@Override
 	public void onInitialize() {
@@ -42,6 +43,7 @@ public class Artent implements ModInitializer {
 	}
 
 	public void registerAll() {
+		ArgumentTypes.register();
 		StatusEffects.register();
 		Potions.register();
 		SpellRegistry.register();

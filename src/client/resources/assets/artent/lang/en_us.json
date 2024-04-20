@@ -210,5 +210,6 @@
   "artent.specialType.cursed": "Common",
   "artent.specialType.demonic": "Demonic",
   "artent.specialType.eldritch": "Eldritch",
-  "artent.specialType.wounded": "Wounded"
+  "artent.specialType.wounded": "Wounded",
+  "artent.argument.specialMobType.invalid": "Invalid special mob type specified"
 }

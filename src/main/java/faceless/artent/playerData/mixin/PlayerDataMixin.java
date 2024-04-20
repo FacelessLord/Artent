@@ -78,6 +78,11 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
 		}
 	}
 
+	@Override
+	public void restoreMana() {
+		getCasterInfo().restoreMana(this.asPlayer());
+		ArtentServerHook.packetSyncPlayerData(this.asPlayer());
+	}
 
 	@Override
 	public long getMoney() {

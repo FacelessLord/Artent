@@ -50,6 +50,8 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 	@Override
 	public void setLevel(int level) {
 		this.asEntity().getDataTracker().set(LEVEL, level);
+		updateLevelLabel();
+		setupAttributes();
 	}
 
 	@Override
@@ -106,6 +108,8 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 	@Override
 	public void setSpecialMobType(SpecialMobType type) {
 		this.asEntity().getDataTracker().set(SPECIAL_MOB_TYPE, type.ordinal());
+		updateLevelLabel();
+		setupAttributes();
 	}
 
 	@Override
@@ -150,37 +154,43 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	public void constructor(EntityType type, World world, CallbackInfo ci) {
-		var level = (int) Math.max(1, getBaseLevel() + (Math.random() * 2 - 1) * getLevelVariation());
-		setLevel(level);
-		var specialTypeRandom = new Random().nextFloat();
-		var specialType = SpecialMobType.Common;
+		if (!(this.asEntity() instanceof PlayerEntity)) {
+			var level = (int) Math.max(1, getBaseLevel() + (Math.random() * 2 - 1) * getLevelVariation());
+			setLevel(level);
+			var specialTypeRandom = new Random().nextFloat();
+			var specialType = SpecialMobType.Common;
 
-		if (specialTypeRandom > 0.8 && specialTypeRandom < 0.9)
-			specialType = SpecialMobType.Wounded;
-		if (specialTypeRandom > 0.9 && specialTypeRandom < 0.95)
-			specialType = SpecialMobType.Cursed;
-		if (specialTypeRandom > 0.95 && specialTypeRandom < 0.985)
-			specialType = SpecialMobType.Demonic;
-		if (specialTypeRandom > 0.985)
-			specialType = SpecialMobType.Eldritch;
-		setSpecialMobType(specialType);
+			if (specialTypeRandom > 0.8 && specialTypeRandom < 0.9)
+				specialType = SpecialMobType.Wounded;
+			if (specialTypeRandom > 0.9 && specialTypeRandom < 0.95)
+				specialType = SpecialMobType.Cursed;
+			if (specialTypeRandom > 0.95 && specialTypeRandom < 0.985)
+				specialType = SpecialMobType.Demonic;
+			if (specialTypeRandom > 0.985)
+				specialType = SpecialMobType.Eldritch;
+			setSpecialMobType(specialType);
 
-		if (!(asEntity() instanceof PlayerEntity)) {
-			var specialTypeString = specialType != SpecialMobType.Common ? specialType.name().toLowerCase() : "";
-			var labelText = MutableText.of(new PlainTextContent.Literal(""));
-			if (specialTypeString.length() > 0)
-				labelText = labelText
-				  .append(Text.translatable(Artent.MODID + ".specialType." + specialTypeString))
-				  .append(" ")
-				  .append(asEntity().getName())
-				  .append(" ");
-
-			labelText = labelText.append(Text.literal(String.valueOf(level)));
-
-			this.asEntity().setCustomName(labelText);
+			updateLevelLabel();
 		}
 
 		setupAttributes();
+	}
+
+	private void updateLevelLabel() {
+		int level = getLevel();
+		SpecialMobType specialType = getSpecialMobType();
+		var specialTypeString = specialType != SpecialMobType.Common ? specialType.name().toLowerCase() : "";
+		var labelText = MutableText.of(new PlainTextContent.Literal(""));
+		if (specialTypeString.length() > 0)
+			labelText = labelText
+			  .append(Text.translatable(Artent.MODID + ".specialType." + specialTypeString))
+			  .append(" ")
+			  .append(asEntity().getType().getName())
+			  .append(" ");
+
+		labelText = labelText.append(Text.literal(String.valueOf(level)));
+
+		this.asEntity().setCustomName(labelText);
 	}
 
 
@@ -216,18 +226,26 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 		var armorAttributeInstance = this.asEntity().getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
 
 		if (speedAttributeInstance != null) {
+			speedAttributeInstance.removeModifier(levelSpeedModifier.getId());
+			speedAttributeInstance.removeModifier(specialTypeSpeedModifier.getId());
 			speedAttributeInstance.addPersistentModifier(levelSpeedModifier);
 			speedAttributeInstance.addPersistentModifier(specialTypeSpeedModifier);
 		}
 		if (attackAttributeInstance != null) {
+			attackAttributeInstance.removeModifier(levelAttackModifier.getId());
+			attackAttributeInstance.removeModifier(specialTypeAttackModifier.getId());
 			attackAttributeInstance.addPersistentModifier(levelAttackModifier);
 			attackAttributeInstance.addPersistentModifier(specialTypeAttackModifier);
 		}
 		if (healthAttributeInstance != null) {
+			healthAttributeInstance.removeModifier(levelHealthModifier.getId());
+			healthAttributeInstance.removeModifier(specialTypeHealthModifier.getId());
 			healthAttributeInstance.addPersistentModifier(levelHealthModifier);
 			healthAttributeInstance.addPersistentModifier(specialTypeHealthModifier);
 		}
 		if (armorAttributeInstance != null) {
+			armorAttributeInstance.removeModifier(levelArmorModifier.getId());
+			armorAttributeInstance.removeModifier(specialTypeArmorModifier.getId());
 			armorAttributeInstance.addPersistentModifier(levelArmorModifier);
 			armorAttributeInstance.addPersistentModifier(specialTypeArmorModifier);
 		}
@@ -239,11 +257,13 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 		if (!nbt.contains("artent"))
 			return;
 		var artentTag = nbt.getCompound("artent");
-		var level = artentTag.getInt("level");
-		var specialType = artentTag.getInt("specialType");
+		if (!(this.asEntity() instanceof PlayerEntity)) {
+			var level = artentTag.getInt("level");
+			var specialType = artentTag.getInt("specialType");
 
-		setLevel(level);
-		setSpecialMobType(SpecialMobType.fromInt(specialType));
+			setLevel(level);
+			setSpecialMobType(SpecialMobType.fromInt(specialType));
+		}
 	}
 
 
@@ -251,8 +271,10 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
 	public void writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
 		var artentTag = new NbtCompound();
 
-		artentTag.putInt("level", getLevel());
-		artentTag.putInt("specialType", getSpecialMobType().ordinal());
+		if (!(this.asEntity() instanceof PlayerEntity)) {
+			artentTag.putInt("level", getLevel());
+			artentTag.putInt("specialType", getSpecialMobType().ordinal());
+		}
 
 		nbt.put("artent", artentTag);
 	}

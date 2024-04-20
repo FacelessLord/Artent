@@ -16,4 +16,15 @@ public enum SpecialMobType {
             default -> Common;
         };
     }
+
+    public static SpecialMobType fromName(String name){
+        return switch (name){
+            case "common" -> Common;
+            case "cursed" -> Cursed;
+            case "demonic" -> Demonic;
+            case "eldritch" -> Eldritch;
+            case "wounded" -> Wounded;
+            default -> null;
+        };
+    }
 }

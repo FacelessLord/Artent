@@ -183,6 +183,7 @@ public final class ModBlocks {
 		  .copyOf(Blocks.STONE)
 		  .nonOpaque()
 		  .noCollision()
+		  .solid()
 		  .collidable(false)
 		  .luminance(15));
 
