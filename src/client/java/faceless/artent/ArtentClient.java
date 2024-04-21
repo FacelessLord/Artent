@@ -84,6 +84,7 @@ public class ArtentClient implements ClientModInitializer {
 		EntityRendererRegistry.register(ModEntities.SPELL_PARTICLE, SpellParticleRenderer::new);
 		EntityRendererRegistry.register(ModEntities.LIGHT_SWORD, LightSwordProjectileEntityRenderer::new);
 		EntityRendererRegistry.register(ModEntities.SPRAY_ELEMENT_ENTITY, SprayParticleEntityRenderer::new);
+		EntityRendererRegistry.register(ModEntities.MAGE_ENTITY, MageEntityRenderer::new);
 		EntityModelLayerRegistry.registerModelLayer(SPRAY_PARTICLE_LAYER, SprayParticleEntityModel::getTexturedModelData);
 
 		ModelPredicateProviderRegistry.register(ModItems.MediumConcentrate, new Identifier("amount"),

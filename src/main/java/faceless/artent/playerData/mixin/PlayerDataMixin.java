@@ -11,11 +11,14 @@ import faceless.artent.playerData.api.HeroInfo;
 import faceless.artent.spells.api.CasterInfo;
 import faceless.artent.spells.api.CasterStorage;
 import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.item.WandItem;
 import faceless.artent.trading.api.TradeInfo;
 import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -158,6 +161,22 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
 	}
 
 	@Override
+	public int getMana() {
+		return getCasterInfo().mana;
+	}
+
+	@Override
+	public float getHealthProportion() {
+		var player = asPlayer();
+		return player.getHealth() / player.getMaxHealth();
+	}
+
+	@Override
+	public Spell getCurrentSpell() {
+		return WandItem.getActiveEntitySpell(asPlayer());
+	}
+
+	@Override
 	public boolean consumeMana(int mana) {
 		var player = (PlayerEntity) (Object) this;
 		var casterInfo = getCasterInfo();
@@ -177,6 +196,16 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
 	public UUID getCasterUuid() {
 		var player = (PlayerEntity) (Object) this;
 		return player.getUuid();
+	}
+
+	@Override
+	public Vec3d getCasterPosition() {
+		return asPlayer().getPos();
+	}
+
+	@Override
+	public Vec3d getCasterRotation() {
+		return asPlayer().getRotationVector();
 	}
 
 	public PlayerEntity asPlayer() {

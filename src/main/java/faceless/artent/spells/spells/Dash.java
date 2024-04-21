@@ -16,7 +16,7 @@ public class Dash extends Spell {
 		super.action(caster, world, stack, castTime);
 		if (!(caster instanceof Entity entity))
 			return;
-		var rotation = entity.getRotationVector();
+		var rotation = caster.getCasterRotation();
 		entity.setVelocity(rotation.multiply(1.25f + Math.min(castTime / 20f, 3f)));
 		entity.fallDistance = 0;
 	}

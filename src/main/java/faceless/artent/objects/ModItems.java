@@ -18,6 +18,7 @@ import faceless.artent.transmutations.item.Chalk;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
+import net.minecraft.item.SpawnEggItem;
 
 public final class ModItems {
 	public static final ArtentItem PhiloStone = new ArtentItem("philosophers_stone");
@@ -62,6 +63,10 @@ public final class ModItems {
 	public static StaffOfLight StaffOfLight = new StaffOfLight(new FabricItemSettings().maxCount(1));
 	public static SpellScroll SpellScroll = new SpellScroll(new FabricItemSettings().maxCount(1));
 	public static LightSword LightSword_SPECIAL = new LightSword();
+
+
+	public static final Item CrowSpawnEgg = new SpawnEggItem(ModEntities.CROW_ENTITY, 0x060e45, 0x020425, new FabricItemSettings());
+	public static final Item MageSpawnEgg = new SpawnEggItem(ModEntities.MAGE_ENTITY, 0x4b015f, 0x9501f2, new FabricItemSettings());
 
 	public static final ArtentItem[] Coins = new ArtentItem[]{
 		new ArtentItem("coin_bronze"),

@@ -1,9 +1,9 @@
 package faceless.artent.item;
 
-import faceless.artent.api.item.ArtentItem;
+import faceless.artent.spells.item.WandItem;
 import net.minecraft.item.Item;
 
-public class CrowStaff extends ArtentItem {
+public class CrowStaff extends WandItem {
 	public CrowStaff(Item.Settings settings) {
 		super(settings, "staff/crow_staff");
 	}

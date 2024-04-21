@@ -12,7 +12,7 @@
 			"rotation": [-45, 90, 0]
 		},
 		"firstperson_righthand": {
-			"rotation": [45, 90, 0]
+			"rotation": [-45, -90, 0]
 		},
 		"firstperson_lefthand": {
 			"rotation": [-45, 90, 0]

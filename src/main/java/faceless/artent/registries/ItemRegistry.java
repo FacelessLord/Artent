@@ -84,6 +84,8 @@ public final class ItemRegistry implements IRegistry {
         appendSpellScrollStacks(ModItems.SpellScroll, ModItemGroups.Main);
 
         register(ModItems.LightSword_SPECIAL);
+        register("crow_spawn_egg", ModItems.CrowSpawnEgg, ModItemGroups.Main);
+        register("mage_spawn_egg", ModItems.MageSpawnEgg, ModItemGroups.Main);
     }
 
     public void register(String itemId, Item item, ArtentItemGroupBuilder groupBuilder) {
