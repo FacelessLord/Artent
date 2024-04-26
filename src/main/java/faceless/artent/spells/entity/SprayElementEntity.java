@@ -58,11 +58,6 @@ public class SprayElementEntity extends ThrownEntity {
 		if (getLifeTimeLeft() <= 0)
 			discard();
 
-		if (getSprayElement() == SprayElement.Fire) {
-			this.setOnFire(true);
-			this.setOnFireFor(Integer.MAX_VALUE / 2);
-		}
-
 		if (getWorld().isClient)
 			return;
 		var world = getWorld();
@@ -196,7 +191,8 @@ public class SprayElementEntity extends ThrownEntity {
 					for (int k = -1; k < 2; k++) {
 						var offsetPos = blockPos.add(i, j, k);
 						var offsetState = getWorld().getBlockState(offsetPos);
-						if (offsetState.isAir()) {
+						var replaceable = offsetState.isReplaceable();
+						if (offsetState.isAir() || replaceable) {
 							getWorld().setBlockState(offsetPos, Blocks.FIRE.getDefaultState());
 						}
 					}

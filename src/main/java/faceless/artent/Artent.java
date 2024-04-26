@@ -30,6 +30,7 @@ public class Artent implements ModInitializer {
 	public static ItemPriceDeterminatorRegistry ItemPriceDeterminators = new ItemPriceDeterminatorRegistry();
 	public static SpellRegistry SpellRegistry = new SpellRegistry();
 	public static ArgumentTypesRegistry ArgumentTypes = new ArgumentTypesRegistry();
+	public static ParticleRegistry Particles = new ParticleRegistry();
 
 	@Override
 	public void onInitialize() {
@@ -51,6 +52,7 @@ public class Artent implements ModInitializer {
 		Items.register();
 		BlockEntities.register();
 		Entities.register();
+		Particles.register();
 		Transmutations.register();
 		ScreenHandlers.register();
 		Enhancers.register();

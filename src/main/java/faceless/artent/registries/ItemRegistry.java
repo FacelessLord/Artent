@@ -76,9 +76,9 @@ public final class ItemRegistry implements IRegistry {
         // staffs
         register(ModItems.CrowStaff, ModItemGroups.Main);
         register(ModItems.StaffOfLight, ModItemGroups.Main);
-        register(ModItems.Spellbook1, ModItemGroups.Main);
-        register(ModItems.Spellbook2, ModItemGroups.Main);
-        register(ModItems.Spellbook3, ModItemGroups.Main);
+        register(ModItems.NoviceSpellbook, ModItemGroups.Main);
+        register(ModItems.ApprenticeSpellbook, ModItemGroups.Main);
+        register(ModItems.MasterSpellbook, ModItemGroups.Main);
 
         register(ModItems.SpellScroll);
         appendSpellScrollStacks(ModItems.SpellScroll, ModItemGroups.Main);

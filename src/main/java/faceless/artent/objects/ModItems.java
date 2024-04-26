@@ -57,9 +57,9 @@ public final class ModItems {
 	public static Item BigConcentrate = new BigConcentrate(new Item.Settings().maxCount(1));
 	public static DarkBook DarkBook = new DarkBook(new Item.Settings().maxCount(1));
 	public static CrowStaff CrowStaff = new CrowStaff(new Item.Settings().maxCount(1));
-	public static SpellBook Spellbook1 = new SpellBook(1, new Item.Settings().maxCount(1));
-	public static SpellBook Spellbook2 = new SpellBook(2, new Item.Settings().maxCount(1));
-	public static SpellBook Spellbook3 = new SpellBook(3, new Item.Settings().maxCount(1));
+	public static SpellBook NoviceSpellbook = new SpellBook(1, new Item.Settings().maxCount(1));
+	public static SpellBook ApprenticeSpellbook = new SpellBook(2, new Item.Settings().maxCount(1));
+	public static SpellBook MasterSpellbook = new SpellBook(3, new Item.Settings().maxCount(1));
 	public static StaffOfLight StaffOfLight = new StaffOfLight(new FabricItemSettings().maxCount(1));
 	public static SpellScroll SpellScroll = new SpellScroll(new FabricItemSettings().maxCount(1));
 	public static LightSword LightSword_SPECIAL = new LightSword();

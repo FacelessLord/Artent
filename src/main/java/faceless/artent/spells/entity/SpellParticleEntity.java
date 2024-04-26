@@ -11,6 +11,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
@@ -75,7 +76,7 @@ public class SpellParticleEntity extends ThrownEntity {
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         setSpellId(nbt.getString("Spell"));
-        ItemStack wandStack = ItemStack.fromNbt(nbt.getCompound("Item"));
+        ItemStack wandStack = ItemStack.fromNbt(nbt.getCompound("WandStack"));
         var casterUuid = nbt.getUuid("Caster");
 
         var player = CasterStorage.getCasterById(getWorld(), casterUuid);
@@ -105,6 +106,16 @@ public class SpellParticleEntity extends ThrownEntity {
                     1);
             this.discard();
         }
+    }
+
+    @Override
+    public void onRemoved() {
+        super.onRemoved();
+    }
+
+    @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
+        super.onSpawnPacket(packet);
     }
 
     @Override

@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ProjectileSpell extends Spell {
-    public ProjectileSpell(String id, int baseCost) {
-        super(id, ActionType.SingleCast | ActionType.BlockCast, baseCost);
-    }
+	public ProjectileSpell(String id, int baseCost) {
+		super(id, ActionType.SingleCast | ActionType.BlockCast, baseCost);
+	}
 
     public void action(ICaster caster, World world, ItemStack stack, int castTime) {
         if (!world.isClient) {
@@ -18,9 +18,9 @@ public class ProjectileSpell extends Spell {
             projectile.setCaster(caster);
             projectile.setSpell(this);
             projectile.setWandStack(stack);
-            projectile.setPosition(caster.getCasterPosition().add(caster.getCasterPosition()).add(0, 1.5f, 0));
+            projectile.setPosition(caster.getCasterPosition().add(caster.getCasterRotation()).add(0, 1.5f, 0));
             var useTimeCoefficient = 1 + castTime / 10f; // TODO мб поднимать не скорость, а количетсво снарядов
-            projectile.setVelocity(caster.getCasterPosition().multiply(useTimeCoefficient));
+            projectile.setVelocity(caster.getCasterRotation().multiply(useTimeCoefficient));
             world.spawnEntity(projectile);
         }
     }

@@ -91,7 +91,7 @@ public class WandItem extends ArtentItem implements ISharpenable {
 		} else {
 			var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
 			if (caster.consumeMana(manaToConsume))
-				spell.action(caster, user.getWorld(), stack, actionTime);
+				spell.action(caster, world, stack, actionTime);
 		}
 	}
 

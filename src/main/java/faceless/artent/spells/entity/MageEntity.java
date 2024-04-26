@@ -104,9 +104,9 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 
 	protected PlayState rotationController(final AnimationState<MageEntity> event) {
 		return switch (getAnimationState()) {
-			case Stand -> event.setAndContinue(STAND_ANIMATION);
+			case Stand -> event.setAndContinue(WALK_ANIMATION);
 			case Walk -> event.setAndContinue(WALK_ANIMATION);
-			case Cast -> event.setAndContinue(CAST_ANIMATION);
+			case Cast -> event.setAndContinue(WALK_ANIMATION);
 			default -> event.setAndContinue(STAND_ANIMATION);
 		};
 	}
@@ -123,7 +123,12 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 
 	@Override
 	public ItemStack getEquippedStack(EquipmentSlot slot) {
-		return new ItemStack(ModItems.StaffOfLight, 1);
+		return switch (slot){
+			case MAINHAND -> new ItemStack(ModItems.StaffOfLight, 1);
+			case OFFHAND -> new ItemStack(ModItems.ApprenticeSpellbook, 1);
+			default -> ItemStack.EMPTY;
+		};
+
 	}
 
 	@Override
