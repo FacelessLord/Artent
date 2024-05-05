@@ -52,6 +52,8 @@
   "item.artent.staff.crow_staff": "Посох Ворон",
   "item.artent.staff.staff_of_light": "Посох Света",
   "item.artent.spell_scroll": "Свиток заклинания",
+  "item.artent.mage_spawn_egg": "Яйцо призыва мага",
+  "item.artent.crow_spawn_egg": "Яйцо призыва ворона",
   "item.concentrate.small.artent.liquid_flame": "Маленький концентрат Зелья Жидкого огня",
   "item.concentrate.small.artent.holy_water": "Маленький концентрат Святой воды",
   "item.concentrate.small.artent.poison": "Маленький концентрат Яда",
@@ -210,5 +212,8 @@
   "artent.specialType.cursed": "Проклятый",
   "artent.specialType.demonic": "Демонический",
   "artent.specialType.eldritch": "Древний",
-  "artent.specialType.wounded": "Раненый"
+  "artent.specialType.wounded": "Раненый",
+  "artent.argument.specialMobType.invalid": "Invalid special mob type specified",
+  "entity.artent.mage": "Маг",
+  "entity.artent.crow": "Ворон"
 }

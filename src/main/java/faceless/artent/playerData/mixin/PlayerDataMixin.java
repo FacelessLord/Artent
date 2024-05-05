@@ -18,6 +18,7 @@ import faceless.artent.trading.inventory.TraderSellInventory;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -173,7 +174,14 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
 
 	@Override
 	public Spell getCurrentSpell() {
-		return WandItem.getActiveEntitySpell(asPlayer());
+		var player = this.asPlayer();
+		var mainHand = WandItem.getSelectedSpell(player, Hand.MAIN_HAND);
+		var offHand = WandItem.getSelectedSpell(player, Hand.OFF_HAND);
+		if (mainHand == null && offHand == null)
+			return null;
+		if (mainHand != null)
+			return mainHand;
+		return offHand;
 	}
 
 	@Override

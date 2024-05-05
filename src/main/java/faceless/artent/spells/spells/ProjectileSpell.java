@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 
 public class ProjectileSpell extends Spell {
 	public ProjectileSpell(String id, int baseCost) {
-		super(id, ActionType.SingleCast | ActionType.BlockCast, baseCost);
+		super(id, ActionType.SingleCast | ActionType.BlockCast, baseCost, 5);
 	}
 
     public void action(ICaster caster, World world, ItemStack stack, int castTime) {

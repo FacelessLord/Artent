@@ -17,7 +17,7 @@ public class SpraySpell extends Spell {
 	public boolean isHurricane = false;
 
 	public SpraySpell(String id, SprayElementEntity.SprayElement element, int baseCost) {
-		super(id, ActionType.Tick, baseCost);
+		super(id, ActionType.Tick, baseCost, 20);
 		this.element = element;
 	}
 
@@ -35,8 +35,9 @@ public class SpraySpell extends Spell {
 				var randomRange = Math.random();
 				var sin = Math.sin(randomAngle) * randomRange;
 				var cos = Math.cos(randomAngle) * randomRange;
+				var randomDist = Math.random() * 0.25f;
 
-				var offsetVector = e2.multiply(sin).add(e3.multiply(cos));
+				var offsetVector = e2.multiply(sin).add(e3.multiply(cos)).add(e1.multiply(randomDist));
 				var startPos = living.getPos().add(offsetVector).add(0, 1.75f, 0);
 
 				var particle = new SprayElementEntity(ModEntities.SPRAY_ELEMENT_ENTITY, world);
@@ -73,8 +74,9 @@ public class SpraySpell extends Spell {
 				var randomRange = Math.random();
 				var sin = Math.sin(randomAngle) * randomRange;
 				var cos = Math.cos(randomAngle) * randomRange;
+				var randomDist = Math.random() * 3;
 
-				var offsetVector = e2.multiply(sin).add(e3.multiply(cos));
+				var offsetVector = e2.multiply(sin).add(e3.multiply(cos)).add(e1.multiply(randomDist));
 				var startPos = living.getPos().add(offsetVector).add(0, 1.75f, 0);
 				var velocity = e1.add(offsetVector.multiply(0.4f)).multiply(0.4f);
 				var position = startPos.add(e1.multiply(1.5f));

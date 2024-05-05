@@ -52,6 +52,8 @@
   "item.artent.staff.crow_staff": "Staff of Crows",
   "item.artent.staff.staff_of_light": "Staff of Light",
   "item.artent.spell_scroll": "Spell Scroll",
+  "item.artent.mage_spawn_egg": "Mage spawn egg",
+  "item.artent.crow_spawn_egg": "Crow spawn egg",
   "item.concentrate.small.artent.liquid_flame": "Small Liquid Flame Potion Concentrate",
   "item.concentrate.small.artent.holy_water": "Small Holy Water Concentrate",
   "item.concentrate.small.artent.poison": "Small Poison Concentrate",
@@ -211,5 +213,7 @@
   "artent.specialType.demonic": "Demonic",
   "artent.specialType.eldritch": "Eldritch",
   "artent.specialType.wounded": "Wounded",
-  "artent.argument.specialMobType.invalid": "Invalid special mob type specified"
+  "artent.argument.specialMobType.invalid": "Invalid special mob type specified",
+  "entity.artent.mage": "Mage",
+  "entity.artent.crow": "Crow"
 }

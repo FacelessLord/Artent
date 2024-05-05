@@ -147,6 +147,9 @@ public class SprayElementEntity extends ThrownEntity {
 			if (entity instanceof EndermanEntity enderman) {
 				enderman.damage(damageSource, caster.getPotency());
 			}
+			if (entity.isOnFire()) {
+				entity.extinguish();
+			}
 		}
 		discard();
 	}
@@ -185,20 +188,20 @@ public class SprayElementEntity extends ThrownEntity {
 				}
 			}
 		}
-		if (getSprayElement() == SprayElement.Fire && !world.isClient) {
-			for (int i = -1; i < 2; i++) {
-				for (int j = -1; j < 2; j++) {
-					for (int k = -1; k < 2; k++) {
-						var offsetPos = blockPos.add(i, j, k);
-						var offsetState = getWorld().getBlockState(offsetPos);
-						var replaceable = offsetState.isReplaceable();
-						if (offsetState.isAir() || replaceable) {
-							getWorld().setBlockState(offsetPos, Blocks.FIRE.getDefaultState());
-						}
-					}
-				}
-			}
-		}
+//		if (getSprayElement() == SprayElement.Fire && !world.isClient) {
+//			for (int i = -1; i < 2; i++) {
+//				for (int j = -1; j < 2; j++) {
+//					for (int k = -1; k < 2; k++) {
+//						var offsetPos = blockPos.add(i, j, k);
+//						var offsetState = getWorld().getBlockState(offsetPos);
+//						var replaceable = offsetState.isReplaceable();
+//						if (offsetState.isAir() || replaceable) {
+//							getWorld().setBlockState(offsetPos, Blocks.FIRE.getDefaultState());
+//						}
+//					}
+//				}
+//			}
+//		}
 
 		discard();
 	}

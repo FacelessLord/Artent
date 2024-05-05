@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 public class WormHole extends Spell {
 	public WormHole() {
-		super("wormhole", ActionType.BlockCast, 8);
+		super("wormhole", ActionType.BlockCast, 8, 30);
 	}
 
 	@Override

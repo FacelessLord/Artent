@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 
 public class Gust extends Spell {
 	public Gust() {
-		super("gust", ActionType.SingleCast, 5);
+		super("gust", ActionType.SingleCast, 5, 10);
 	}
 
 	@Override

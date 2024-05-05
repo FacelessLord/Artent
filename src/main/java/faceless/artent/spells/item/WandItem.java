@@ -13,7 +13,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,8 @@ public class WandItem extends ArtentItem implements ISharpenable {
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
 		var stack = player.getStackInHand(hand);
-		var spell = getActiveEntitySpell(player);
+
+		var spell = ((ICaster) player).getCurrentSpell();
 		if (spell == null)
 			return TypedActionResult.fail(stack);
 
@@ -52,7 +52,7 @@ public class WandItem extends ArtentItem implements ISharpenable {
 			return TypedActionResult.fail(stack);
 		}
 
-		if ((spell.type & (Spell.ActionType.SingleCast | Spell.ActionType.Tick)) > 0) {
+		if (spell.isSingleCastAction() || spell.isTickAction()) {
 			player.setCurrentHand(hand);
 			return TypedActionResult.consume(stack);
 		}
@@ -80,9 +80,9 @@ public class WandItem extends ArtentItem implements ISharpenable {
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (!(user instanceof ICaster caster)) return;
 
-		var spell = getActiveEntitySpell(user);
+		var spell = caster.getCurrentSpell();
 		if (spell == null) return;
-		if ((spell.type & Spell.ActionType.SingleCast) == 0)
+		if (!spell.isSingleCastAction())
 			return;
 
 		var actionTime = getMaxUseTime(stack) - remainingUseTicks; // TODO minimal spellcast time
@@ -96,49 +96,34 @@ public class WandItem extends ArtentItem implements ISharpenable {
 	}
 
 	public void usageTick(World world, LivingEntity living, ItemStack stack, int remainingUseTicks) {
-		var spell = getActiveEntitySpell(living);
+		if (!(living instanceof ICaster caster))
+			return;
+		var spell = caster.getCurrentSpell();
 		if (spell == null) return;
 
-		if (living instanceof PlayerEntity player) {
-			var actionTime = getMaxUseTime(stack) - remainingUseTicks;
-			var caster = DataUtil.asCaster(player);
+		var actionTime = getMaxUseTime(stack) - remainingUseTicks;
 
-			if ((spell.type & Spell.ActionType.Tick) == 0)
-				return;
+		if (!spell.isTickAction())
+			return;
 
-			var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
-			SpellActionResult result = null;
+		var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+		SpellActionResult result = null;
 
-			if (caster.consumeMana(manaToConsume))
-				result = spell.spellTick(caster,
-				  world,
-				  stack,
-				  actionTime);
-			if (result == null) {
-				player.stopUsingItem();
-				return;
-			}
-			if (result.type == SpellActionResultType.Stop || result.type == SpellActionResultType.Recoil) {
-				player.clearActiveItem();
-			}
-			if (result.type == SpellActionResultType.Recoil) {
-				spell.onRecoil(caster, world, stack, actionTime);
-			}
+		if (caster.consumeMana(manaToConsume))
+			result = spell.spellTick(caster,
+			  world,
+			  stack,
+			  actionTime);
+		if (result == null) {
+			living.stopUsingItem();
+			return;
 		}
-	}
-
-	@Nullable
-	public static Spell getActiveEntitySpell(LivingEntity user) {
-		if (user instanceof PlayerEntity player) {
-			var mainHand = getSelectedSpell(player, Hand.MAIN_HAND);
-			var offHand = getSelectedSpell(player, Hand.OFF_HAND);
-			if (mainHand == null && offHand == null)
-				return null;
-			if (mainHand != null)
-				return mainHand;
-			return offHand;
+		if (result.type == SpellActionResultType.Stop || result.type == SpellActionResultType.Recoil) {
+			living.clearActiveItem();
 		}
-		return null;
+		if (result.type == SpellActionResultType.Recoil) {
+			spell.onRecoil(caster, world, stack, actionTime);
+		}
 	}
 
 	@Override
@@ -158,7 +143,7 @@ public class WandItem extends ArtentItem implements ISharpenable {
 		if (spell == null)
 			return ActionResult.FAIL;
 
-		if ((spell.type & Spell.ActionType.BlockCast) == 0) {
+		if (!spell.isBlockCastAction()) {
 			return ActionResult.PASS;
 		} // TODO recoil
 

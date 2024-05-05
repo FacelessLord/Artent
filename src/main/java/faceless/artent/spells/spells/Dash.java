@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class Dash extends Spell {
 	public Dash() {
-		super("dash", ActionType.SingleCast, 5);
+		super("dash", ActionType.SingleCast, 5, 10);
 	}
 
 	@Override
