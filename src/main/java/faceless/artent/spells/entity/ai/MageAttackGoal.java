@@ -55,7 +55,6 @@ public class MageAttackGoal extends Goal {
 	public void start() {
 		super.start();
 		castTime = 0;
-		mage.setIsCasting(true);
 	}
 
 	@Override
@@ -174,7 +173,6 @@ public class MageAttackGoal extends Goal {
 	@Override
 	public void stop() {
 		super.stop();
-		mage.setIsCasting(false);
 		mage.clearActiveItem();
 		this.targetSeeingTicker = 0;
 		this.cooldown = -1;

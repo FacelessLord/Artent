@@ -36,19 +36,17 @@ import java.util.UUID;
 
 public class MageEntity extends HostileEntity implements ICaster, GeoEntity, RangedAttackMob {
 	protected static final RawAnimation STAND_ANIMATION = RawAnimation.begin().thenLoop("animation.mage.stand");
-	protected static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.walk");
+	protected static final RawAnimation WALK_LEGS_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.walk_legs");
+	protected static final RawAnimation WALK_HANDS_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.walk_hands");
 	protected static final RawAnimation CAST_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.cast");
-
-	private static final TrackedData<String> ANIMATION_STATE = DataTracker.registerData(MageEntity.class,
-	  TrackedDataHandlerRegistry.STRING);
+	protected static final RawAnimation START_CAST_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.start_cast");
 	private static final TrackedData<Integer> MANA = DataTracker.registerData(MageEntity.class,
 	  TrackedDataHandlerRegistry.INTEGER);
 
-	public UUID mageId;
-	private int maxMana = 100;
-	private boolean isCasting = false;
+	private static final int MAX_MANA_BASE = 100;
 	private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 	public Spell[] spells;
+	public UUID mageId;
 
 	public MageEntity(EntityType<MageEntity> entityType, World world) {
 		super(entityType, world);
@@ -73,7 +71,6 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 	protected void initDataTracker() {
 		super.initDataTracker();
 		getDataTracker().startTracking(MANA, 0);
-		getDataTracker().startTracking(ANIMATION_STATE, MageAnimationState.Stand.name());
 	}
 
 	public static DefaultAttributeContainer.Builder createLivingAttributes() {
@@ -88,27 +85,31 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 		  .add(EntityAttributes.GENERIC_MAX_ABSORPTION);
 	}
 
-
-	public MageAnimationState getAnimationState() {
-		return MageAnimationState.valueOf(getDataTracker().get(ANIMATION_STATE));
-	}
-
-	public void setAnimationState(MageAnimationState state) {
-		getDataTracker().set(ANIMATION_STATE, state.name());
-	}
-
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "ROTATION", 5, this::rotationController));
+		controllers.add(new AnimationController<>(this, "HANDS", 5, this::handsController));
+		controllers.add(new AnimationController<>(this, "LEGS", 5, this::legsController));
 	}
 
-	protected PlayState rotationController(final AnimationState<MageEntity> event) {
-		return switch (getAnimationState()) {
-			case Stand -> event.setAndContinue(STAND_ANIMATION);
-			case Walk -> event.setAndContinue(WALK_ANIMATION);
-			case Cast -> event.setAndContinue(CAST_ANIMATION);
-			default -> event.setAndContinue(STAND_ANIMATION);
-		};
+	protected PlayState handsController(final AnimationState<MageEntity> event) {
+		var mage = event.getAnimatable();
+		if (mage.isUsingItem()) {
+			if (mage.getItemUseTime() < 10)
+				return event.setAndContinue(START_CAST_ANIMATION);
+			return event.setAndContinue(CAST_ANIMATION);
+		}
+
+		if (mage.getVelocity().length() > 0.2)
+			return event.setAndContinue(WALK_HANDS_ANIMATION);
+
+		return event.setAndContinue(STAND_ANIMATION);
+	}
+
+	protected PlayState legsController(final AnimationState<MageEntity> event) {
+		var mage = event.getAnimatable();
+		if (mage.getVelocity().length() > 0.1)
+			return event.setAndContinue(WALK_LEGS_ANIMATION);
+		return event.setAndContinue(STAND_ANIMATION);
 	}
 
 	@Override
@@ -175,22 +176,12 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 		return getPos();
 	}
 
-	public void setIsCasting(boolean isCasting) {
-		this.isCasting = isCasting;
-	}
 
 	@Override
 	public void tick() {
 		super.tick();
 		if (getMana() < getMaxMana()) {
 			setMana(Math.min(getMaxMana(), getMana() + ((ILeveledMob) this).getLevel()));
-		}
-		if (isUsingItem()) {
-			setAnimationState(MageAnimationState.Cast);
-		} else if (getVelocity().length() > 0.2) {
-			setAnimationState(MageAnimationState.Walk);
-		} else {
-			setAnimationState(MageAnimationState.Stand);
 		}
 	}
 
@@ -199,9 +190,6 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 		super.writeCustomDataToNbt(nbt);
 		nbt.putUuid("mageId", mageId);
 		nbt.putInt("mana", getMana());
-		nbt.putInt("maxMana", getMaxMana());
-		nbt.putString("animationState", getAnimationState().name());
-		nbt.putBoolean("isCasting", isCasting);
 	}
 
 	@Override
@@ -209,28 +197,10 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 		super.readCustomDataFromNbt(nbt);
 		mageId = nbt.contains("mageId") ? nbt.getUuid("mageId") : UUID.randomUUID();
 		setMana(nbt.getInt("mana"));
-		setMaxMana(nbt.getInt("maxMana"));
-		isCasting = nbt.getBoolean("isCasting");
-		var stateString = nbt.getString("animationState");
-		try {
-			if (stateString.length() > 0) {
-				var state = MageAnimationState.valueOf(stateString);
-				setAnimationState(state);
-			} else {
-				setAnimationState(MageAnimationState.Stand);
-			}
-		} catch (Exception e) {
-			setAnimationState(MageAnimationState.Stand);
-			System.err.println("Can't parse mage animation state: " + stateString);
-		}
 	}
 
 	public int getMaxMana() {
-		return 100 * ((ILeveledMob) this).getLevel();
-	}
-
-	public void setMaxMana(int maxMana) {
-		this.maxMana = maxMana;
+		return MAX_MANA_BASE * ((ILeveledMob) this).getLevel();
 	}
 
 	@Override
@@ -255,11 +225,5 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 	@Override
 	public void shootAt(LivingEntity target, float pullProgress) {
 
-	}
-
-	public static enum MageAnimationState {
-		Stand,
-		Walk,
-		Cast
 	}
 }
