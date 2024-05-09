@@ -49,39 +49,43 @@ public class ArtentServerHook {
                 blockEntity.markDirty();
             });
         });
-        ServerPlayNetworking.registerGlobalReceiver(REMOVE_CIRCLE_PACKET_ID, (server, player, handler, buffer, sender) -> {
-            BlockPos pos = buffer.readBlockPos();
+        ServerPlayNetworking.registerGlobalReceiver(REMOVE_CIRCLE_PACKET_ID,
+                                                    (server, player, handler, buffer, sender) -> {
+                                                        BlockPos pos = buffer.readBlockPos();
 
-            // Server sided code
-            server.execute(() -> {
-                var world = player.getWorld();
-                if (world == null)
-                    return;
-                var state = world.getBlockState(pos);
-                if (state.getBlock() != ModBlocks.AlchemicalCircle)
-                    return;
+                                                        // Server sided code
+                                                        server.execute(() -> {
+                                                            var world = player.getWorld();
+                                                            if (world == null)
+                                                                return;
+                                                            var state = world.getBlockState(pos);
+                                                            if (state.getBlock() != ModBlocks.AlchemicalCircle)
+                                                                return;
 
-                world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
-            });
-        });
-        ServerPlayNetworking.registerGlobalReceiver(DAMAGE_CHALK_PACKET_ID, (server, player, handler, buffer, sender) -> {
-            var playerUuid = buffer.readUuid();
+                                                            world.setBlockState(pos,
+                                                                                Blocks.AIR.getDefaultState(),
+                                                                                Block.NOTIFY_ALL);
+                                                        });
+                                                    });
+        ServerPlayNetworking.registerGlobalReceiver(DAMAGE_CHALK_PACKET_ID,
+                                                    (server, player, handler, buffer, sender) -> {
+                                                        var playerUuid = buffer.readUuid();
 
-            if (!player.getUuid().equals(playerUuid))
-                return;
-            // Server sided code
-            server.execute(() -> {
-                var world = player.getWorld();
-                if (world == null)
-                    return;
+                                                        if (!player.getUuid().equals(playerUuid))
+                                                            return;
+                                                        // Server sided code
+                                                        server.execute(() -> {
+                                                            var world = player.getWorld();
+                                                            if (world == null)
+                                                                return;
 
-                if (damageChalk(player, Hand.MAIN_HAND)) {
-                    player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
-                } else if (damageChalk(player, Hand.OFF_HAND)) {
-                    player.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
-                }
-            });
-        });
+                                                            if (damageChalk(player, Hand.MAIN_HAND)) {
+                                                                player.setStackInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                                            } else if (damageChalk(player, Hand.OFF_HAND)) {
+                                                                player.setStackInHand(Hand.OFF_HAND, ItemStack.EMPTY);
+                                                            }
+                                                        });
+                                                    });
         ServerPlayNetworking.registerGlobalReceiver(SELL_ITEMS_PACKET_ID, (server, player, handler, buffer, sender) -> {
             var playerUuid = buffer.readUuid();
             var money = buffer.readLong();
@@ -128,9 +132,14 @@ public class ArtentServerHook {
     public static boolean damageChalk(PlayerEntity player, Hand hand) {
         var mainHand = player.getStackInHand(hand);
         return !player.isCreative()
-                && !mainHand.isEmpty()
-                && mainHand.getItem() == ModItems.Chalk
-                && mainHand.damage(1, player.getWorld().getRandom(), player instanceof ServerPlayerEntity serverPlayer ? serverPlayer : null);
+               &&
+               !mainHand.isEmpty()
+               &&
+               mainHand.getItem() == ModItems.Chalk
+               &&
+               mainHand.damage(1,
+                               player.getWorld().getRandom(),
+                               player instanceof ServerPlayerEntity serverPlayer ? serverPlayer : null);
     }
 
     public static void packetOpenCircleGui(PlayerEntity player, AlchemicalCircleEntity entity) {

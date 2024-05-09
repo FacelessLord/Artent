@@ -21,139 +21,139 @@ import java.util.List;
 import java.util.Map;
 
 public class ActionBurningAir extends Transmutation {
-	private static final int PACKET_SIZE = 200;
-	private static final int CHECK_FREQUENCY = 20;
-	public Lazy<Map<Item, Integer>> fuelTimeMap = new Lazy<>(AbstractFurnaceBlockEntity::createFuelTimeMap);
+    private static final int PACKET_SIZE = 200;
+    private static final int CHECK_FREQUENCY = 20;
+    public Lazy<Map<Item, Integer>> fuelTimeMap = new Lazy<>(AbstractFurnaceBlockEntity::createFuelTimeMap);
 
-	public ActionBurningAir() {
-		super("circle.burning_air", (facing, entity, playerEntity) -> {
-		});
-		this.setTickAction((facing, e, p, tick) -> {
-			int fuel = e.circleTag.getInt("furnaceFuel");
-			var center = e.getPos().toCenterPos();
-			Box box = new Box(center.add(-1.5f, -1.5f, -1.5f), center.add(1.5f, 1.5f, 1.5f));
-			var world = e.getWorld();
+    public ActionBurningAir() {
+        super("circle.burning_air", (facing, entity, playerEntity) -> {
+        });
+        this.setTickAction((facing, e, p, tick) -> {
+            int fuel = e.circleTag.getInt("furnaceFuel");
+            var center = e.getPos().toCenterPos();
+            Box box = new Box(center.add(-1.5f, -1.5f, -1.5f), center.add(1.5f, 1.5f, 1.5f));
+            var world = e.getWorld();
 
-			if (world == null)
-				return false;
+            if (world == null)
+                return false;
 
-			List<ItemEntity> entityList = world.getEntitiesByType(EntityType.ITEM, box, ie -> true);
+            List<ItemEntity> entityList = world.getEntitiesByType(EntityType.ITEM, box, ie -> true);
 
-			fuel += entityList.stream().map(ei -> {
-				int fuelValue = fuelTimeMap.get().getOrDefault(ei.getStack().getItem(), 0);
-				if (fuelValue > 0) {
-					int result = fuelValue * ei.getStack().getCount();
-					ei.setDespawnImmediately();
-					return result;
-				}
-				return 0;
-			}).reduce(Integer::sum).orElse(0);
+            fuel += entityList.stream().map(ei -> {
+                int fuelValue = fuelTimeMap.get().getOrDefault(ei.getStack().getItem(), 0);
+                if (fuelValue > 0) {
+                    int result = fuelValue * ei.getStack().getCount();
+                    ei.setDespawnImmediately();
+                    return result;
+                }
+                return 0;
+            }).reduce(Integer::sum).orElse(0);
 
-			fuel += e.boundEntities
-				.stream()
-				.map(Pair::getLeft)
-				.filter(be -> be instanceof FurnaceBlockEntity)
-				.map(f -> (FurnaceBlockEntity) f)
-				.filter(f -> f.getStack(1).getCount() > 0)
-				.map(f -> {
-					int fuelValue = fuelTimeMap.get().getOrDefault(f.getStack(1).getItem(), 0);
-					if (fuelValue > 0) {
-						int result = fuelValue * f.getStack(1).getCount();
-						f.setStack(1, ItemStack.EMPTY);
-						return result;
-					}
-					return 0;
-				})
-				.reduce(Integer::sum)
-				.orElse(0) * 3 / 2;
-			if (tick % CHECK_FREQUENCY == 0) {
-				fuel -= e.boundEntities
-					.stream()
-					.map(Pair::getLeft)
-					.filter(be -> be instanceof FurnaceBlockEntity)
-					.map(be -> (FurnaceBlockEntity) be)
-					.filter(f -> getBurnTime(f) <= 20 && canAcceptRecipeOutput(f, getRecipeFor(f)))
-					.map(f -> {
-						addBurnTime(f, PACKET_SIZE + 10);
-						return PACKET_SIZE;
-					})
-					.reduce(Integer::sum)
-					.orElse(0);
-			}
+            fuel += e.boundEntities
+                      .stream()
+                      .map(Pair::getLeft)
+                      .filter(be -> be instanceof FurnaceBlockEntity)
+                      .map(f -> (FurnaceBlockEntity) f)
+                      .filter(f -> f.getStack(1).getCount() > 0)
+                      .map(f -> {
+                          int fuelValue = fuelTimeMap.get().getOrDefault(f.getStack(1).getItem(), 0);
+                          if (fuelValue > 0) {
+                              int result = fuelValue * f.getStack(1).getCount();
+                              f.setStack(1, ItemStack.EMPTY);
+                              return result;
+                          }
+                          return 0;
+                      })
+                      .reduce(Integer::sum)
+                      .orElse(0) * 3 / 2;
+            if (tick % CHECK_FREQUENCY == 0) {
+                fuel -= e.boundEntities
+                  .stream()
+                  .map(Pair::getLeft)
+                  .filter(be -> be instanceof FurnaceBlockEntity)
+                  .map(be -> (FurnaceBlockEntity) be)
+                  .filter(f -> getBurnTime(f) <= 20 && canAcceptRecipeOutput(f, getRecipeFor(f)))
+                  .map(f -> {
+                      addBurnTime(f, PACKET_SIZE + 10);
+                      return PACKET_SIZE;
+                  })
+                  .reduce(Integer::sum)
+                  .orElse(0);
+            }
 
-			e.circleTag.putInt("furnaceFuel", fuel);
-			return fuel <= 0;
-		});
-		this.setPrepCol(new Color(255, 140, 80));
-		this.setActCol(new Color(255, 80, 40));
-	}
+            e.circleTag.putInt("furnaceFuel", fuel);
+            return fuel <= 0;
+        });
+        this.setPrepCol(new Color(255, 140, 80));
+        this.setActCol(new Color(255, 80, 40));
+    }
 
-	private Recipe<?> getRecipeFor(FurnaceBlockEntity f) {
-		if (f.hasWorld())
-			//noinspection DataFlowIssue
-			return f
-				.getWorld()
-				.getRecipeManager()
-				.getFirstMatch(RecipeType.SMELTING, f, f.getWorld())
-				.map(RecipeEntry::value)
-				.orElse(null);
-		return null;
-	}
+    private Recipe<?> getRecipeFor(FurnaceBlockEntity f) {
+        if (f.hasWorld())
+            //noinspection DataFlowIssue
+            return f
+              .getWorld()
+              .getRecipeManager()
+              .getFirstMatch(RecipeType.SMELTING, f, f.getWorld())
+              .map(RecipeEntry::value)
+              .orElse(null);
+        return null;
+    }
 
-	private int getBurnTime(FurnaceBlockEntity f) {
-		try {
-			Field b = AbstractFurnaceBlockEntity.class.getDeclaredField("burnTime");
-			b.setAccessible(true);
-			return (int) b.get(f);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
+    private int getBurnTime(FurnaceBlockEntity f) {
+        try {
+            Field b = AbstractFurnaceBlockEntity.class.getDeclaredField("burnTime");
+            b.setAccessible(true);
+            return (int) b.get(f);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
-	private void addBurnTime(FurnaceBlockEntity f, @SuppressWarnings("SameParameterValue") int value) {
-		try {
-			Field b = AbstractFurnaceBlockEntity.class.getDeclaredField("burnTime");
-			b.setAccessible(true);
-			b.set(f, value);
-			var world = f.getWorld();
-			if (world == null)
-				return;
+    private void addBurnTime(FurnaceBlockEntity f, @SuppressWarnings("SameParameterValue") int value) {
+        try {
+            Field b = AbstractFurnaceBlockEntity.class.getDeclaredField("burnTime");
+            b.setAccessible(true);
+            b.set(f, value);
+            var world = f.getWorld();
+            if (world == null)
+                return;
 
-			world.setBlockState(
-				f.getPos(),
-				f.getWorld().getBlockState(f.getPos()).with(AbstractFurnaceBlock.LIT, true),
-				3);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
+            world.setBlockState(
+              f.getPos(),
+              f.getWorld().getBlockState(f.getPos()).with(AbstractFurnaceBlock.LIT, true),
+              3);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public boolean canAcceptRecipeOutput(AbstractFurnaceBlockEntity inventory, Recipe<?> recipe) {
-		if (!inventory.getStack(0).isEmpty() && recipe != null) {
-			var world = inventory.getWorld();
-			if (world == null)
-				return false;
+    public boolean canAcceptRecipeOutput(AbstractFurnaceBlockEntity inventory, Recipe<?> recipe) {
+        if (!inventory.getStack(0).isEmpty() && recipe != null) {
+            var world = inventory.getWorld();
+            if (world == null)
+                return false;
 
-			var registryManager = world.getRegistryManager();
-			ItemStack itemStack = recipe.getResult(registryManager);
-			if (itemStack.isEmpty()) {
-				return false;
-			} else {
-				ItemStack itemStack2 = inventory.getStack(2);
-				if (itemStack2.isEmpty()) {
-					return true;
-				} else if (!ItemStack.areItemsEqual(itemStack2, itemStack)) {
-					return false;
-				} else if (itemStack2.getCount() < inventory.getMaxCountPerStack()
-					&& itemStack2.getCount() < itemStack2.getMaxCount()) {
-					return true;
-				} else {
-					return itemStack2.getCount() < itemStack.getMaxCount();
-				}
-			}
-		} else {
-			return false;
-		}
-	}
+            var registryManager = world.getRegistryManager();
+            ItemStack itemStack = recipe.getResult(registryManager);
+            if (itemStack.isEmpty()) {
+                return false;
+            } else {
+                ItemStack itemStack2 = inventory.getStack(2);
+                if (itemStack2.isEmpty()) {
+                    return true;
+                } else if (!ItemStack.areItemsEqual(itemStack2, itemStack)) {
+                    return false;
+                } else if (itemStack2.getCount() < inventory.getMaxCountPerStack()
+                           && itemStack2.getCount() < itemStack2.getMaxCount()) {
+                    return true;
+                } else {
+                    return itemStack2.getCount() < itemStack.getMaxCount();
+                }
+            }
+        } else {
+            return false;
+        }
+    }
 }

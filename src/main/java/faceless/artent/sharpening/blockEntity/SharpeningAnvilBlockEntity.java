@@ -21,51 +21,54 @@ import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class SharpeningAnvilBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
-	public ArtentInventory inventory;
+    public ArtentInventory inventory;
 
-	public SharpeningAnvilBlockEntity(BlockPos pos, BlockState state) {
-		super(ModBlockEntities.SharpeningAnvil, pos, state);
-		inventory = new SharpeningAnvilInventory(this);
-	}
+    public SharpeningAnvilBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.SharpeningAnvil, pos, state);
+        inventory = new SharpeningAnvilInventory(this);
+    }
 
-	@Override
-	public void readNbt(NbtCompound nbt) {
-		super.readNbt(nbt);
-		inventory.readNbt(nbt);
-	}
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        inventory.readNbt(nbt);
+    }
 
-	@Override
-	public void writeNbt(NbtCompound nbt) {
-		super.writeNbt(nbt);
-		inventory.writeNbt(nbt);
-	}
+    @Override
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        inventory.writeNbt(nbt);
+    }
 
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		//noinspection DataFlowIssue
-		world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
-	}
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        //noinspection DataFlowIssue
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+    }
 
-	@Nullable
-	@Override
-	public Packet<ClientPlayPacketListener> toUpdatePacket() {
-		return BlockEntityUpdateS2CPacket.create(this);
-	}
+    @Nullable
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
 
-	@Override
-	public NbtCompound toInitialChunkDataNbt() {
-		return createNbt();
-	}
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
+    }
 
-	@Override
-	public Text getDisplayName() {
-		return Text.translatable("sharpening_anvil");
-	}
+    @Override
+    public Text getDisplayName() {
+        return Text.translatable("sharpening_anvil");
+    }
 
-	@Nullable
-	@Override
-	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-		return new SharpeningAnvilScreenHandler(syncId, playerInventory, this.inventory, ScreenHandlerContext.create(world, pos));
-	}
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+        return new SharpeningAnvilScreenHandler(syncId,
+                                                playerInventory,
+                                                this.inventory,
+                                                ScreenHandlerContext.create(world, pos));
+    }
 }

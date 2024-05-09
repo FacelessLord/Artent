@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "aam:block/kaolin_clay_bricks" }
+    "": {
+      "model": "aam:block/kaolin_clay_bricks"
+    }
   }
 }

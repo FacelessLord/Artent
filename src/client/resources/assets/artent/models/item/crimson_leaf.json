@@ -1,1 +1,6 @@
-{"parent": "minecraft:item/generated", "textures": {"layer0": "artent:item/ingredients/crimson_leaf"}}
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "artent:item/ingredients/crimson_leaf"
+  }
+}

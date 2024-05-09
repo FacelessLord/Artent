@@ -27,11 +27,14 @@ import org.spongepowered.asm.mixin.Unique;
 
 public class SprayElementEntity extends ThrownEntity {
     @Unique
-    private static final TrackedData<Integer> SPRAY_ELEMENT = DataTracker.registerData(SprayElementEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> SPRAY_ELEMENT = DataTracker.registerData(SprayElementEntity.class,
+                                                                                       TrackedDataHandlerRegistry.INTEGER);
     @Unique
-    private static final TrackedData<Integer> MOVEMENT_TYPE = DataTracker.registerData(SprayElementEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> MOVEMENT_TYPE = DataTracker.registerData(SprayElementEntity.class,
+                                                                                       TrackedDataHandlerRegistry.INTEGER);
     @Unique
-    private static final TrackedData<Integer> LIFE_TIME_LEFT = DataTracker.registerData(SprayElementEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> LIFE_TIME_LEFT = DataTracker.registerData(SprayElementEntity.class,
+                                                                                        TrackedDataHandlerRegistry.INTEGER);
 
     private ICaster caster;
     private ItemStack wandStack = ItemStack.EMPTY;
@@ -61,7 +64,9 @@ public class SprayElementEntity extends ThrownEntity {
         var blockState = world.getBlockState(blockPos);
         var block = blockState.getBlock();
 
-        var entities = world.getEntitiesByClass(ProjectileEntity.class, Box.of(getPos(), 3, 3, 3), e -> !(e instanceof SprayElementEntity));
+        var entities = world.getEntitiesByClass(ProjectileEntity.class,
+                                                Box.of(getPos(), 3, 3, 3),
+                                                e -> !(e instanceof SprayElementEntity));
         for (var e : entities) {
             e.discard();
         }
@@ -157,7 +162,12 @@ public class SprayElementEntity extends ThrownEntity {
 
 
         if (getSprayElement() == SprayElement.Fire && !world.isClient) {
-            if (block == Blocks.ICE || block == Blocks.BLUE_ICE || block == Blocks.FROSTED_ICE || block == Blocks.PACKED_ICE || block == Blocks.SNOW_BLOCK || block == Blocks.POWDER_SNOW)
+            if (block == Blocks.ICE ||
+                block == Blocks.BLUE_ICE ||
+                block == Blocks.FROSTED_ICE ||
+                block == Blocks.PACKED_ICE ||
+                block == Blocks.SNOW_BLOCK ||
+                block == Blocks.POWDER_SNOW)
                 world.setBlockState(blockPos, Blocks.WATER.getDefaultState());
         }
 
@@ -289,7 +299,9 @@ public class SprayElementEntity extends ThrownEntity {
             var random = getWorld().random;
             var randomAngle = random.nextFloat() * Math.PI * 2;
 
-            var offset = new Vec3d(Math.sin(randomAngle) * (1 + random.nextFloat()), random.nextFloat() * 4 - 2, Math.cos(randomAngle) * (1 + random.nextFloat())).multiply(3, 1, 3);
+            var offset = new Vec3d(Math.sin(randomAngle) * (1 + random.nextFloat()),
+                                   random.nextFloat() * 4 - 2,
+                                   Math.cos(randomAngle) * (1 + random.nextFloat())).multiply(3, 1, 3);
             setPosition(startingPos.add(offset));
             var velocity = offset.crossProduct(new Vec3d(0, 1, 0));
             setVelocity(velocity);

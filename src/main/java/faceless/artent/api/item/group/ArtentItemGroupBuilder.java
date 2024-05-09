@@ -11,18 +11,18 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class ArtentItemGroupBuilder {
-	public ItemGroup.Builder builder;
-	public List<ItemStack> Items = new ArrayList<>();
+    public ItemGroup.Builder builder;
+    public List<ItemStack> Items = new ArrayList<>();
 
-	public ArtentItemGroupBuilder(Supplier<ItemStack> icon, String groupId) {
-		builder = FabricItemGroup.builder().icon(icon).displayName(Text.translatable("itemGroup.artent." + groupId));
-	}
+    public ArtentItemGroupBuilder(Supplier<ItemStack> icon, String groupId) {
+        builder = FabricItemGroup.builder().icon(icon).displayName(Text.translatable("itemGroup.artent." + groupId));
+    }
 
-	public void addItem(Item item) {
-		Items.add(new ItemStack(item));
-	}
+    public void addItem(Item item) {
+        Items.add(new ItemStack(item));
+    }
 
-	public ItemGroup build() {
-		return builder.entries((ctx, entries) -> entries.addAll(Items)).build();
-	}
+    public ItemGroup build() {
+        return builder.entries((ctx, entries) -> entries.addAll(Items)).build();
+    }
 }

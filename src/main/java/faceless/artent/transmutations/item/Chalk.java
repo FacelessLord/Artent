@@ -13,32 +13,32 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 
 public class Chalk extends ArtentItem {
-	public Chalk(Settings settings) {
-		super(settings, "chalk/chalk");
-	}
+    public Chalk(Settings settings) {
+        super(settings, "chalk/chalk");
+    }
 
-	@Override
-	public ActionResult useOnBlock(ItemUsageContext context) {
-		var blockSide = context.getSide();
-		BlockPos circlePos = context.getBlockPos().add(blockSide.getVector());
-		var world = context.getWorld();
-		if (world == null)
-			return ActionResult.FAIL;
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        var blockSide = context.getSide();
+        BlockPos circlePos = context.getBlockPos().add(blockSide.getVector());
+        var world = context.getWorld();
+        if (world == null)
+            return ActionResult.FAIL;
 
-		BlockState circleState = ModBlocks.AlchemicalCircle
-			.getDefaultState()
-			.with(AlchemicalCircleBlock.FACING, blockSide);
-		world.setBlockState(circlePos, circleState, Block.NOTIFY_ALL);
+        BlockState circleState = ModBlocks.AlchemicalCircle
+          .getDefaultState()
+          .with(AlchemicalCircleBlock.FACING, blockSide);
+        world.setBlockState(circlePos, circleState, Block.NOTIFY_ALL);
 
-		BlockEntity blockEntity = world.getBlockEntity(circlePos);
-		if (!(blockEntity instanceof AlchemicalCircleEntity circle))
-			return ActionResult.FAIL;
+        BlockEntity blockEntity = world.getBlockEntity(circlePos);
+        if (!(blockEntity instanceof AlchemicalCircleEntity circle))
+            return ActionResult.FAIL;
 
-		var player = context.getPlayer();
-		if (player == null)
-			return ActionResult.FAIL;
+        var player = context.getPlayer();
+        if (player == null)
+            return ActionResult.FAIL;
 
-		ArtentServerHook.packetOpenCircleGui(player, circle);
-		return ActionResult.SUCCESS;
-	}
+        ArtentServerHook.packetOpenCircleGui(player, circle);
+        return ActionResult.SUCCESS;
+    }
 }

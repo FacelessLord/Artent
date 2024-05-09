@@ -1,1 +1,6 @@
-{"parent": "minecraft:item/generated", "textures": {"layer0": "artent:item/poison_bottle"}}
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "artent:item/poison_bottle"
+  }
+}

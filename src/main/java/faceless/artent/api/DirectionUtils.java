@@ -3,27 +3,27 @@ package faceless.artent.api;
 import net.minecraft.util.math.Direction;
 
 public class DirectionUtils {
-	public static int[] applyDirection(int[] src, Direction direction) {
-		return switch (direction) {
-			case DOWN -> new int[]{ src[0], -src[1], -src[2] };
-			case NORTH -> new int[]{ src[0], src[2], -src[1] };
-			case SOUTH -> new int[]{ src[0], -src[2], src[1] };
-			case EAST -> new int[]{ src[1], -src[0], src[2] };
-			case WEST -> new int[]{ -src[1], src[0], src[2] };
-			default -> src;
-		};
-	}
+    public static int[] applyDirection(int[] src, Direction direction) {
+        return switch (direction) {
+            case DOWN -> new int[]{src[0], -src[1], -src[2]};
+            case NORTH -> new int[]{src[0], src[2], -src[1]};
+            case SOUTH -> new int[]{src[0], -src[2], src[1]};
+            case EAST -> new int[]{src[1], -src[0], src[2]};
+            case WEST -> new int[]{-src[1], src[0], src[2]};
+            default -> src;
+        };
+    }
 
-	public static float[] applyDirection(float[] src, Direction direction) {
-		return switch (direction) {
-			case DOWN -> new float[]{ src[0], -src[1], -src[2] };
-			case NORTH -> new float[]{ src[0], src[2], -src[1] };
-			case SOUTH -> new float[]{ src[0], -src[2], src[1] };
-			case EAST -> new float[]{ src[1], -src[0], src[2] };
-			case WEST -> new float[]{ -src[1], src[0], src[2] };
-			default -> src;
-		};
-	}
+    public static float[] applyDirection(float[] src, Direction direction) {
+        return switch (direction) {
+            case DOWN -> new float[]{src[0], -src[1], -src[2]};
+            case NORTH -> new float[]{src[0], src[2], -src[1]};
+            case SOUTH -> new float[]{src[0], -src[2], src[1]};
+            case EAST -> new float[]{src[1], -src[0], src[2]};
+            case WEST -> new float[]{-src[1], src[0], src[2]};
+            default -> src;
+        };
+    }
 //
 //	// Corrupted don't use
 //	@Deprecated

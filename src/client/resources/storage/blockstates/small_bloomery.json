@@ -1,6 +1,13 @@
 {
   "variants": {
-    "closed=true": { "models": ["aam:block/small_bloomery","aam:block/small_bloomery_door"]  },
-    "closed=false": { "model": "aam:block/small_bloomery" }
+    "closed=true": {
+      "models": [
+        "aam:block/small_bloomery",
+        "aam:block/small_bloomery_door"
+      ]
+    },
+    "closed=false": {
+      "model": "aam:block/small_bloomery"
+    }
   }
 }

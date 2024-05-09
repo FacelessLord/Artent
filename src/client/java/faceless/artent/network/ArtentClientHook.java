@@ -17,105 +17,106 @@ import net.minecraft.util.math.BlockPos;
 @Environment(EnvType.CLIENT)
 public class ArtentClientHook {
 
-	public void loadClient() {
-		System.out.println("AlchemicalNetworkHook client side load");
-		ClientPlayNetworking
-			.registerGlobalReceiver(
-				ArtentServerHook.OPEN_CIRCLE_GUI_PACKET_ID,
-				(client, handler, buffer, responseHandler) -> {
+    public void loadClient() {
+        System.out.println("AlchemicalNetworkHook client side load");
+        ClientPlayNetworking
+          .registerGlobalReceiver(
+            ArtentServerHook.OPEN_CIRCLE_GUI_PACKET_ID,
+            (client, handler, buffer, responseHandler) -> {
 
-					BlockPos pos = buffer.readBlockPos();
-					if (client.player == null)
-						return;
+                BlockPos pos = buffer.readBlockPos();
+                if (client.player == null)
+                    return;
 
-					BlockEntity blockEntity = client.player.getWorld().getBlockEntity(pos);
+                BlockEntity blockEntity = client.player.getWorld().getBlockEntity(pos);
 //
-					// Client sided code
-					client.execute(() -> {
-						AlchemicalCircleGui gui = new AlchemicalCircleGui((AlchemicalCircleEntity) blockEntity);
-						client.setScreen(gui);
-					});
-				});
-		ClientPlayNetworking
-			.registerGlobalReceiver(
-				ArtentServerHook.SYNC_PLAYER_DATA_PACKET_ID,
-				(client, handler, buffer, responseHandler) -> {
-					var nbt = buffer.readNbt();
-					if (client.player == null)
-						return;
+                // Client sided code
+                client.execute(() -> {
+                    AlchemicalCircleGui gui = new AlchemicalCircleGui((AlchemicalCircleEntity) blockEntity);
+                    client.setScreen(gui);
+                });
+            });
+        ClientPlayNetworking
+          .registerGlobalReceiver(
+            ArtentServerHook.SYNC_PLAYER_DATA_PACKET_ID,
+            (client, handler, buffer, responseHandler) -> {
+                var nbt = buffer.readNbt();
+                if (client.player == null)
+                    return;
 //
-					// Client sided code
-					client.execute(() -> {
-						var artentHandler = DataUtil.getHandler(client.player);
-						artentHandler.readFromNbt(nbt);
-						var x = 1;
-					});
-				});
-		ClientPlayNetworking
-			.registerGlobalReceiver(
-				ArtentServerHook.SYNC_CAULDRON_PACKET_ID,
-				(client, handler, buffer, responseHandler) -> {
+                // Client sided code
+                client.execute(() -> {
+                    var artentHandler = DataUtil.getHandler(client.player);
+                    artentHandler.readFromNbt(nbt);
+                    var x = 1;
+                });
+            });
+        ClientPlayNetworking
+          .registerGlobalReceiver(
+            ArtentServerHook.SYNC_CAULDRON_PACKET_ID,
+            (client, handler, buffer, responseHandler) -> {
 
-					BlockPos pos = buffer.readBlockPos();
-					var nbt = buffer.readNbt();
+                BlockPos pos = buffer.readBlockPos();
+                var nbt = buffer.readNbt();
 
-					// Client sided code
-					client.execute(() -> {
-						if (client.player == null)
-							return;
+                // Client sided code
+                client.execute(() -> {
+                    if (client.player == null)
+                        return;
 
-						var world = client.player.getWorld();
-						if (world == null)
-							return;
+                    var world = client.player.getWorld();
+                    if (world == null)
+                        return;
 
-						BlockEntity blockEntity = world.getBlockEntity(pos);
-						if (!(blockEntity instanceof BrewingCauldronBlockEntity cauldron))
-							return;
+                    BlockEntity blockEntity = world.getBlockEntity(pos);
+                    if (!(blockEntity instanceof BrewingCauldronBlockEntity cauldron))
+                        return;
 
-						cauldron.readNbt(nbt);
-					});
-				});
-	}
+                    cauldron.readNbt(nbt);
+                });
+            });
+    }
 
-	public static void packetSynchronizeCircle(AlchemicalCircleEntity entity) {
-		NbtCompound tag = new NbtCompound();
-		entity.writeNbt(tag);
+    public static void packetSynchronizeCircle(AlchemicalCircleEntity entity) {
+        NbtCompound tag = new NbtCompound();
+        entity.writeNbt(tag);
 
-		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		passedData.writeBlockPos(entity.getPos());
-		passedData.writeNbt(tag);
-		ClientPlayNetworking.send(ArtentServerHook.SYNCHRONIZE_CIRCLE, passedData);
-	}
+        PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+        passedData.writeBlockPos(entity.getPos());
+        passedData.writeNbt(tag);
+        ClientPlayNetworking.send(ArtentServerHook.SYNCHRONIZE_CIRCLE, passedData);
+    }
 
-	public static void packetDamageChalk(PlayerEntity player) {
-		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		passedData.writeUuid(player.getUuid());
-		ClientPlayNetworking.send(ArtentServerHook.DAMAGE_CHALK_PACKET_ID, passedData);
-	}
+    public static void packetDamageChalk(PlayerEntity player) {
+        PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+        passedData.writeUuid(player.getUuid());
+        ClientPlayNetworking.send(ArtentServerHook.DAMAGE_CHALK_PACKET_ID, passedData);
+    }
 
-	public static void packetRemoveCircle(BlockPos pos) {
-		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		passedData.writeBlockPos(pos);
-		ClientPlayNetworking.send(ArtentServerHook.REMOVE_CIRCLE_PACKET_ID, passedData);
-	}
+    public static void packetRemoveCircle(BlockPos pos) {
+        PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+        passedData.writeBlockPos(pos);
+        ClientPlayNetworking.send(ArtentServerHook.REMOVE_CIRCLE_PACKET_ID, passedData);
+    }
 
-	public static void packetSellItems(PlayerEntity player, long money) {
-		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		passedData.writeUuid(player.getUuid());
-		passedData.writeLong(money);
-		ClientPlayNetworking.send(ArtentServerHook.SELL_ITEMS_PACKET_ID, passedData);
-	}
+    public static void packetSellItems(PlayerEntity player, long money) {
+        PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+        passedData.writeUuid(player.getUuid());
+        passedData.writeLong(money);
+        ClientPlayNetworking.send(ArtentServerHook.SELL_ITEMS_PACKET_ID, passedData);
+    }
 
-	public static void packetSpellIndexLeft(PlayerEntity player) {
-		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		passedData.writeUuid(player.getUuid());
+    public static void packetSpellIndexLeft(PlayerEntity player) {
+        PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+        passedData.writeUuid(player.getUuid());
 
-		ClientPlayNetworking.send(ArtentServerHook.SPELL_INDEX_LEFT, passedData);
-	}
-	public static void packetSpellIndexRight(PlayerEntity player) {
-		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		passedData.writeUuid(player.getUuid());
+        ClientPlayNetworking.send(ArtentServerHook.SPELL_INDEX_LEFT, passedData);
+    }
 
-		ClientPlayNetworking.send(ArtentServerHook.SPELL_INDEX_RIGHT, passedData);
-	}
+    public static void packetSpellIndexRight(PlayerEntity player) {
+        PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+        passedData.writeUuid(player.getUuid());
+
+        ClientPlayNetworking.send(ArtentServerHook.SPELL_INDEX_RIGHT, passedData);
+    }
 }

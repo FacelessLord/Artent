@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "artent:block/light" }
+    "": {
+      "model": "artent:block/light"
+    }
   }
 }

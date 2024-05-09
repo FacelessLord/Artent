@@ -1,10 +1,22 @@
 {
   "variants": {
-    "age=0": { "model": "artent:block/berry_bush" },
-    "age=1": { "model": "artent:block/berry_greenberry_bush" },
-    "age=2,berry_type=0": { "model": "artent:block/blackberry_bush" },
-    "age=2,berry_type=1": { "model": "artent:block/blueberry_bush" },
-    "age=2,berry_type=2": { "model": "artent:block/cloudberry_bush" },
-    "age=2,berry_type=3": { "model": "artent:block/raspberry_bush" }
+    "age=0": {
+      "model": "artent:block/berry_bush"
+    },
+    "age=1": {
+      "model": "artent:block/berry_greenberry_bush"
+    },
+    "age=2,berry_type=0": {
+      "model": "artent:block/blackberry_bush"
+    },
+    "age=2,berry_type=1": {
+      "model": "artent:block/blueberry_bush"
+    },
+    "age=2,berry_type=2": {
+      "model": "artent:block/cloudberry_bush"
+    },
+    "age=2,berry_type=3": {
+      "model": "artent:block/raspberry_bush"
+    }
   }
 }

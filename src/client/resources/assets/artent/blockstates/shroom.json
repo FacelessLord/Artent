@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "artent:block/shroom" }
+    "": {
+      "model": "artent:block/shroom"
+    }
   }
 }

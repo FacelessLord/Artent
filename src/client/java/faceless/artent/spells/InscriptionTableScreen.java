@@ -82,9 +82,9 @@ public class InscriptionTableScreen extends HandledScreen<InscriptionTableScreen
         var itemStack = slot.getStack();
         var isBook = !(slot.inventory instanceof PlayerInventory) && slot.id > 3;
         if (!itemStack.isEmpty()
-                && itemStack.getItem() instanceof ISpellScroll scroll
-                && isBook
-                && scroll.getSpell(itemStack) != null) {
+            && itemStack.getItem() instanceof ISpellScroll scroll
+            && isBook
+            && scroll.getSpell(itemStack) != null) {
             drawSpellInSlot(context, scroll.getSpell(itemStack), slot.x, slot.y);
             return;
         }

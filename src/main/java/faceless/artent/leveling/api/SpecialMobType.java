@@ -17,8 +17,8 @@ public enum SpecialMobType {
         };
     }
 
-    public static SpecialMobType fromName(String name){
-        return switch (name){
+    public static SpecialMobType fromName(String name) {
+        return switch (name) {
             case "common" -> Common;
             case "cursed" -> Cursed;
             case "demonic" -> Demonic;

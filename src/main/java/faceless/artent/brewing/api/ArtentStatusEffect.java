@@ -15,56 +15,60 @@ import java.util.List;
 import static net.minecraft.world.Heightmap.Type.MOTION_BLOCKING_NO_LEAVES;
 
 public class ArtentStatusEffect extends StatusEffect {
-	private boolean isInstant = false;
+    private boolean isInstant = false;
 
-	public ArtentStatusEffect(StatusEffectCategory category, Color color) {
-		super(category, color.toHex());
-	}
+    public ArtentStatusEffect(StatusEffectCategory category, Color color) {
+        super(category, color.toHex());
+    }
 
-	public ArtentStatusEffect(StatusEffectCategory category, Color color, boolean isInstant) {
-		super(category, color.toHex());
-		this.isInstant = isInstant;
-	}
+    public ArtentStatusEffect(StatusEffectCategory category, Color color, boolean isInstant) {
+        super(category, color.toHex());
+        this.isInstant = isInstant;
+    }
 
-	public void onEffectRemoved(LivingEntity entity, int amplifier, List<StatusEffectInstance> statusEffectQueue) {
-		if (!(entity instanceof ServerPlayerEntity player))
-			return;
+    public void onEffectRemoved(LivingEntity entity, int amplifier, List<StatusEffectInstance> statusEffectQueue) {
+        if (!(entity instanceof ServerPlayerEntity player))
+            return;
 
-		if (this == ModPotionEffects.FLIGHT && !player.isCreative()) {
-			player.interactionManager.getGameMode().setAbilities(player.getAbilities());
-			player.sendAbilitiesUpdate();
-			player.getAbilities().allowFlying = false;
-			player.sendAbilitiesUpdate();
-		}
-		if (this == ModPotionEffects.BERSERK) {
-			onRemoved(entity.getAttributes());
-			statusEffectQueue.add(new StatusEffectInstance(ModPotionEffects.BERSERK_RECOIL, 30 * 20, amplifier, true, true));
-		}
-	}
+        if (this == ModPotionEffects.FLIGHT && !player.isCreative()) {
+            player.interactionManager.getGameMode().setAbilities(player.getAbilities());
+            player.sendAbilitiesUpdate();
+            player.getAbilities().allowFlying = false;
+            player.sendAbilitiesUpdate();
+        }
+        if (this == ModPotionEffects.BERSERK) {
+            onRemoved(entity.getAttributes());
+            statusEffectQueue.add(new StatusEffectInstance(ModPotionEffects.BERSERK_RECOIL,
+                                                           30 * 20,
+                                                           amplifier,
+                                                           true,
+                                                           true));
+        }
+    }
 
-	@Override
-	public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-		if (entity == null)
-			return;
-		if (this == ModPotionEffects.FLIGHT && entity instanceof ServerPlayerEntity player && !player.isCreative()) {
-			player.getAbilities().allowFlying = true;
-			player.sendAbilitiesUpdate();
-		}
-		if (this == ModPotionEffects.BERSERK) {
-			super.applyUpdateEffect(entity, amplifier);
-		}
-		if (this == ModPotionEffects.FREEZING) {
-			entity.extinguish();
-		}
-		if (this == ModPotionEffects.FAST_SWIMMING) {
-			if (entity.isTouchingWater())
-				onApplied(entity.getAttributes(), amplifier);
-			else
-				onRemoved(entity.getAttributes());
-		}
-		if (entity.hasStatusEffect(ModPotionEffects.FEATHER_FALLING)) {
-			entity.fallDistance = 0;
-		}
+    @Override
+    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+        if (entity == null)
+            return;
+        if (this == ModPotionEffects.FLIGHT && entity instanceof ServerPlayerEntity player && !player.isCreative()) {
+            player.getAbilities().allowFlying = true;
+            player.sendAbilitiesUpdate();
+        }
+        if (this == ModPotionEffects.BERSERK) {
+            super.applyUpdateEffect(entity, amplifier);
+        }
+        if (this == ModPotionEffects.FREEZING) {
+            entity.extinguish();
+        }
+        if (this == ModPotionEffects.FAST_SWIMMING) {
+            if (entity.isTouchingWater())
+                onApplied(entity.getAttributes(), amplifier);
+            else
+                onRemoved(entity.getAttributes());
+        }
+        if (entity.hasStatusEffect(ModPotionEffects.FEATHER_FALLING)) {
+            entity.fallDistance = 0;
+        }
 //		if (this == ModPotionEffects.REGENERATION) {
 //			if (entity.getGroup() == EntityGroup.UNDEAD) {
 //				entity.timeUntilRegen = 20;
@@ -72,34 +76,40 @@ public class ArtentStatusEffect extends StatusEffect {
 //			} else
 //				entity.heal(1f);
 //		}
-	}
+    }
 
-	public void applyInstantEffect(@Nullable Entity source, @Nullable Entity attacker, LivingEntity target, int amplifier, double proximity) {
-		if (this == ModPotionEffects.SURFACE_TELEPORTATION) {
-			var pos = target.getBlockPos();
-			var world = target.getWorld();
-			if (world == null)
-				return;
+    public void applyInstantEffect(
+      @Nullable Entity source,
+      @Nullable Entity attacker,
+      LivingEntity target,
+      int amplifier,
+      double proximity
+    ) {
+        if (this == ModPotionEffects.SURFACE_TELEPORTATION) {
+            var pos = target.getBlockPos();
+            var world = target.getWorld();
+            if (world == null)
+                return;
 
-			var topPosition = world.getTopPosition(MOTION_BLOCKING_NO_LEAVES, pos);
-			var diff = topPosition.subtract(pos).getY();
-			if (diff > 0 && diff < 64 * (amplifier + 1)) {
-				target.teleport(topPosition.getX(), topPosition.getY() + 1, topPosition.getZ());
-			}
-		}
-	}
+            var topPosition = world.getTopPosition(MOTION_BLOCKING_NO_LEAVES, pos);
+            var diff = topPosition.subtract(pos).getY();
+            if (diff > 0 && diff < 64 * (amplifier + 1)) {
+                target.teleport(topPosition.getX(), topPosition.getY() + 1, topPosition.getZ());
+            }
+        }
+    }
 
-	public boolean canApplyUpdateEffect(int duration, int amplifier) {
-		return super.canApplyUpdateEffect(duration, amplifier)
-			|| this == ModPotionEffects.FLIGHT
-			|| this == ModPotionEffects.FREEZING && duration % 10 == 0
-			|| this == ModPotionEffects.BERSERK && duration == 600
+    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+        return super.canApplyUpdateEffect(duration, amplifier)
+               || this == ModPotionEffects.FLIGHT
+               || this == ModPotionEffects.FREEZING && duration % 10 == 0
+               || this == ModPotionEffects.BERSERK && duration == 600
 //			|| this == ModPotionEffects.REGENERATION && ((20 >> amplifier) == 0 || duration % (20 >> amplifier) == 0)
-			|| this == ModPotionEffects.FAST_SWIMMING && (duration % 10 == 0);
-	}
+               || this == ModPotionEffects.FAST_SWIMMING && (duration % 10 == 0);
+    }
 
-	@Override
-	public boolean isInstant() {
-		return isInstant;
-	}
+    @Override
+    public boolean isInstant() {
+        return isInstant;
+    }
 }

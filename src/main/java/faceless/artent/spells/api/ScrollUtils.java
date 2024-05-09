@@ -22,7 +22,7 @@ public class ScrollUtils {
     }
 
     public static ItemStack createItemFromScroll(ScrollStack scrollStack) {
-        if(scrollStack == null)
+        if (scrollStack == null)
             return ItemStack.EMPTY;
 
         var item = getItemByType(scrollStack.scrollType);

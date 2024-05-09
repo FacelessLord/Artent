@@ -1,8 +1,8 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "item/generated",
-	"textures": {
-		"1": "artent:spell/light_sword",
-		"particle": "artent:spell/light_sword"
-	}
+  "credit": "Made with Blockbench",
+  "parent": "item/generated",
+  "textures": {
+    "1": "artent:spell/light_sword",
+    "particle": "artent:spell/light_sword"
+  }
 }

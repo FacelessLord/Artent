@@ -15,12 +15,13 @@ public class MakeLight extends ProjectileSpell {
 
     @Override
     public void blockCast(
-            ICaster caster,
-            World world,
-            ItemStack stack,
-            BlockPos hitPos,
-            Direction hitSide,
-            int actionTime) {
+      ICaster caster,
+      World world,
+      ItemStack stack,
+      BlockPos hitPos,
+      Direction hitSide,
+      int actionTime
+    ) {
         var blockPos = hitPos.offset(hitSide);
         if (world.getBlockState(blockPos).isAir())
             world.setBlockState(blockPos, ModBlocks.LightBlock.getDefaultState());

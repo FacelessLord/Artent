@@ -10,11 +10,11 @@ import faceless.artent.transmutations.blockEntities.AlchemicalCircleEntity;
 import net.minecraft.block.entity.BlockEntityType;
 
 public class ModBlockEntities {
-	public static BlockEntityType<AlchemicalCircleEntity> AlchemicalCircle;
-	public static BlockEntityType<SharpeningAnvilBlockEntity> SharpeningAnvil;
-	public static BlockEntityType<BrewingCauldronBlockEntity> BrewingCauldron;
-	public static BlockEntityType<FermentingBarrelBlockEntity> FermentingBarrel;
-	public static BlockEntityType<TraderBlockEntity> Trader;
-	public static BlockEntityType<InscriptionTableBlockEntity> InscriptionTable;
-	public static BlockEntityType<VoidBlockEntity> VoidBlock;
+    public static BlockEntityType<AlchemicalCircleEntity> AlchemicalCircle;
+    public static BlockEntityType<SharpeningAnvilBlockEntity> SharpeningAnvil;
+    public static BlockEntityType<BrewingCauldronBlockEntity> BrewingCauldron;
+    public static BlockEntityType<FermentingBarrelBlockEntity> FermentingBarrel;
+    public static BlockEntityType<TraderBlockEntity> Trader;
+    public static BlockEntityType<InscriptionTableBlockEntity> InscriptionTable;
+    public static BlockEntityType<VoidBlockEntity> VoidBlock;
 }

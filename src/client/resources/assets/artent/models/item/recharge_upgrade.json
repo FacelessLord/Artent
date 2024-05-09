@@ -1,1 +1,6 @@
-{"parent": "minecraft:item/generated", "textures": {"layer0": "artent:item/recharge_upgrade"}}
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "artent:item/recharge_upgrade"
+  }
+}

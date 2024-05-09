@@ -16,16 +16,16 @@ public class ModKeyBindings implements IRegistry {
     @Override
     public void register() {
         spellIndexLeft = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key." + Artent.MODID + ".spell_index.left",
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_LEFT_BRACKET, // The keycode of the key
-                "category." + Artent.MODID
+          "key." + Artent.MODID + ".spell_index.left",
+          InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
+          GLFW.GLFW_KEY_LEFT_BRACKET, // The keycode of the key
+          "category." + Artent.MODID
         ));
         spellIndexRight = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key." + Artent.MODID + ".spell_index.right",
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_RIGHT_BRACKET, // The keycode of the key
-                "category." + Artent.MODID
+          "key." + Artent.MODID + ".spell_index.right",
+          InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
+          GLFW.GLFW_KEY_RIGHT_BRACKET, // The keycode of the key
+          "category." + Artent.MODID
         ));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (spellIndexLeft.wasPressed()) {

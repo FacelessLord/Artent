@@ -9,36 +9,52 @@ import net.minecraft.item.ItemStack;
 
 public class GeoHeldItemFeatureRenderer<T extends LivingEntity> {
 
-	private final HeldItemRenderer heldItemRenderer;
+    private final HeldItemRenderer heldItemRenderer;
 
-	public GeoHeldItemFeatureRenderer(HeldItemRenderer heldItemRenderer) {
+    public GeoHeldItemFeatureRenderer(HeldItemRenderer heldItemRenderer) {
 
-		this.heldItemRenderer = heldItemRenderer;
-	}
+        this.heldItemRenderer = heldItemRenderer;
+    }
 
-	public void renderMain(MatrixStack matrixStack,
-						   VertexConsumerProvider vertexConsumerProvider,
-						   int light,
-						   T livingEntity) {
-		ItemStack itemStack = livingEntity.getMainHandStack();
-		if (itemStack.isEmpty())
-			return;
+    public void renderMain(
+      MatrixStack matrixStack,
+      VertexConsumerProvider vertexConsumerProvider,
+      int light,
+      T livingEntity
+    ) {
+        ItemStack itemStack = livingEntity.getMainHandStack();
+        if (itemStack.isEmpty())
+            return;
 
-		matrixStack.push();
-		this.heldItemRenderer.renderItem(livingEntity, itemStack, ModelTransformationMode.THIRD_PERSON_RIGHT_HAND, false, matrixStack, vertexConsumerProvider, light);
-		matrixStack.pop();
-	}
+        matrixStack.push();
+        this.heldItemRenderer.renderItem(livingEntity,
+                                         itemStack,
+                                         ModelTransformationMode.THIRD_PERSON_RIGHT_HAND,
+                                         false,
+                                         matrixStack,
+                                         vertexConsumerProvider,
+                                         light);
+        matrixStack.pop();
+    }
 
-	public void renderOff(MatrixStack matrixStack,
-						  VertexConsumerProvider vertexConsumerProvider,
-						  int light,
-						  T livingEntity) {
-		ItemStack itemStack = livingEntity.getOffHandStack();
-		if (itemStack.isEmpty())
-			return;
+    public void renderOff(
+      MatrixStack matrixStack,
+      VertexConsumerProvider vertexConsumerProvider,
+      int light,
+      T livingEntity
+    ) {
+        ItemStack itemStack = livingEntity.getOffHandStack();
+        if (itemStack.isEmpty())
+            return;
 
-		matrixStack.push();
-		this.heldItemRenderer.renderItem(livingEntity, itemStack, ModelTransformationMode.THIRD_PERSON_RIGHT_HAND, true, matrixStack, vertexConsumerProvider, light);
-		matrixStack.pop();
-	}
+        matrixStack.push();
+        this.heldItemRenderer.renderItem(livingEntity,
+                                         itemStack,
+                                         ModelTransformationMode.THIRD_PERSON_RIGHT_HAND,
+                                         true,
+                                         matrixStack,
+                                         vertexConsumerProvider,
+                                         light);
+        matrixStack.pop();
+    }
 }

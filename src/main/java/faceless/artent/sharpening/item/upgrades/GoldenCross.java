@@ -7,15 +7,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Formatting;
 
 public class GoldenCross extends EnhancerItem {
-	public GoldenCross(Settings settings) {
-		super(Formatting.GOLD, "upgrade/golden_cross", settings);
-	}
+    public GoldenCross(Settings settings) {
+        super(Formatting.GOLD, "upgrade/golden_cross", settings);
+    }
 
-	@Override
-	public void onEntityDamaged(ItemStack tool, LivingEntity attacker, LivingEntity target, float amount) {
-		if (target.getGroup() == EntityGroup.UNDEAD) {
-			target.timeUntilRegen = 0;
-			target.damage(attacker.getDamageSources().magic(), amount * 0.2f);
-		}
-	}
+    @Override
+    public void onEntityDamaged(ItemStack tool, LivingEntity attacker, LivingEntity target, float amount) {
+        if (target.getGroup() == EntityGroup.UNDEAD) {
+            target.timeUntilRegen = 0;
+            target.damage(attacker.getDamageSources().magic(), amount * 0.2f);
+        }
+    }
 }

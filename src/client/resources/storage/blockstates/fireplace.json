@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "aam:block/fireplace" }
+    "": {
+      "model": "aam:block/fireplace"
+    }
   }
 }

@@ -1,5 +1,7 @@
 {
-    "variants": {
-      "": { "model": "artent:block/dungeon/sandstone_0" }
+  "variants": {
+    "": {
+      "model": "artent:block/dungeon/sandstone_0"
     }
   }
+}

@@ -10,21 +10,21 @@ import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
 public class SellButton extends ButtonWidget {
-	protected SellButton(int x, int y, int width, int height, PressAction onPress) {
-		super(x, y, width, height, Text.translatable("artent.gui.trader.sell"), onPress, DEFAULT_NARRATION_SUPPLIER);
-	}
+    protected SellButton(int x, int y, int width, int height, PressAction onPress) {
+        super(x, y, width, height, Text.translatable("artent.gui.trader.sell"), onPress, DEFAULT_NARRATION_SUPPLIER);
+    }
 
-	@Override
-	protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-		var x = getX();
-		var y = getY();
-		int selected = this.isMouseOver(mouseX, mouseY) ? 1 : 0;
+    @Override
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        var x = getX();
+        var y = getY();
+        int selected = this.isMouseOver(mouseX, mouseY) ? 1 : 0;
 
-		context.drawTexture(TraderScreen.TEXTURE, x, y, width, height, 176, selected * 12, 41, 12, 256, 256);
-		var textRenderer = MinecraftClient.getInstance().textRenderer;
-		var message = this.getMessage();
-		var messageWidth = textRenderer.getWidth(message);
+        context.drawTexture(TraderScreen.TEXTURE, x, y, width, height, 176, selected * 12, 41, 12, 256, 256);
+        var textRenderer = MinecraftClient.getInstance().textRenderer;
+        var message = this.getMessage();
+        var messageWidth = textRenderer.getWidth(message);
 
-		context.drawTextWithShadow(textRenderer, message, x + width / 2 - messageWidth / 2, y + 2, Color.White.asInt());
-	}
+        context.drawTextWithShadow(textRenderer, message, x + width / 2 - messageWidth / 2, y + 2, Color.White.asInt());
+    }
 }

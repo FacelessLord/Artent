@@ -1,9 +1,9 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "artent:item/potions/empty_phial",
-		"layer1": "artent:item/potions/potion_offset",
-		"particle": "artent:item/potions/potion_offset"
-	}
+  "credit": "Made with Blockbench",
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "artent:item/potions/empty_phial",
+    "layer1": "artent:item/potions/potion_offset",
+    "particle": "artent:item/potions/potion_offset"
+  }
 }

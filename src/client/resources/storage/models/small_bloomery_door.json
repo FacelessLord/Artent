@@ -1,23 +1,87 @@
 {
-	"credit": "Made with Blockbench",
-	"textures": {
-		"0": "aam:blocks/kaolin_bricks",
-		"particle": "aam:blocks/kaolin_bricks"
-	},
-	"elements": [
-		{
-			"name": "door",
-			"from": [5, 0, 0],
-			"to": [11, 4, 1],
-			"rotation": {"angle": 0, "axis": "y", "origin": [13, 8, 8]},
-			"faces": {
-				"north": {"uv": [9, 11, 15, 15], "texture": "#0"},
-				"east": {"uv": [9, 11, 10, 15], "texture": "#0"},
-				"south": {"uv": [9, 11, 15, 15], "texture": "#0"},
-				"west": {"uv": [9, 11, 10, 15], "texture": "#0"},
-				"up": {"uv": [9, 11, 15, 12], "texture": "#0"},
-				"down": {"uv": [9, 14, 15, 15], "texture": "#0"}
-			}
-		}
-	]
+  "credit": "Made with Blockbench",
+  "textures": {
+    "0": "aam:blocks/kaolin_bricks",
+    "particle": "aam:blocks/kaolin_bricks"
+  },
+  "elements": [
+    {
+      "name": "door",
+      "from": [
+        5,
+        0,
+        0
+      ],
+      "to": [
+        11,
+        4,
+        1
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          13,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            11,
+            15,
+            15
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            9,
+            11,
+            10,
+            15
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            9,
+            11,
+            15,
+            15
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            9,
+            11,
+            10,
+            15
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            9,
+            11,
+            15,
+            12
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            9,
+            14,
+            15,
+            15
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
 }

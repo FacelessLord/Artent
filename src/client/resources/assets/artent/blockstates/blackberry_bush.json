@@ -1,7 +1,13 @@
 {
   "variants": {
-    "age=0": { "model": "artent:block/berry_bush" },
-    "age=1": { "model": "artent:block/greenberry_bush" },
-    "age=2": { "model": "artent:block/blackberry_bush" }
+    "age=0": {
+      "model": "artent:block/berry_bush"
+    },
+    "age=1": {
+      "model": "artent:block/greenberry_bush"
+    },
+    "age=2": {
+      "model": "artent:block/blackberry_bush"
+    }
   }
 }

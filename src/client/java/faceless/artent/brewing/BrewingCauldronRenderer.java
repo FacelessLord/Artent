@@ -14,30 +14,42 @@ import org.lwjgl.opengl.GL11;
 
 public class BrewingCauldronRenderer implements BlockEntityRenderer<BrewingCauldronBlockEntity> {
 
-	public BrewingCauldronRenderer(BlockEntityRendererFactory.Context ctx) {
-	}
+    public BrewingCauldronRenderer(BlockEntityRendererFactory.Context ctx) {
+    }
 
-	@Override
-	public void render(BrewingCauldronBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		var waterLevel = entity.waterAmount;
-		var waterColor = entity.color;
-		var world = entity.getWorld();
-		if (world == null)
-			return;
+    @Override
+    public void render(
+      BrewingCauldronBlockEntity entity,
+      float tickDelta,
+      MatrixStack matrices,
+      VertexConsumerProvider vertexConsumers,
+      int light,
+      int overlay
+    ) {
+        var waterLevel = entity.waterAmount;
+        var waterColor = entity.color;
+        var world = entity.getWorld();
+        if (world == null)
+            return;
 
-		BlockRenderManager blockRenderManager = MinecraftClient.getInstance().getBlockRenderManager();
-		var state = ModBlocks.CauldronFluid.getDefaultState();
+        BlockRenderManager blockRenderManager = MinecraftClient.getInstance().getBlockRenderManager();
+        var state = ModBlocks.CauldronFluid.getDefaultState();
 
-		matrices.push();
-		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		RenderSystem.clearColor(waterColor.getRedF(), waterColor.getGreenF(), waterColor.getBlueF(), 0.25f);
-		matrices.translate(2 / 16d, 4 / 16d - 1 / 128f, 2 / 16d);
-		matrices.scale(12f / 16f, waterLevel / 1000f * 15f / 32f, 12f / 16f);
+        matrices.push();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        RenderSystem.clearColor(waterColor.getRedF(), waterColor.getGreenF(), waterColor.getBlueF(), 0.25f);
+        matrices.translate(2 / 16d, 4 / 16d - 1 / 128f, 2 / 16d);
+        matrices.scale(12f / 16f, waterLevel / 1000f * 15f / 32f, 12f / 16f);
 
-		blockRenderManager.renderBlock(state, entity.getPos(), entity.getWorld(), matrices,
-			vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull()), false, world.random);
-		RenderSystem.disableBlend();
-		matrices.pop();
-	}
+        blockRenderManager.renderBlock(state,
+                                       entity.getPos(),
+                                       entity.getWorld(),
+                                       matrices,
+                                       vertexConsumers.getBuffer(TexturedRenderLayers.getEntityTranslucentCull()),
+                                       false,
+                                       world.random);
+        RenderSystem.disableBlend();
+        matrices.pop();
+    }
 }

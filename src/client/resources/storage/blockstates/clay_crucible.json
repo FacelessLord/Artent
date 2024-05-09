@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "aam:block/clay_crucible" }
+    "": {
+      "model": "aam:block/clay_crucible"
+    }
   }
 }

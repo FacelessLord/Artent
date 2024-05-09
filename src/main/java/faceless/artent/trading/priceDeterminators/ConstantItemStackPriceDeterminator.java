@@ -8,33 +8,33 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 
 public class ConstantItemStackPriceDeterminator implements IItemStackPriceDeterminator {
-	public static String NAME = "constant";
+    public static String NAME = "constant";
 
-	@Override
-	public MoneyPouch getSellPrice(ItemStack stack, IPriceDeterminatorContext ctx) {
-		return MoneyPouch.fromLong(5000L * stack.getCount());
-	}
+    @Override
+    public MoneyPouch getSellPrice(ItemStack stack, IPriceDeterminatorContext ctx) {
+        return MoneyPouch.fromLong(5000L * stack.getCount());
+    }
 
-	@Override
-	public MoneyPouch getBuyPrice(ItemStack stack, PlayerEntity player, IPriceDeterminatorContext ctx) {
-		return new MoneyPouch(0, 0, stack.getCount());
-	}
+    @Override
+    public MoneyPouch getBuyPrice(ItemStack stack, PlayerEntity player, IPriceDeterminatorContext ctx) {
+        return new MoneyPouch(0, 0, stack.getCount());
+    }
 
-	public static class ConstantPriceDeterminatorContext implements IPriceDeterminatorContext {
+    public static class ConstantPriceDeterminatorContext implements IPriceDeterminatorContext {
 
-		@Override
-		public String getContextType() {
-			return NAME;
-		}
+        @Override
+        public String getContextType() {
+            return NAME;
+        }
 
-		@Override
-		public void writeToNbt(NbtCompound tag) {
+        @Override
+        public void writeToNbt(NbtCompound tag) {
 
-		}
+        }
 
-		@Override
-		public void readFromNbt(NbtCompound tag) {
+        @Override
+        public void readFromNbt(NbtCompound tag) {
 
-		}
-	}
+        }
+    }
 }

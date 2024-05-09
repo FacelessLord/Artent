@@ -31,7 +31,7 @@ public class InscriptionTablePt2 extends ArtentBlock {
         super.onBroken(world, pos, state);
         var facing = getFacing(state);
         var directionToMain = facing.rotateClockwise(Direction.Axis.Y);
-        if(!world.isClient())
+        if (!world.isClient())
             world.breakBlock(pos.offset(directionToMain), true);
     }
 
@@ -62,7 +62,14 @@ public class InscriptionTablePt2 extends ArtentBlock {
 //    }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(
+      BlockState state,
+      World world,
+      BlockPos pos,
+      PlayerEntity player,
+      Hand hand,
+      BlockHitResult hit
+    ) {
         var facing = getFacing(state);
         var directionToMain = facing.rotateClockwise(Direction.Axis.Y);
         var pt1Pos = pos.offset(directionToMain);

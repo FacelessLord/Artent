@@ -35,195 +35,202 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class MageEntity extends HostileEntity implements ICaster, GeoEntity, RangedAttackMob {
-	protected static final RawAnimation STAND_ANIMATION = RawAnimation.begin().thenLoop("animation.mage.stand");
-	protected static final RawAnimation WALK_LEGS_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.walk_legs");
-	protected static final RawAnimation WALK_HANDS_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.walk_hands");
-	protected static final RawAnimation CAST_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.cast");
-	protected static final RawAnimation START_CAST_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.start_cast");
-	private static final TrackedData<Integer> MANA = DataTracker.registerData(MageEntity.class,
-	  TrackedDataHandlerRegistry.INTEGER);
+    protected static final RawAnimation STAND_ANIMATION = RawAnimation.begin().thenLoop("animation.mage.stand");
+    protected static final RawAnimation WALK_LEGS_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.walk_legs");
+    protected static final RawAnimation WALK_HANDS_ANIMATION = RawAnimation
+      .begin()
+      .thenPlay("animation.mage.walk_hands");
+    protected static final RawAnimation CAST_ANIMATION = RawAnimation.begin().thenPlay("animation.mage.cast");
+    protected static final RawAnimation START_CAST_ANIMATION = RawAnimation
+      .begin()
+      .thenPlay("animation.mage.start_cast");
+    private static final TrackedData<Integer> MANA = DataTracker.registerData(MageEntity.class,
+                                                                              TrackedDataHandlerRegistry.INTEGER);
 
-	private static final int MAX_MANA_BASE = 100;
-	private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-	public Spell[] spells;
-	public UUID mageId;
+    private static final int MAX_MANA_BASE = 100;
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    public Spell[] spells;
+    public UUID mageId;
 
-	public MageEntity(EntityType<MageEntity> entityType, World world) {
-		super(entityType, world);
-		mageId = UUID.randomUUID();
-		spells = new Spell[]{ModSpells.Gust, ModSpells.Flamethrower, ModSpells.LightSword};
-	}
+    public MageEntity(EntityType<MageEntity> entityType, World world) {
+        super(entityType, world);
+        mageId = UUID.randomUUID();
+        spells = new Spell[]{ModSpells.Gust, ModSpells.Flamethrower, ModSpells.LightSword};
+    }
 
-	@Override
-	protected void initGoals() {
-		this.goalSelector.add(5, new WanderAroundFarGoal(this, 1));
-		this.goalSelector.add(6, new LookAtEntityGoal(this, SkeletonEntity.class, 16.0f));
-		this.goalSelector.add(6, new LookAroundGoal(this));
-		this.goalSelector.add(4, new MageAttackGoal(this, this, new ArrayList<>(0), 8, 1));
-		this.targetSelector.add(1, new RevengeGoal(this));
-		this.targetSelector.add(3, new ActiveTargetGoal<>(this, SkeletonEntity.class, false)); // TODO select mobs not in a team
-		this.targetSelector.add(3, new ActiveTargetGoal<>(this, ZombieEntity.class, false));
-		this.targetSelector.add(3, new ActiveTargetGoal<>(this, SpiderEntity.class, false));
-		this.targetSelector.add(3, new ActiveTargetGoal<>(this, CreeperEntity.class, false));
-	}
+    @Override
+    protected void initGoals() {
+        this.goalSelector.add(5, new WanderAroundFarGoal(this, 1));
+        this.goalSelector.add(6, new LookAtEntityGoal(this, SkeletonEntity.class, 16.0f));
+        this.goalSelector.add(6, new LookAroundGoal(this));
+        this.goalSelector.add(4, new MageAttackGoal(this, this, new ArrayList<>(0), 8, 1));
+        this.targetSelector.add(1, new RevengeGoal(this));
+        this.targetSelector.add(3,
+                                new ActiveTargetGoal<>(this,
+                                                       SkeletonEntity.class,
+                                                       false)); // TODO select mobs not in a team
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, ZombieEntity.class, false));
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, SpiderEntity.class, false));
+        this.targetSelector.add(3, new ActiveTargetGoal<>(this, CreeperEntity.class, false));
+    }
 
-	@Override
-	protected void initDataTracker() {
-		super.initDataTracker();
-		getDataTracker().startTracking(MANA, 0);
-	}
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        getDataTracker().startTracking(MANA, 0);
+    }
 
-	public static DefaultAttributeContainer.Builder createLivingAttributes() {
-		return DefaultAttributeContainer
-		  .builder()
-		  .add(EntityAttributes.GENERIC_MAX_HEALTH)
-		  .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
-		  .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
-		  .add(EntityAttributes.GENERIC_ARMOR)
-		  .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS)
-		  .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32)
-		  .add(EntityAttributes.GENERIC_MAX_ABSORPTION);
-	}
+    public static DefaultAttributeContainer.Builder createLivingAttributes() {
+        return DefaultAttributeContainer
+          .builder()
+          .add(EntityAttributes.GENERIC_MAX_HEALTH)
+          .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
+          .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
+          .add(EntityAttributes.GENERIC_ARMOR)
+          .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS)
+          .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32)
+          .add(EntityAttributes.GENERIC_MAX_ABSORPTION);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "HANDS", 5, this::handsController));
-		controllers.add(new AnimationController<>(this, "LEGS", 5, this::legsController));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "HANDS", 5, this::handsController));
+        controllers.add(new AnimationController<>(this, "LEGS", 5, this::legsController));
+    }
 
-	protected PlayState handsController(final AnimationState<MageEntity> event) {
-		var mage = event.getAnimatable();
-		if (mage.isUsingItem()) {
-			if (mage.getItemUseTime() < 10)
-				return event.setAndContinue(START_CAST_ANIMATION);
-			return event.setAndContinue(CAST_ANIMATION);
-		}
+    protected PlayState handsController(final AnimationState<MageEntity> event) {
+        var mage = event.getAnimatable();
+        if (mage.isUsingItem()) {
+            if (mage.getItemUseTime() < 10)
+                return event.setAndContinue(START_CAST_ANIMATION);
+            return event.setAndContinue(CAST_ANIMATION);
+        }
 
-		if (mage.getVelocity().length() > 0.2)
-			return event.setAndContinue(WALK_HANDS_ANIMATION);
+        if (mage.getVelocity().length() > 0.2)
+            return event.setAndContinue(WALK_HANDS_ANIMATION);
 
-		return event.setAndContinue(STAND_ANIMATION);
-	}
+        return event.setAndContinue(STAND_ANIMATION);
+    }
 
-	protected PlayState legsController(final AnimationState<MageEntity> event) {
-		var mage = event.getAnimatable();
-		if (mage.getVelocity().length() > 0.1)
-			return event.setAndContinue(WALK_LEGS_ANIMATION);
-		return event.setAndContinue(STAND_ANIMATION);
-	}
+    protected PlayState legsController(final AnimationState<MageEntity> event) {
+        var mage = event.getAnimatable();
+        if (mage.getVelocity().length() > 0.1)
+            return event.setAndContinue(WALK_LEGS_ANIMATION);
+        return event.setAndContinue(STAND_ANIMATION);
+    }
 
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.geoCache;
-	}
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
+    }
 
-	@Override
-	public Iterable<ItemStack> getArmorItems() {
-		return new ArrayList<>(0);
-	}
+    @Override
+    public Iterable<ItemStack> getArmorItems() {
+        return new ArrayList<>(0);
+    }
 
-	@Override
-	public ItemStack getEquippedStack(EquipmentSlot slot) {
-		return switch (slot) {
-			case MAINHAND -> new ItemStack(ModItems.StaffOfLight, 1);
-			case OFFHAND -> new ItemStack(ModItems.ApprenticeSpellbook, 1);
-			default -> ItemStack.EMPTY;
-		};
+    @Override
+    public ItemStack getEquippedStack(EquipmentSlot slot) {
+        return switch (slot) {
+            case MAINHAND -> new ItemStack(ModItems.StaffOfLight, 1);
+            case OFFHAND -> new ItemStack(ModItems.ApprenticeSpellbook, 1);
+            default -> ItemStack.EMPTY;
+        };
 
-	}
+    }
 
-	@Override
-	public void equipStack(EquipmentSlot slot, ItemStack stack) {
+    @Override
+    public void equipStack(EquipmentSlot slot, ItemStack stack) {
 
-	}
+    }
 
-	@Override
-	public Arm getMainArm() {
-		return Arm.RIGHT;
-	}
+    @Override
+    public Arm getMainArm() {
+        return Arm.RIGHT;
+    }
 
-	@Override
-	public boolean consumeMana(int mana) {
-		if (this.getMana() >= mana) {
-			setMana(this.getMana() - mana);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean consumeMana(int mana) {
+        if (this.getMana() >= mana) {
+            setMana(this.getMana() - mana);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public void restoreMana() {
-		setMana(getMaxMana());
-	}
+    @Override
+    public void restoreMana() {
+        setMana(getMaxMana());
+    }
 
-	@Override
-	public int getPotency() {
-		return 2;
-	}
+    @Override
+    public int getPotency() {
+        return 2;
+    }
 
-	@Override
-	public UUID getCasterUuid() {
-		return mageId;
-	}
+    @Override
+    public UUID getCasterUuid() {
+        return mageId;
+    }
 
-	@Override
-	public Vec3d getCasterRotation() {
-		return getRotationVector();
-	}
+    @Override
+    public Vec3d getCasterRotation() {
+        return getRotationVector();
+    }
 
-	@Override
-	public Vec3d getCasterPosition() {
-		return getPos();
-	}
+    @Override
+    public Vec3d getCasterPosition() {
+        return getPos();
+    }
 
 
-	@Override
-	public void tick() {
-		super.tick();
-		if (getMana() < getMaxMana()) {
-			setMana(Math.min(getMaxMana(), getMana() + ((ILeveledMob) this).getLevel()));
-		}
-	}
+    @Override
+    public void tick() {
+        super.tick();
+        if (getMana() < getMaxMana()) {
+            setMana(Math.min(getMaxMana(), getMana() + ((ILeveledMob) this).getLevel()));
+        }
+    }
 
-	@Override
-	public void writeCustomDataToNbt(NbtCompound nbt) {
-		super.writeCustomDataToNbt(nbt);
-		nbt.putUuid("mageId", mageId);
-		nbt.putInt("mana", getMana());
-	}
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putUuid("mageId", mageId);
+        nbt.putInt("mana", getMana());
+    }
 
-	@Override
-	public void readCustomDataFromNbt(NbtCompound nbt) {
-		super.readCustomDataFromNbt(nbt);
-		mageId = nbt.contains("mageId") ? nbt.getUuid("mageId") : UUID.randomUUID();
-		setMana(nbt.getInt("mana"));
-	}
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        mageId = nbt.contains("mageId") ? nbt.getUuid("mageId") : UUID.randomUUID();
+        setMana(nbt.getInt("mana"));
+    }
 
-	public int getMaxMana() {
-		return MAX_MANA_BASE * ((ILeveledMob) this).getLevel();
-	}
+    public int getMaxMana() {
+        return MAX_MANA_BASE * ((ILeveledMob) this).getLevel();
+    }
 
-	@Override
-	public int getMana() {
-		return getDataTracker().get(MANA);
-	}
+    @Override
+    public int getMana() {
+        return getDataTracker().get(MANA);
+    }
 
-	@Override
-	public float getHealthProportion() {
-		return getHealth() / getMaxHealth();
-	}
+    @Override
+    public float getHealthProportion() {
+        return getHealth() / getMaxHealth();
+    }
 
-	@Override
-	public Spell getCurrentSpell() {
-		return ModSpells.Flamethrower;
-	}
+    @Override
+    public Spell getCurrentSpell() {
+        return ModSpells.Flamethrower;
+    }
 
-	public void setMana(int mana) {
-		getDataTracker().set(MANA, mana);
-	}
+    public void setMana(int mana) {
+        getDataTracker().set(MANA, mana);
+    }
 
-	@Override
-	public void shootAt(LivingEntity target, float pullProgress) {
+    @Override
+    public void shootAt(LivingEntity target, float pullProgress) {
 
-	}
+    }
 }

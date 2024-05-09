@@ -13,28 +13,28 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class DarkBook extends Item implements INamed {
-	public DarkBook(Settings settings) {
-		super(settings);
-	}
+    public DarkBook(Settings settings) {
+        super(settings);
+    }
 
-	@Override
-	public String getId() {
-		return "dark_book";
-	}
+    @Override
+    public String getId() {
+        return "dark_book";
+    }
 
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		var handler = DataUtil.getHandler(user);
-		var canEditTrades = handler.canEditTrades();
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        var handler = DataUtil.getHandler(user);
+        var canEditTrades = handler.canEditTrades();
 
-		if (!world.isClient) {
-			var random = new Random();
-			var coin = new CoinEntity(world);
-			coin.setPosition(user.getPos());
-			coin.setCoinType(random.nextInt(0, 3));
-			coin.setCoinCount(random.nextInt(1, 100));
-			world.spawnEntity(coin);
-		}
+        if (!world.isClient) {
+            var random = new Random();
+            var coin = new CoinEntity(world);
+            coin.setPosition(user.getPos());
+            coin.setCoinType(random.nextInt(0, 3));
+            coin.setCoinCount(random.nextInt(1, 100));
+            world.spawnEntity(coin);
+        }
 
 
 //		if (!world.isClient) {
@@ -43,6 +43,6 @@ public class DarkBook extends Item implements INamed {
 //		} else {
 //			user.sendMessage(Text.literal("CanEditTrades: " + !canEditTrades));
 //		}
-		return super.use(world, user, hand);
-	}
+        return super.use(world, user, hand);
+    }
 }

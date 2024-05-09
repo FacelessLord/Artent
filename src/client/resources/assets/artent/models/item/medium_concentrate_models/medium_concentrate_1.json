@@ -1,9 +1,9 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "artent:item/potions/medium_concentrate",
-		"layer1": "artent:item/potions/medium_concentrate_offset_1",
-		"particle": "artent:item/potions/medium_concentrate"
-	}
+  "credit": "Made with Blockbench",
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "artent:item/potions/medium_concentrate",
+    "layer1": "artent:item/potions/medium_concentrate_offset_1",
+    "particle": "artent:item/potions/medium_concentrate"
+  }
 }

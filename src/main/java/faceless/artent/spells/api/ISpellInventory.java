@@ -5,6 +5,7 @@ import net.minecraft.nbt.NbtCompound;
 public interface ISpellInventory {
 
     int getSize();
+
     ScrollStack getSpell(int slot);
 
     void setSpell(int slot, ScrollStack spell);
@@ -16,6 +17,7 @@ public interface ISpellInventory {
     void writeNbt(NbtCompound nbt);
 
     boolean isDirty();
+
     void markDirty();
 
     void clearDirty();

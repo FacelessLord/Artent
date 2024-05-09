@@ -32,108 +32,119 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class Trader extends BlockWithEntity implements INamed {
-	@Override
-	protected MapCodec<? extends BlockWithEntity> getCodec() {
-		return CODEC;
-	}
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return CODEC;
+    }
 
-	public static final MapCodec<SharpeningAnvil> CODEC = SharpeningAnvil.createCodec(SharpeningAnvil::new);
-	public BlockItem Item;
+    public static final MapCodec<SharpeningAnvil> CODEC = SharpeningAnvil.createCodec(SharpeningAnvil::new);
+    public BlockItem Item;
 
-	public Trader(Settings settings) {
-		super(settings);
-	}
+    public Trader(Settings settings) {
+        super(settings);
+    }
 
-	@Override
-	public String getId() {
-		return "trader";
-	}
+    @Override
+    public String getId() {
+        return "trader";
+    }
 
-	@Override
-	public BlockRenderType getRenderType(BlockState state) {
-		// With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
-		return BlockRenderType.MODEL;
-	}
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
+        return BlockRenderType.MODEL;
+    }
 
-	protected void openScreen(World world, BlockState state, BlockPos pos, PlayerEntity player) {
-		if (!world.isClient) {
+    protected void openScreen(World world, BlockState state, BlockPos pos, PlayerEntity player) {
+        if (!world.isClient) {
 
-			var blockEntity = world.getBlockEntity(pos);
-			if (!(blockEntity instanceof TraderBlockEntity trader))
-				return;
+            var blockEntity = world.getBlockEntity(pos);
+            if (!(blockEntity instanceof TraderBlockEntity trader))
+                return;
 
-			var tradeInfo = getTradeInfo();
-			var handler = DataUtil.getHandler(player);
-			handler.setTradeInfo(tradeInfo);
-			ArtentServerHook.packetSyncPlayerData(player);
+            var tradeInfo = getTradeInfo();
+            var handler = DataUtil.getHandler(player);
+            handler.setTradeInfo(tradeInfo);
+            ArtentServerHook.packetSyncPlayerData(player);
 
-			trader.setTradeInfo(tradeInfo);
+            trader.setTradeInfo(tradeInfo);
 
-			//This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity cast to
-			//a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
-			NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            //This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity cast to
+            //a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
+            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
 
-			if (screenHandlerFactory != null) {
-				//With this call the server will request the client to open the appropriate Screenhandler
-				player.openHandledScreen(screenHandlerFactory);
-			}
-		}
-	}
+            if (screenHandlerFactory != null) {
+                //With this call the server will request the client to open the appropriate Screenhandler
+                player.openHandledScreen(screenHandlerFactory);
+            }
+        }
+    }
 
-	public static TradeInfo getTradeInfo() {
-		var tradeInfo = new TradeInfo();
-		tradeInfo.offer.set(0, new ItemStack(ModItems.AmberSphere));
-		tradeInfo.offer.set(1, new ItemStack(ModItems.FortitudeSpiritStone));
-		tradeInfo.offer.set(2, new ItemStack(ModItems.StoneOfTheSea));
-		tradeInfo.offer.set(4, new ItemStack(ModItems.PhiloStone));
-		tradeInfo.offer.set(6, new ItemStack(ModItems.SmithingHammer));
-		tradeInfo.offer.set(7, new ItemStack(ModBlocks.SharpeningAnvil.Item));
-		tradeInfo.offer.set(7, new ItemStack(ModItems.NetherFireStone));
-		tradeInfo.priceDeterminatorContext = new ConstantItemStackPriceDeterminator.ConstantPriceDeterminatorContext();
-		tradeInfo.priceDeterminatorType = ConstantItemStackPriceDeterminator.NAME;
+    public static TradeInfo getTradeInfo() {
+        var tradeInfo = new TradeInfo();
+        tradeInfo.offer.set(0, new ItemStack(ModItems.AmberSphere));
+        tradeInfo.offer.set(1, new ItemStack(ModItems.FortitudeSpiritStone));
+        tradeInfo.offer.set(2, new ItemStack(ModItems.StoneOfTheSea));
+        tradeInfo.offer.set(4, new ItemStack(ModItems.PhiloStone));
+        tradeInfo.offer.set(6, new ItemStack(ModItems.SmithingHammer));
+        tradeInfo.offer.set(7, new ItemStack(ModBlocks.SharpeningAnvil.Item));
+        tradeInfo.offer.set(7, new ItemStack(ModItems.NetherFireStone));
+        tradeInfo.priceDeterminatorContext = new ConstantItemStackPriceDeterminator.ConstantPriceDeterminatorContext();
+        tradeInfo.priceDeterminatorType = ConstantItemStackPriceDeterminator.NAME;
 
-		return tradeInfo;
-	}
+        return tradeInfo;
+    }
 
-	@Override
-	@Nullable
-	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-		var blockEntity = world.getBlockEntity(pos);
-		if (blockEntity instanceof TraderBlockEntity trader)
-			return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
-				var traderSellInventory = DataUtil.getTraderSellInventory(player);
-				return new TraderScreenHandler(
-				  syncId,
-				  inventory,
-				  trader.offerInventory,
-				  traderSellInventory,
-				  ScreenHandlerContext.create(world, pos));
-			}, Text.translatable("gui.artent.trader"));
-		return null;
-	}
+    @Override
+    @Nullable
+    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+        var blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof TraderBlockEntity trader)
+            return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
+                var traderSellInventory = DataUtil.getTraderSellInventory(player);
+                return new TraderScreenHandler(
+                  syncId,
+                  inventory,
+                  trader.offerInventory,
+                  traderSellInventory,
+                  ScreenHandlerContext.create(world, pos));
+            }, Text.translatable("gui.artent.trader"));
+        return null;
+    }
 
-	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (world.isClient) {
-			return ActionResult.SUCCESS;
-		}
-		this.openScreen(world, state, pos, player);
-		return ActionResult.SUCCESS;
-	}
+    @Override
+    public ActionResult onUse(
+      BlockState state,
+      World world,
+      BlockPos pos,
+      PlayerEntity player,
+      Hand hand,
+      BlockHitResult hit
+    ) {
+        if (world.isClient) {
+            return ActionResult.SUCCESS;
+        }
+        this.openScreen(world, state, pos, player);
+        return ActionResult.SUCCESS;
+    }
 
-	@Nullable
-	@Override
-	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new TraderBlockEntity(pos, state);
-	}
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new TraderBlockEntity(pos, state);
+    }
 
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return null;//validateTicker(type, ModBlockEntities.SHARPENING_ANVIL, (world1, pos, state1, be) -> be.tick(world1, pos, state1));
-	}
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+      World world,
+      BlockState state,
+      BlockEntityType<T> type
+    ) {
+        return null;//validateTicker(type, ModBlockEntities.SHARPENING_ANVIL, (world1, pos, state1, be) -> be.tick(world1, pos, state1));
+    }
 
-	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return Block.createCuboidShape(1, 1, 1, 15, 15, 15);
-	}
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return Block.createCuboidShape(1, 1, 1, 15, 15, 15);
+    }
 }

@@ -14,14 +14,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractBlock.class)
 public class BreakBlockMixin {
-	@Inject(at = @At("TAIL"), method = "calcBlockBreakingDelta", cancellable = true)
-	public void calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
-		if (player.hasStatusEffect(ModPotionEffects.LUMBERJACK)) {
-			var potion = player.getStatusEffect(ModPotionEffects.LUMBERJACK);
-			if ((state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES)) && potion != null) {
-				var modifier = 3 << potion.getAmplifier();
-				cir.setReturnValue(cir.getReturnValue() * modifier);
-			}
-		}
-	}
+    @Inject(at = @At("TAIL"), method = "calcBlockBreakingDelta", cancellable = true)
+    public void calcBlockBreakingDelta(
+      BlockState state,
+      PlayerEntity player,
+      BlockView world,
+      BlockPos pos,
+      CallbackInfoReturnable<Float> cir
+    ) {
+        if (player.hasStatusEffect(ModPotionEffects.LUMBERJACK)) {
+            var potion = player.getStatusEffect(ModPotionEffects.LUMBERJACK);
+            if ((state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES)) && potion != null) {
+                var modifier = 3 << potion.getAmplifier();
+                cir.setReturnValue(cir.getReturnValue() * modifier);
+            }
+        }
+    }
 }

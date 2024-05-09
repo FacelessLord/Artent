@@ -17,52 +17,57 @@ import java.util.List;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
-	// No need to serialize this value
-	@Unique
-	private final List<StatusEffectInstance> statusEffectQueue = new ArrayList<>();
+    // No need to serialize this value
+    @Unique
+    private final List<StatusEffectInstance> statusEffectQueue = new ArrayList<>();
 
-	@Inject(at = @At("HEAD"), method = "tickStatusEffects")
-	protected void tickStatusEffects(CallbackInfo ci) {
-		var living = get();
-		if (living.getWorld() != null && !living.getWorld().isClient) {
-			for (StatusEffectInstance effect : statusEffectQueue) {
-				living.addStatusEffect(effect);
-			}
-			statusEffectQueue.clear();
-		}
-	}
+    @Inject(at = @At("HEAD"), method = "tickStatusEffects")
+    protected void tickStatusEffects(CallbackInfo ci) {
+        var living = get();
+        if (living.getWorld() != null && !living.getWorld().isClient) {
+            for (StatusEffectInstance effect : statusEffectQueue) {
+                living.addStatusEffect(effect);
+            }
+            statusEffectQueue.clear();
+        }
+    }
 
-	@Inject(at = @At("HEAD"), method = "onStatusEffectRemoved")
-	protected void onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo ci) {
-		var living = get();
-		if (!living.getWorld().isClient) {
-			var type = effect.getEffectType();
-			if (type instanceof ArtentStatusEffect artentStatusEffect) {
-				artentStatusEffect.onEffectRemoved(living, effect.getAmplifier(), statusEffectQueue);
-				this.updateAttributes();
-			}
-		}
-	}
+    @Inject(at = @At("HEAD"), method = "onStatusEffectRemoved")
+    protected void onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo ci) {
+        var living = get();
+        if (!living.getWorld().isClient) {
+            var type = effect.getEffectType();
+            if (type instanceof ArtentStatusEffect artentStatusEffect) {
+                artentStatusEffect.onEffectRemoved(living, effect.getAmplifier(), statusEffectQueue);
+                this.updateAttributes();
+            }
+        }
+    }
 
-	@Inject(at = @At("HEAD"), method = "onStatusEffectUpgraded")
-	protected void onStatusEffectUpgraded(StatusEffectInstance effect, boolean reapplyEffect, @Nullable Entity source, CallbackInfo ci) {
-		var living = get();
-		if (reapplyEffect && !living.getWorld().isClient) {
-			var type = effect.getEffectType();
-			if (!(type instanceof ArtentStatusEffect artentStatusEffect)) {
-				return;
-			}
-			artentStatusEffect.onEffectRemoved(living, effect.getAmplifier(), statusEffectQueue);
-			this.updateAttributes();
-		}
-	}
+    @Inject(at = @At("HEAD"), method = "onStatusEffectUpgraded")
+    protected void onStatusEffectUpgraded(
+      StatusEffectInstance effect,
+      boolean reapplyEffect,
+      @Nullable Entity source,
+      CallbackInfo ci
+    ) {
+        var living = get();
+        if (reapplyEffect && !living.getWorld().isClient) {
+            var type = effect.getEffectType();
+            if (!(type instanceof ArtentStatusEffect artentStatusEffect)) {
+                return;
+            }
+            artentStatusEffect.onEffectRemoved(living, effect.getAmplifier(), statusEffectQueue);
+            this.updateAttributes();
+        }
+    }
 
-	@Shadow
-	private void updateAttributes() {
-	}
+    @Shadow
+    private void updateAttributes() {
+    }
 
-	@Unique
-	private LivingEntity get() {
-		return (LivingEntity) (Object) this;
-	}
+    @Unique
+    private LivingEntity get() {
+        return (LivingEntity) (Object) this;
+    }
 }

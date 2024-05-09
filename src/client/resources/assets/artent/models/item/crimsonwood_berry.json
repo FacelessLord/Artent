@@ -1,1 +1,6 @@
-{"parent": "minecraft:item/generated", "textures": {"layer0": "artent:item/ingredients/crimsonwood_berry"}}
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "artent:item/ingredients/crimsonwood_berry"
+  }
+}

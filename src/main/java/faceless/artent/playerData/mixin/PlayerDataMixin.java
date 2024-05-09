@@ -71,12 +71,22 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
             var mobLevel = leveledMob.getLevel();
             var experienceScaling = LevelingUtils.getExperienceScalingByMobLevel(heroInfo.getLevel(), mobLevel);
             if (Double.isInfinite(experienceScaling)) {
-                experienceScaling = LevelingUtils.getExperienceScalingByMobLevel(heroInfo.getLevel(), heroInfo.getLevel() + 5) * (mobLevel - heroInfo.getLevel());
+                experienceScaling = LevelingUtils.getExperienceScalingByMobLevel(heroInfo.getLevel(),
+                                                                                 heroInfo.getLevel() + 5) *
+                                    (mobLevel - heroInfo.getLevel());
             }
             var mobsToLevel = LevelingUtils.getSameLevelMobsToLevel(heroInfo.getLevel());
             var xpPerSameLevelMob = heroInfo.getExperienceToLevel() / mobsToLevel;
             var earnedXp = (int) (xpPerSameLevelMob * experienceScaling * specialMobScalingFactor);
-            System.out.println(heroInfo.getLevel() + " " + mobLevel + " " + experienceScaling + " " + xpPerSameLevelMob + " " + earnedXp);
+            System.out.println(heroInfo.getLevel() +
+                               " " +
+                               mobLevel +
+                               " " +
+                               experienceScaling +
+                               " " +
+                               xpPerSameLevelMob +
+                               " " +
+                               earnedXp);
             heroInfo.addExperience(this.asPlayer(), earnedXp);
         }
 

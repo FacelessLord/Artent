@@ -11,23 +11,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public class AttackMixin {
-	@Inject(method = "tryAttack", at = @At("TAIL"))
-	public void tryAttack(Entity target, CallbackInfoReturnable<Boolean> cir) {
-	}
+    @Inject(method = "tryAttack", at = @At("TAIL"))
+    public void tryAttack(Entity target, CallbackInfoReturnable<Boolean> cir) {
+    }
 
-	@Inject(method = "damage", at = @At("TAIL"))
-	public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-		var living = (LivingEntity) (Object) this;
-		var attacker = source.getAttacker();
-		if (!(attacker instanceof LivingEntity livingAttacker))
-			return;
+    @Inject(method = "damage", at = @At("TAIL"))
+    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        var living = (LivingEntity) (Object) this;
+        var attacker = source.getAttacker();
+        if (!(attacker instanceof LivingEntity livingAttacker))
+            return;
 
-		var attackerItem = SharpeningUtils.getCarriedItem(livingAttacker);
-		if (attackerItem != null && !attackerItem.isEmpty()) {
-			SharpeningUtils
-				.getNonEmptySlots(attackerItem)
-				.forEach(e -> e.onEntityDamaged(attackerItem, livingAttacker, living, amount));
-		}
+        var attackerItem = SharpeningUtils.getCarriedItem(livingAttacker);
+        if (attackerItem != null && !attackerItem.isEmpty()) {
+            SharpeningUtils
+              .getNonEmptySlots(attackerItem)
+              .forEach(e -> e.onEntityDamaged(attackerItem, livingAttacker, living, amount));
+        }
 
 //        checkBarrierEffects(living, livingAttacker);
 //        checkBarrierEffects(livingAttacker, living);
@@ -42,7 +42,7 @@ public class AttackMixin {
 //            if (potion != null)
 //                livingAttacker.heal(amount * 0.6f * (1 + potion.getAmplifier()));
 //        }
-	}
+    }
 
 //    private void checkBarrierEffects(LivingEntity living, LivingEntity livingAttacker) {
 //        if (living.hasStatusEffect(ModPotionEffects.LIQUID_FLAME)) {

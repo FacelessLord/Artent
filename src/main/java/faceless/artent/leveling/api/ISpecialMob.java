@@ -7,6 +7,7 @@ import java.util.List;
 public interface ISpecialMob {
 
     SpecialMobType getSpecialMobType();
+
     void setSpecialMobType(SpecialMobType type);
 
     boolean hasSpecialMobModifier();
@@ -14,7 +15,9 @@ public interface ISpecialMob {
     float getSpecialAttackModifier();
 
     float getSpecialSpeedModifier();
+
     float getSpecialHealthModifier();
+
     float getSpecialArmorModifier();
 
     void makeSpecialDrops(List<ItemStack> drops);

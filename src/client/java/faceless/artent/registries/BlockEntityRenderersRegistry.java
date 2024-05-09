@@ -9,11 +9,11 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 
 
 public class BlockEntityRenderersRegistry implements IRegistry {
-	@Override
-	public void register() {
-		BlockEntityRendererFactories.register(ModBlockEntities.AlchemicalCircle, AlchemicalCircleRenderer::new);
-		BlockEntityRendererFactories.register(ModBlockEntities.SharpeningAnvil, SharpeningAnvilRenderer::new);
-		BlockEntityRendererFactories.register(ModBlockEntities.VoidBlock, VoidBlockRenderer::new);
-		BlockEntityRendererFactories.register(ModBlockEntities.BrewingCauldron, BrewingCauldronRenderer::new);
-	}
+    @Override
+    public void register() {
+        BlockEntityRendererFactories.register(ModBlockEntities.AlchemicalCircle, AlchemicalCircleRenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.SharpeningAnvil, SharpeningAnvilRenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.VoidBlock, VoidBlockRenderer::new);
+        BlockEntityRendererFactories.register(ModBlockEntities.BrewingCauldron, BrewingCauldronRenderer::new);
+    }
 }

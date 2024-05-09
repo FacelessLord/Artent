@@ -53,10 +53,13 @@ public class PersistentPlayersState extends PersistentState {
         return persistentState;
     }
 
-    private static Type<PersistentPlayersState> Type = new Type<>(
-            PersistentPlayersState::new, // If there's no 'PersistentPlayersState' yet create one
-            PersistentPlayersState::createFromNbt, // If there is a 'PersistentPlayersState' NBT, parse it with 'createFromNbt'
-            null // Supposed to be an 'DataFixTypes' enum, but we can just pass null
+    private static final Type<PersistentPlayersState> Type = new Type<>(
+      PersistentPlayersState::new,
+      // If there's no 'PersistentPlayersState' yet create one
+      PersistentPlayersState::createFromNbt,
+      // If there is a 'PersistentPlayersState' NBT, parse it with 'createFromNbt'
+      null
+      // Supposed to be an 'DataFixTypes' enum, but we can just pass null
     );
 
     public static PersistentPlayersState getServerState(MinecraftServer server) {

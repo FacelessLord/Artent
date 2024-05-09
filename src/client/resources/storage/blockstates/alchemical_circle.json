@@ -1,59 +1,169 @@
 {
   "variants": {
-    "type=0": { "model": "aam:block/alchemical_circle" },
-    "type=1": { "model": "aam:block/circles/circle_big" },
-    "type=2": { "model": "aam:block/circles/circle_medium" },
-    "type=3": { "model": "aam:block/circles/circle_small" },
-    "type=4": { "model": "aam:block/circles/flower_big" },
-    "type=5": { "model": "aam:block/circles/flower_medium" },
-    "type=6": { "model": "aam:block/circles/flower_small" },
-    "type=7": { "model": "aam:block/circles/hex_big" },
-    "type=8": { "model": "aam:block/circles/hex_rev_big" },
-    "type=9": { "model": "aam:block/circles/hex_medium" },
-    "type=10": { "model": "aam:block/circles/hex_rev_medium" },
-    "type=11": { "model": "aam:block/circles/hex_small" },
-    "type=12": { "model": "aam:block/circles/hex_rev_small" },
-    "type=13": { "model": "aam:block/circles/light_big" },
-    "type=14": { "model": "aam:block/circles/moon_big" },
-    "type=15": { "model": "aam:block/circles/light_medium" },
-    "type=16": { "model": "aam:block/circles/moon_medium" },
-    "type=17": { "model": "aam:block/circles/light_small" },
-    "type=18": { "model": "aam:block/circles/moon_small" },
-    "type=19": { "model": "aam:block/circles/pentagon_big" },
-    "type=20": { "model": "aam:block/circles/pentagon_rev_big" },
-    "type=21": { "model": "aam:block/circles/pentagon_medium" },
-    "type=22": { "model": "aam:block/circles/pentagon_rev_medium" },
-    "type=23": { "model": "aam:block/circles/pentagon_small" },
-    "type=24": { "model": "aam:block/circles/pentagon_rev_small" },
-    "type=25": { "model": "aam:block/circles/pentagram_big" },
-    "type=26": { "model": "aam:block/circles/pentagram_rev_big" },
-    "type=27": { "model": "aam:block/circles/pentagram_medium" },
-    "type=28": { "model": "aam:block/circles/pentagram_rev_medium" },
-    "type=29": { "model": "aam:block/circles/pentagram_small" },
-    "type=30": { "model": "aam:block/circles/pentagram_rev_small" },
-    "type=31": { "model": "aam:block/circles/rect_big" },
-    "type=32": { "model": "aam:block/circles/rhomb_big" },
-    "type=33": { "model": "aam:block/circles/rect_medium" },
-    "type=34": { "model": "aam:block/circles/rhomb_medium" },
-    "type=35": { "model": "aam:block/circles/rect_small" },
-    "type=36": { "model": "aam:block/circles/rhomb_small" },
-    "type=37": { "model": "aam:block/circles/shield_big" },
-    "type=38": { "model": "aam:block/circles/tree_big" },
-    "type=39": { "model": "aam:block/circles/shield_medium" },
-    "type=40": { "model": "aam:block/circles/tree_medium" },
-    "type=41": { "model": "aam:block/circles/shield_small" },
-    "type=42": { "model": "aam:block/circles/tree_small" },
-    "type=43": { "model": "aam:block/circles/triangle_big" },
-    "type=44": { "model": "aam:block/circles/triangle_rev_big" },
-    "type=45": { "model": "aam:block/circles/triangle_medium" },
-    "type=46": { "model": "aam:block/circles/triangle_rev_medium" },
-    "type=47": { "model": "aam:block/circles/triangle_small" },
-    "type=48": { "model": "aam:block/circles/triangle_rev_small" },
-    "type=49": { "model": "aam:block/circles/triangles_big" },
-    "type=50": { "model": "aam:block/circles/triangles_rev_big" },
-    "type=51": { "model": "aam:block/circles/triangles_medium" },
-    "type=52": { "model": "aam:block/circles/triangles_rev_medium" },
-    "type=53": { "model": "aam:block/circles/triangles_small" },
-    "type=54": { "model": "aam:block/circles/triangles_rev_small" }
+    "type=0": {
+      "model": "aam:block/alchemical_circle"
+    },
+    "type=1": {
+      "model": "aam:block/circles/circle_big"
+    },
+    "type=2": {
+      "model": "aam:block/circles/circle_medium"
+    },
+    "type=3": {
+      "model": "aam:block/circles/circle_small"
+    },
+    "type=4": {
+      "model": "aam:block/circles/flower_big"
+    },
+    "type=5": {
+      "model": "aam:block/circles/flower_medium"
+    },
+    "type=6": {
+      "model": "aam:block/circles/flower_small"
+    },
+    "type=7": {
+      "model": "aam:block/circles/hex_big"
+    },
+    "type=8": {
+      "model": "aam:block/circles/hex_rev_big"
+    },
+    "type=9": {
+      "model": "aam:block/circles/hex_medium"
+    },
+    "type=10": {
+      "model": "aam:block/circles/hex_rev_medium"
+    },
+    "type=11": {
+      "model": "aam:block/circles/hex_small"
+    },
+    "type=12": {
+      "model": "aam:block/circles/hex_rev_small"
+    },
+    "type=13": {
+      "model": "aam:block/circles/light_big"
+    },
+    "type=14": {
+      "model": "aam:block/circles/moon_big"
+    },
+    "type=15": {
+      "model": "aam:block/circles/light_medium"
+    },
+    "type=16": {
+      "model": "aam:block/circles/moon_medium"
+    },
+    "type=17": {
+      "model": "aam:block/circles/light_small"
+    },
+    "type=18": {
+      "model": "aam:block/circles/moon_small"
+    },
+    "type=19": {
+      "model": "aam:block/circles/pentagon_big"
+    },
+    "type=20": {
+      "model": "aam:block/circles/pentagon_rev_big"
+    },
+    "type=21": {
+      "model": "aam:block/circles/pentagon_medium"
+    },
+    "type=22": {
+      "model": "aam:block/circles/pentagon_rev_medium"
+    },
+    "type=23": {
+      "model": "aam:block/circles/pentagon_small"
+    },
+    "type=24": {
+      "model": "aam:block/circles/pentagon_rev_small"
+    },
+    "type=25": {
+      "model": "aam:block/circles/pentagram_big"
+    },
+    "type=26": {
+      "model": "aam:block/circles/pentagram_rev_big"
+    },
+    "type=27": {
+      "model": "aam:block/circles/pentagram_medium"
+    },
+    "type=28": {
+      "model": "aam:block/circles/pentagram_rev_medium"
+    },
+    "type=29": {
+      "model": "aam:block/circles/pentagram_small"
+    },
+    "type=30": {
+      "model": "aam:block/circles/pentagram_rev_small"
+    },
+    "type=31": {
+      "model": "aam:block/circles/rect_big"
+    },
+    "type=32": {
+      "model": "aam:block/circles/rhomb_big"
+    },
+    "type=33": {
+      "model": "aam:block/circles/rect_medium"
+    },
+    "type=34": {
+      "model": "aam:block/circles/rhomb_medium"
+    },
+    "type=35": {
+      "model": "aam:block/circles/rect_small"
+    },
+    "type=36": {
+      "model": "aam:block/circles/rhomb_small"
+    },
+    "type=37": {
+      "model": "aam:block/circles/shield_big"
+    },
+    "type=38": {
+      "model": "aam:block/circles/tree_big"
+    },
+    "type=39": {
+      "model": "aam:block/circles/shield_medium"
+    },
+    "type=40": {
+      "model": "aam:block/circles/tree_medium"
+    },
+    "type=41": {
+      "model": "aam:block/circles/shield_small"
+    },
+    "type=42": {
+      "model": "aam:block/circles/tree_small"
+    },
+    "type=43": {
+      "model": "aam:block/circles/triangle_big"
+    },
+    "type=44": {
+      "model": "aam:block/circles/triangle_rev_big"
+    },
+    "type=45": {
+      "model": "aam:block/circles/triangle_medium"
+    },
+    "type=46": {
+      "model": "aam:block/circles/triangle_rev_medium"
+    },
+    "type=47": {
+      "model": "aam:block/circles/triangle_small"
+    },
+    "type=48": {
+      "model": "aam:block/circles/triangle_rev_small"
+    },
+    "type=49": {
+      "model": "aam:block/circles/triangles_big"
+    },
+    "type=50": {
+      "model": "aam:block/circles/triangles_rev_big"
+    },
+    "type=51": {
+      "model": "aam:block/circles/triangles_medium"
+    },
+    "type=52": {
+      "model": "aam:block/circles/triangles_rev_medium"
+    },
+    "type=53": {
+      "model": "aam:block/circles/triangles_small"
+    },
+    "type=54": {
+      "model": "aam:block/circles/triangles_rev_small"
+    }
   }
 }

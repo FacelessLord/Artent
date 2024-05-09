@@ -8,35 +8,35 @@ import net.minecraft.nbt.NbtCompound;
 
 public interface ArtentPlayerData {
 
-	void onEntityKilled(LivingEntity living);
+    void onEntityKilled(LivingEntity living);
 
-	ArtentPlayerState getPlayerState();
+    ArtentPlayerState getPlayerState();
 
-	long getMoney();
+    long getMoney();
 
-	void setMoney(long money);
+    void setMoney(long money);
 
-	void addMoney(long money);
+    void addMoney(long money);
 
-	boolean canEditTrades();
+    boolean canEditTrades();
 
-	void setCanEditTrades(boolean canEdit);
+    void setCanEditTrades(boolean canEdit);
 
-	TraderSellInventory getTraderSellInventory();
+    TraderSellInventory getTraderSellInventory();
 
-	TradeInfo getTradeInfo();
+    TradeInfo getTradeInfo();
 
-	void setTradeInfo(TradeInfo info);
+    void setTradeInfo(TradeInfo info);
 
-	HeroInfo getHeroInfo();
+    HeroInfo getHeroInfo();
 
-	void setHeroInfo(HeroInfo info);
+    void setHeroInfo(HeroInfo info);
 
-	CasterInfo getCasterInfo();
+    CasterInfo getCasterInfo();
 
-	void setCasterInfo(CasterInfo info);
+    void setCasterInfo(CasterInfo info);
 
-	void writeToNbt(NbtCompound compound);
+    void writeToNbt(NbtCompound compound);
 
-	void readFromNbt(NbtCompound compound);
+    void readFromNbt(NbtCompound compound);
 }

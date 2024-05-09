@@ -20,69 +20,69 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class AlchemicalPaper extends ArtentItem {
-	public AlchemicalPaper() {
-		super("alchemical_paper");
-	}
+    public AlchemicalPaper() {
+        super("alchemical_paper");
+    }
 
-	@Override
-	public ActionResult useOnBlock(ItemUsageContext context) {
-		var stack = context.getStack();
-		var blockSide = context.getSide();
-		var blockPos = context.getBlockPos();
-		var blockState = context.getWorld().getBlockState(blockPos);
-		if (blockState.getBlock() == ModBlocks.AlchemicalCircle && context.shouldCancelInteraction()) {
-			useOnCircle(context);
-			return ActionResult.SUCCESS;
-		}
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        var stack = context.getStack();
+        var blockSide = context.getSide();
+        var blockPos = context.getBlockPos();
+        var blockState = context.getWorld().getBlockState(blockPos);
+        if (blockState.getBlock() == ModBlocks.AlchemicalCircle && context.shouldCancelInteraction()) {
+            useOnCircle(context);
+            return ActionResult.SUCCESS;
+        }
 
-		if (stack == null || !stack.hasNbt() || !stack.getOrCreateNbt().contains("circleFormula"))
-			return ActionResult.PASS;
+        if (stack == null || !stack.hasNbt() || !stack.getOrCreateNbt().contains("circleFormula"))
+            return ActionResult.PASS;
 
-		BlockPos circlePos = blockPos.add(blockSide.getVector());
+        BlockPos circlePos = blockPos.add(blockSide.getVector());
 
-		BlockState circleState = ModBlocks.AlchemicalCircle
-			.getDefaultState()
-			.with(AlchemicalCircleBlock.FACING, blockSide);
-		context.getWorld().setBlockState(circlePos, circleState, Block.NOTIFY_ALL);
+        BlockState circleState = ModBlocks.AlchemicalCircle
+          .getDefaultState()
+          .with(AlchemicalCircleBlock.FACING, blockSide);
+        context.getWorld().setBlockState(circlePos, circleState, Block.NOTIFY_ALL);
 
-		var blockEntity = context.getWorld().getBlockEntity(circlePos);
-		if (blockEntity == null)
-			return ActionResult.FAIL;
-		var circle = (AlchemicalCircleEntity) blockEntity;
+        var blockEntity = context.getWorld().getBlockEntity(circlePos);
+        if (blockEntity == null)
+            return ActionResult.FAIL;
+        var circle = (AlchemicalCircleEntity) blockEntity;
 
-		var circleString = stack.getOrCreateNbt().getString("circleFormula");
+        var circleString = stack.getOrCreateNbt().getString("circleFormula");
 
-		circle.parts = CircleHelper.getCircles(circleString);
-		circle.transmutation = TransmutationRegistry.registry.getOrDefault(circleString, null);
+        circle.parts = CircleHelper.getCircles(circleString);
+        circle.transmutation = TransmutationRegistry.registry.getOrDefault(circleString, null);
 
-		return super.useOnBlock(context);
-	}
+        return super.useOnBlock(context);
+    }
 
-	private void useOnCircle(ItemUsageContext context) {
-		var stack = context.getStack();
-		var blockPos = context.getBlockPos();
-		var blockEntity = context.getWorld().getBlockEntity(blockPos);
-		if (blockEntity == null)
-			return;
+    private void useOnCircle(ItemUsageContext context) {
+        var stack = context.getStack();
+        var blockPos = context.getBlockPos();
+        var blockEntity = context.getWorld().getBlockEntity(blockPos);
+        if (blockEntity == null)
+            return;
 
-		var circle = (AlchemicalCircleEntity) blockEntity;
+        var circle = (AlchemicalCircleEntity) blockEntity;
 
-		var formula = CircleHelper.createCircleFormula(circle.parts);
-		var handTag = stack.getOrCreateNbt();
-		handTag.putString("circleFormula", formula);
-	}
+        var formula = CircleHelper.createCircleFormula(circle.parts);
+        var handTag = stack.getOrCreateNbt();
+        handTag.putString("circleFormula", formula);
+    }
 
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		return stack.hasNbt() && stack.getOrCreateNbt().contains("circleFormula");
-	}
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        return stack.hasNbt() && stack.getOrCreateNbt().contains("circleFormula");
+    }
 
-	@Override
-	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		super.appendTooltip(stack, world, tooltip, context);
-		if (!hasGlint(stack))
-			return;
-		var formula = stack.getOrCreateNbt().getString("circleFormula");
-		tooltip.add(Text.literal(formula));
-	}
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        super.appendTooltip(stack, world, tooltip, context);
+        if (!hasGlint(stack))
+            return;
+        var formula = stack.getOrCreateNbt().getString("circleFormula");
+        tooltip.add(Text.literal(formula));
+    }
 }

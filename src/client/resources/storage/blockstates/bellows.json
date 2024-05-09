@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "aam:block/bellows" }
+    "": {
+      "model": "aam:block/bellows"
+    }
   }
 }

@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "artent:block/trader" }
+    "": {
+      "model": "artent:block/trader"
+    }
   }
 }

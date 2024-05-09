@@ -10,21 +10,23 @@ import net.minecraft.util.Identifier;
 
 public class SpellParticleRenderer extends EntityRenderer<SpellParticleEntity> {
 
-	public SpellParticleRenderer(EntityRendererFactory.Context context) {
-		super(context);
-	}
+    public SpellParticleRenderer(EntityRendererFactory.Context context) {
+        super(context);
+    }
 
-	@Override
-	public void render(SpellParticleEntity lightbulb,
-                       float f,
-                       float g,
-                       MatrixStack matrixStack,
-                       VertexConsumerProvider vertexConsumerProvider,
-                       int i) {
-	}
+    @Override
+    public void render(
+      SpellParticleEntity lightbulb,
+      float f,
+      float g,
+      MatrixStack matrixStack,
+      VertexConsumerProvider vertexConsumerProvider,
+      int i
+    ) {
+    }
 
-	@Override
-	public Identifier getTexture(SpellParticleEntity coinEntity) {
-		return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
-	}
+    @Override
+    public Identifier getTexture(SpellParticleEntity coinEntity) {
+        return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
+    }
 }

@@ -1,7 +1,7 @@
 package faceless.artent.brewing.api;
 
 public interface IBrewable {
-	int getBrewingTime();
+    int getBrewingTime();
 
-	void setBrewingTime(int time);
+    void setBrewingTime(int time);
 }

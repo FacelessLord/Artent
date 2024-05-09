@@ -1,5 +1,5 @@
 package faceless.artent.registries;
 
 public interface IRegistry {
-	void register();
+    void register();
 }

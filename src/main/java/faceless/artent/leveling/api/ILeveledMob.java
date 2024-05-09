@@ -8,6 +8,7 @@ public interface ILeveledMob {
     int getBaseLevel();
 
     int getLevel();
+
     void setLevel(int level);
 
     int getLevelVariation();
@@ -15,11 +16,14 @@ public interface ILeveledMob {
     float getLevelAttackModifier();
 
     float getLevelSpeedModifier();
+
     float getLevelHealthModifier();
+
     float getLevelArmorModifier();
 
     void makeLevelDrops(List<ItemStack> drops);
 
     float getLevelMoneyDropModifier();
+
     float getXpModifier(int level); // TODO possibily remove
 }

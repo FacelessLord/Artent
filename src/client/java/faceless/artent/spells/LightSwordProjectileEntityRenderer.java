@@ -26,15 +26,20 @@ public class LightSwordProjectileEntityRenderer extends EntityRenderer<LightSwor
     }
 
     @Override
-    public void render(LightSwordProjectileEntity swordProjectile,
-                       float f,
-                       float g,
-                       MatrixStack matrixStack,
-                       VertexConsumerProvider vertexConsumerProvider,
-                       int i) {
+    public void render(
+      LightSwordProjectileEntity swordProjectile,
+      float f,
+      float g,
+      MatrixStack matrixStack,
+      VertexConsumerProvider vertexConsumerProvider,
+      int i
+    ) {
         matrixStack.push();
         var stack = new ItemStack(ModItems.LightSword_SPECIAL);
-        BakedModel bakedModel = this.itemRenderer.getModel(stack, swordProjectile.getWorld(), null, swordProjectile.getId());
+        BakedModel bakedModel = this.itemRenderer.getModel(stack,
+                                                           swordProjectile.getWorld(),
+                                                           null,
+                                                           swordProjectile.getId());
         matrixStack.scale(1.5f, 1.5f, 1.5f);
 
         var velocity = swordProjectile.getVelocity();
@@ -48,13 +53,13 @@ public class LightSwordProjectileEntityRenderer extends EntityRenderer<LightSwor
         matrixStack.translate(0, -0.0875f, 0);
         matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-45));
         this.itemRenderer.renderItem(stack,
-                ModelTransformationMode.GROUND,
-                false,
-                matrixStack,
-                vertexConsumerProvider,
-                i,
-                OverlayTexture.DEFAULT_UV,
-                bakedModel);
+                                     ModelTransformationMode.GROUND,
+                                     false,
+                                     matrixStack,
+                                     vertexConsumerProvider,
+                                     i,
+                                     OverlayTexture.DEFAULT_UV,
+                                     bakedModel);
         super.render(swordProjectile, f, g, matrixStack, vertexConsumerProvider, i);
         matrixStack.pop();
     }

@@ -91,17 +91,24 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
         var blockEntity = world.getBlockEntity(pos);
         if (blockEntity instanceof InscriptionTableBlockEntity table)
             return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) ->
-                    new InscriptionTableScreenHandler(
-                            syncId,
-                            inventory,
-                            table.inventory,
-                            ScreenHandlerContext.create(world, pos)),
-                    Text.translatable("gui.artent.inscription_table"));
+                                                         new InscriptionTableScreenHandler(
+                                                           syncId,
+                                                           inventory,
+                                                           table.inventory,
+                                                           ScreenHandlerContext.create(world, pos)),
+                                                       Text.translatable("gui.artent.inscription_table"));
         return null;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(
+      BlockState state,
+      World world,
+      BlockPos pos,
+      PlayerEntity player,
+      Hand hand,
+      BlockHitResult hit
+    ) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         }
@@ -116,7 +123,11 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+      World world,
+      BlockState state,
+      BlockEntityType<T> type
+    ) {
         return null;//validateTicker(type, ModBlockEntities.SHARPENING_ANVIL, (world1, pos, state1, be) -> be.tick(world1, pos, state1));
     }
 
@@ -125,7 +136,7 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
         super.onBroken(world, pos, state);
         var facing = getFacing(state);
         var directionToPt2 = facing.rotateCounterclockwise(Direction.Axis.Y);
-        if(!world.isClient())
+        if (!world.isClient())
             world.breakBlock(pos.offset(directionToPt2), false);
     }
 
@@ -161,14 +172,22 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+    public void onPlaced(
+      World world,
+      BlockPos pos,
+      BlockState state,
+      @Nullable LivingEntity placer,
+      ItemStack itemStack
+    ) {
         super.onPlaced(world, pos, state, placer, itemStack);
 
         var facing = getFacing(state);
         var directionToPt2 = facing.rotateCounterclockwise(Direction.Axis.Y);
         var pt2Pos = pos.offset(directionToPt2);
         if (world.getBlockState(pt2Pos).isAir())
-            world.setBlockState(pt2Pos, ModBlocks.InscriptionTable2.getDefaultState().with(FACING, facing), Block.NOTIFY_ALL_AND_REDRAW);
+            world.setBlockState(pt2Pos,
+                                ModBlocks.InscriptionTable2.getDefaultState().with(FACING, facing),
+                                Block.NOTIFY_ALL_AND_REDRAW);
     }
 
     @Override

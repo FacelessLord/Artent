@@ -10,12 +10,12 @@ import net.minecraft.world.BlockView;
 
 public class LightBlock extends ArtentBlock {
 
-	public LightBlock(Settings settings) {
-		super("light", settings);
-	}
+    public LightBlock(Settings settings) {
+        super("light", settings);
+    }
 
-	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return Block.createCuboidShape(0, 0, 0, 0, 0, 0);
-	}
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        return Block.createCuboidShape(0, 0, 0, 0, 0, 0);
+    }
 }

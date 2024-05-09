@@ -21,63 +21,69 @@ import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
 
 public final class ModItems {
-	public static final ArtentItem PhiloStone = new ArtentItem("philosophers_stone");
-	public static final Chalk Chalk = new Chalk(new FabricItemSettings().maxDamage(128));
-	public static final AlchemicalClock AlchemicalClock = new AlchemicalClock();
-	public static final AlchemicalCoal AlchemicalCoal = new AlchemicalCoal();
-	public static final AlchemicalPaper AlchemicalPaper = new AlchemicalPaper();
+    public static final ArtentItem PhiloStone = new ArtentItem("philosophers_stone");
+    public static final Chalk Chalk = new Chalk(new FabricItemSettings().maxDamage(128));
+    public static final AlchemicalClock AlchemicalClock = new AlchemicalClock();
+    public static final AlchemicalCoal AlchemicalCoal = new AlchemicalCoal();
+    public static final AlchemicalPaper AlchemicalPaper = new AlchemicalPaper();
 
-	public static SmithingHammer SmithingHammer = new SmithingHammer(new FabricItemSettings().maxCount(1)
-																		 .maxDamage(512));
-	public static Item StoneOfTheSea = new Item(new FabricItemSettings().maxCount(64));
-	public static Item FortitudeSpiritStone = new Item(new FabricItemSettings().maxCount(64));
-	public static Item AmberSphere = new Item(new FabricItemSettings().maxCount(64));
+    public static SmithingHammer SmithingHammer = new SmithingHammer(new FabricItemSettings().maxCount(1)
+                                                                                             .maxDamage(512));
+    public static Item StoneOfTheSea = new Item(new FabricItemSettings().maxCount(64));
+    public static Item FortitudeSpiritStone = new Item(new FabricItemSettings().maxCount(64));
+    public static Item AmberSphere = new Item(new FabricItemSettings().maxCount(64));
 
-	public static Item[] Catalysts = new Item[]{ StoneOfTheSea, FortitudeSpiritStone, AmberSphere };
+    public static Item[] Catalysts = new Item[]{StoneOfTheSea, FortitudeSpiritStone, AmberSphere};
 
-	public static EnhancerItem EnderInversionUpgrade = new EnderInversion(new FabricItemSettings().maxCount(1));
-	public static EnhancerItem NetherFireStone = new NetherFireStone(new FabricItemSettings().maxCount(1));
-	public static EnhancerItem GoldenCrossUpgrade = new GoldenCross(new FabricItemSettings().maxCount(1));
-	public static EnhancerItem PoisonBottleUpgrade = new PoisonBottle(new FabricItemSettings().maxCount(1));
-	public static EnhancerItem VampiresFangUpgrade = new VampiresFang(new FabricItemSettings().maxCount(1));
+    public static EnhancerItem EnderInversionUpgrade = new EnderInversion(new FabricItemSettings().maxCount(1));
+    public static EnhancerItem NetherFireStone = new NetherFireStone(new FabricItemSettings().maxCount(1));
+    public static EnhancerItem GoldenCrossUpgrade = new GoldenCross(new FabricItemSettings().maxCount(1));
+    public static EnhancerItem PoisonBottleUpgrade = new PoisonBottle(new FabricItemSettings().maxCount(1));
+    public static EnhancerItem VampiresFangUpgrade = new VampiresFang(new FabricItemSettings().maxCount(1));
 
-	public static Item EmptyPhial = new Item(new Item.Settings().maxCount(64));
-	public static Item EmptyPhialExplosive = new Item(new Item.Settings().maxCount(64));
-	public static PotionPhial PotionPhial = new PotionPhial(new Item.Settings().maxCount(64));
-	public static PotionPhialExplosive PotionPhialExplosive = new PotionPhialExplosive(new Item.Settings().maxCount(64));
-	public static final FoodComponent Berry = new FoodComponent.Builder().hunger(2).saturationModifier(0.1f).build();
-	public static Item CrimsonLeaf = new Item(new Item.Settings().maxCount(64));
-	public static Item GoldenBucket = new Item(new Item.Settings().maxCount(1));
-	public static Item GoldenBucketFilled = new FilledGoldenBucket(new Item.Settings().maxCount(1));
-	public static Item SmallConcentratePhial = new Item(new Item.Settings().maxCount(64));
-	public static Item SmallConcentrate = new SmallConcentrate(new Item.Settings().maxCount(64));
-	public static Item MediumConcentratePhial = new Item(new Item.Settings().maxCount(64));
-	public static Item MediumConcentrate = new MediumConcentrate(new Item.Settings().maxCount(1));
-	public static Item BigConcentratePhial = new Item(new Item.Settings().maxCount(64));
-	public static Item BigConcentrate = new BigConcentrate(new Item.Settings().maxCount(1));
-	public static DarkBook DarkBook = new DarkBook(new Item.Settings().maxCount(1));
-	public static CrowStaff CrowStaff = new CrowStaff(new Item.Settings().maxCount(1));
-	public static SpellBook NoviceSpellbook = new SpellBook(1, new Item.Settings().maxCount(1));
-	public static SpellBook ApprenticeSpellbook = new SpellBook(2, new Item.Settings().maxCount(1));
-	public static SpellBook MasterSpellbook = new SpellBook(3, new Item.Settings().maxCount(1));
-	public static StaffOfLight StaffOfLight = new StaffOfLight(new FabricItemSettings().maxCount(1));
-	public static SpellScroll SpellScroll = new SpellScroll(new FabricItemSettings().maxCount(1));
-	public static LightSword LightSword_SPECIAL = new LightSword();
+    public static Item EmptyPhial = new Item(new Item.Settings().maxCount(64));
+    public static Item EmptyPhialExplosive = new Item(new Item.Settings().maxCount(64));
+    public static PotionPhial PotionPhial = new PotionPhial(new Item.Settings().maxCount(64));
+    public static PotionPhialExplosive PotionPhialExplosive = new PotionPhialExplosive(new Item.Settings().maxCount(64));
+    public static final FoodComponent Berry = new FoodComponent.Builder().hunger(2).saturationModifier(0.1f).build();
+    public static Item CrimsonLeaf = new Item(new Item.Settings().maxCount(64));
+    public static Item GoldenBucket = new Item(new Item.Settings().maxCount(1));
+    public static Item GoldenBucketFilled = new FilledGoldenBucket(new Item.Settings().maxCount(1));
+    public static Item SmallConcentratePhial = new Item(new Item.Settings().maxCount(64));
+    public static Item SmallConcentrate = new SmallConcentrate(new Item.Settings().maxCount(64));
+    public static Item MediumConcentratePhial = new Item(new Item.Settings().maxCount(64));
+    public static Item MediumConcentrate = new MediumConcentrate(new Item.Settings().maxCount(1));
+    public static Item BigConcentratePhial = new Item(new Item.Settings().maxCount(64));
+    public static Item BigConcentrate = new BigConcentrate(new Item.Settings().maxCount(1));
+    public static DarkBook DarkBook = new DarkBook(new Item.Settings().maxCount(1));
+    public static CrowStaff CrowStaff = new CrowStaff(new Item.Settings().maxCount(1));
+    public static SpellBook NoviceSpellbook = new SpellBook(1, new Item.Settings().maxCount(1));
+    public static SpellBook ApprenticeSpellbook = new SpellBook(2, new Item.Settings().maxCount(1));
+    public static SpellBook MasterSpellbook = new SpellBook(3, new Item.Settings().maxCount(1));
+    public static StaffOfLight StaffOfLight = new StaffOfLight(new FabricItemSettings().maxCount(1));
+    public static SpellScroll SpellScroll = new SpellScroll(new FabricItemSettings().maxCount(1));
+    public static LightSword LightSword_SPECIAL = new LightSword();
 
 
-	public static final Item CrowSpawnEgg = new SpawnEggItem(ModEntities.CROW_ENTITY, 0x060e45, 0x020425, new FabricItemSettings());
-	public static final Item MageSpawnEgg = new SpawnEggItem(ModEntities.MAGE_ENTITY, 0x4b015f, 0x9501f2, new FabricItemSettings());
+    public static final Item CrowSpawnEgg = new SpawnEggItem(ModEntities.CROW_ENTITY,
+                                                             0x060e45,
+                                                             0x020425,
+                                                             new FabricItemSettings());
+    public static final Item MageSpawnEgg = new SpawnEggItem(ModEntities.MAGE_ENTITY,
+                                                             0x4b015f,
+                                                             0x9501f2,
+                                                             new FabricItemSettings());
 
-	public static final ArtentItem[] Coins = new ArtentItem[]{
-		new ArtentItem("coin_bronze"),
-		new ArtentItem("coin_silver"),
-		new ArtentItem("coin_gold") };
+    public static final ArtentItem[] Coins = new ArtentItem[]{
+      new ArtentItem("coin_bronze"),
+      new ArtentItem("coin_silver"),
+      new ArtentItem("coin_gold")};
 
-	public static Item[] berries = new Item[]{
-		new Item(new Item.Settings().maxCount(64).food(Berry)),
-		new Item(new Item.Settings().maxCount(64).food(Berry)),
-		new Item(new Item.Settings().maxCount(64).food(Berry)),
-		new Item(new Item.Settings().maxCount(64).food(Berry)),
-		new Item(new Item.Settings().maxCount(64).food(Berry)),
-	};
+    public static Item[] berries = new Item[]{
+      new Item(new Item.Settings().maxCount(64).food(Berry)),
+      new Item(new Item.Settings().maxCount(64).food(Berry)),
+      new Item(new Item.Settings().maxCount(64).food(Berry)),
+      new Item(new Item.Settings().maxCount(64).food(Berry)),
+      new Item(new Item.Settings().maxCount(64).food(Berry)),
+    };
 }

@@ -9,7 +9,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CrowEntityRenderer extends GeoEntityRenderer<CrowEntity> {
 
-	public CrowEntityRenderer(EntityRendererFactory.Context context) {
-		super(context, new DefaultedEntityGeoModel<>(new Identifier(Artent.MODID, "crow")));
-	}
+    public CrowEntityRenderer(EntityRendererFactory.Context context) {
+        super(context, new DefaultedEntityGeoModel<>(new Identifier(Artent.MODID, "crow")));
+    }
 }

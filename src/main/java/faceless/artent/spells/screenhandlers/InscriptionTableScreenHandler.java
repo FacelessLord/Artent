@@ -32,12 +32,12 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
             var itemStack = slotStack.copy();
             var item = itemStack.getItem();
             if (slotId < 14) { // output
-                if(slotId == 0)
+                if (slotId == 0)
                     table.setStack(0, slotStack);
                 if (!this.insertItem(slotStack, 14, 40, true)) {
                     return ItemStack.EMPTY;
                 }
-                if(slotId == 0) {
+                if (slotId == 0) {
                     table.setStack(0, ItemStack.EMPTY);
                 }
                 slot.onQuickTransfer(slotStack, itemStack);
@@ -89,10 +89,17 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5) <= 16, true);
+        return this.context.get((world, pos) -> player.squaredDistanceTo((double) pos.getX() + 0.5,
+                                                                         (double) pos.getY() + 0.5,
+                                                                         (double) pos.getZ() + 0.5) <= 16, true);
     }
 
-    public InscriptionTableScreenHandler(int syncId, PlayerInventory inv, Inventory table, ScreenHandlerContext context) {
+    public InscriptionTableScreenHandler(
+      int syncId,
+      PlayerInventory inv,
+      Inventory table,
+      ScreenHandlerContext context
+    ) {
         super(ModScreenHandlers.INSCRIPTION_TABLE, syncId);
         this.context = context;
         checkSize(table, 3);
@@ -135,7 +142,9 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
                 @Override
                 public boolean isEnabled() {
                     var bookStack = table.getStack(0);
-                    return !bookStack.isEmpty() && bookStack.getItem() instanceof ISpellInventoryItem book && k < book.getSize(bookStack);
+                    return !bookStack.isEmpty() &&
+                           bookStack.getItem() instanceof ISpellInventoryItem book &&
+                           k < book.getSize(bookStack);
                 }
             });
         }

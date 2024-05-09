@@ -17,40 +17,40 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class PotionPhialExplosive extends Item implements INamed {
-	public PotionPhialExplosive(Settings settings) {
-		super(settings);
-	}
+    public PotionPhialExplosive(Settings settings) {
+        super(settings);
+    }
 
-	@Override
-	public String getId() {
-		return "potion_phial_explosive";
-	}
+    @Override
+    public String getId() {
+        return "potion_phial_explosive";
+    }
 
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		ItemStack itemStack = user.getStackInHand(hand);
-		if (!world.isClient) {
-			ThrowablePotionPhialEntity potionEntity = new ThrowablePotionPhialEntity(world, user);
-			potionEntity.setItem(itemStack);
-			potionEntity.setVelocity(user, user.getPitch(), user.getYaw(), -20.0f, 0.5f, 1.0f);
-			world.spawnEntity(potionEntity);
-		}
-		user.incrementStat(Stats.USED.getOrCreateStat(this));
-		if (!user.getAbilities().creativeMode) {
-			itemStack.decrement(1);
-		}
-		return TypedActionResult.success(itemStack, world.isClient());
-	}
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        ItemStack itemStack = user.getStackInHand(hand);
+        if (!world.isClient) {
+            ThrowablePotionPhialEntity potionEntity = new ThrowablePotionPhialEntity(world, user);
+            potionEntity.setItem(itemStack);
+            potionEntity.setVelocity(user, user.getPitch(), user.getYaw(), -20.0f, 0.5f, 1.0f);
+            world.spawnEntity(potionEntity);
+        }
+        user.incrementStat(Stats.USED.getOrCreateStat(this));
+        if (!user.getAbilities().creativeMode) {
+            itemStack.decrement(1);
+        }
+        return TypedActionResult.success(itemStack, world.isClient());
+    }
 
-	@Override
-	public Text getName(ItemStack stack) {
-		var key = stack.getOrCreateNbt().getString("potionKey");
-		return Text.translatable("item.potion." + key + ".explosive");
-	}
+    @Override
+    public Text getName(ItemStack stack) {
+        var key = stack.getOrCreateNbt().getString("potionKey");
+        return Text.translatable("item.potion." + key + ".explosive");
+    }
 
-	@Override
-	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-		var tickRate = world == null ? 20.0f : world.getTickManager().getTickRate();
-		AlchemicalPotionUtil.buildTooltip(stack, tooltip, 1.0f, tickRate);
-	}
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        var tickRate = world == null ? 20.0f : world.getTickManager().getTickRate();
+        AlchemicalPotionUtil.buildTooltip(stack, tooltip, 1.0f, tickRate);
+    }
 }

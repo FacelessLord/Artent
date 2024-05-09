@@ -26,10 +26,12 @@ public class LightSwordProjectileEntity extends ThrownEntity {
     private ICaster caster;
     private ItemStack wandStack = ItemStack.EMPTY;
     private static final TrackedData<String> SPELL = DataTracker.registerData(LightSwordProjectileEntity.class,
-            TrackedDataHandlerRegistry.STRING);
+                                                                              TrackedDataHandlerRegistry.STRING);
 
-    public LightSwordProjectileEntity(EntityType<? extends LightSwordProjectileEntity> entityType,
-                                      World world) {
+    public LightSwordProjectileEntity(
+      EntityType<? extends LightSwordProjectileEntity> entityType,
+      World world
+    ) {
         super(entityType, world);
         this.setNoGravity(true);
     }
@@ -109,8 +111,8 @@ public class LightSwordProjectileEntity extends ThrownEntity {
 
             var damageSources = this.getDamageSources();
             var damageSource = this.caster instanceof LivingEntity casterAttacker
-                    ? damageSources.mobProjectile(this, casterAttacker)
-                    : damageSources.magic();
+              ? damageSources.mobProjectile(this, casterAttacker)
+              : damageSources.magic();
             var damageCoeff = 1;
             if (Objects.equals(this.getSpellId(), ModSpells.GilgameshLightStorm.id))
                 damageCoeff = 4;
@@ -145,12 +147,12 @@ public class LightSwordProjectileEntity extends ThrownEntity {
             }
 
             world.addParticle(new DustParticleEffect(ModSpells.MakeLight.color, 1),
-                    getParticleX(0.05f),
-                    this.getRandomBodyY(),
-                    getParticleZ(0.05f),
-                    0,
-                    0,
-                    0);
+                              getParticleX(0.05f),
+                              this.getRandomBodyY(),
+                              getParticleZ(0.05f),
+                              0,
+                              0,
+                              0);
         }
 
         if (getVelocity().length() < 0.05)

@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "aam:block/kaolin_clay_terracotta" }
+    "": {
+      "model": "aam:block/kaolin_clay_terracotta"
+    }
   }
 }

@@ -1,13 +1,13 @@
 package faceless.artent.api;
 
 public class CancellationToken {
-	private boolean cancelled;
+    private boolean cancelled;
 
-	public boolean isCancelled() {
-		return cancelled;
-	}
+    public boolean isCancelled() {
+        return cancelled;
+    }
 
-	public void setCancelled() {
-		cancelled = true;
-	}
+    public void setCancelled() {
+        cancelled = true;
+    }
 }

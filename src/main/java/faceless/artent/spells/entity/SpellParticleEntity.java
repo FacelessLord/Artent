@@ -20,10 +20,12 @@ public class SpellParticleEntity extends ThrownEntity {
     private ICaster caster;
     private ItemStack wandStack = ItemStack.EMPTY;
     private static final TrackedData<String> SPELL = DataTracker.registerData(SpellParticleEntity.class,
-            TrackedDataHandlerRegistry.STRING);
+                                                                              TrackedDataHandlerRegistry.STRING);
 
-    public SpellParticleEntity(EntityType<? extends SpellParticleEntity> entityType,
-                               World world) {
+    public SpellParticleEntity(
+      EntityType<? extends SpellParticleEntity> entityType,
+      World world
+    ) {
         super(entityType, world);
         this.setNoGravity(true);
     }
@@ -99,11 +101,11 @@ public class SpellParticleEntity extends ThrownEntity {
             }
 
             spell.blockCast(getCaster(),
-                    getWorld(),
-                    getWandStack(),
-                    blockHitResult.getBlockPos(),
-                    blockHitResult.getSide(),
-                    1);
+                            getWorld(),
+                            getWandStack(),
+                            blockHitResult.getBlockPos(),
+                            blockHitResult.getSide(),
+                            1);
             this.discard();
         }
     }
@@ -129,12 +131,12 @@ public class SpellParticleEntity extends ThrownEntity {
             }
 
             world.addParticle(new DustParticleEffect(spell.color, 1),
-                    getParticleX(0.05f),
-                    this.getRandomBodyY(),
-                    getParticleZ(0.05f),
-                    0,
-                    0,
-                    0);
+                              getParticleX(0.05f),
+                              this.getRandomBodyY(),
+                              getParticleZ(0.05f),
+                              0,
+                              0,
+                              0);
         }
 
         if (getVelocity().length() < 0.05)

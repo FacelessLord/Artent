@@ -20,9 +20,9 @@ public class ArtentHudRenderer {
     public static final Identifier SPELL_BOOK_HUD = new Identifier(Artent.MODID, "textures/hud/spell_book_hud.png");
 
     public static final Identifier[] COINS = new Identifier[]{
-            BRONZE_COIN_TEXTURE,
-            SILVER_COIN_TEXTURE,
-            GOLD_COIN_TEXTURE
+      BRONZE_COIN_TEXTURE,
+      SILVER_COIN_TEXTURE,
+      GOLD_COIN_TEXTURE
     };
 
     public static void render(DrawContext context, float tickDelta, ArtentHudContext ctx) {
@@ -121,7 +121,15 @@ public class ArtentHudRenderer {
 
             var fillPercentage = 1f * heroInfo.experience / heroInfo.getExperienceToLevel();
             var experienceHeight = (int) Math.min(109 * fillPercentage, 109);
-            context.drawTexture(SPELL_BOOK_HUD, 2, 125 - experienceHeight, 77, 42 + 14 + 2 + 109 - experienceHeight, 5, experienceHeight, 256, 256);
+            context.drawTexture(SPELL_BOOK_HUD,
+                                2,
+                                125 - experienceHeight,
+                                77,
+                                42 + 14 + 2 + 109 - experienceHeight,
+                                5,
+                                experienceHeight,
+                                256,
+                                256);
             matrices.pop();
         }
     }

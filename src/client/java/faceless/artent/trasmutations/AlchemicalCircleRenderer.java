@@ -28,83 +28,87 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class AlchemicalCircleRenderer implements BlockEntityRenderer<AlchemicalCircleEntity> {
-	public BlockEntityRendererFactory.Context renderContext;
+    public BlockEntityRendererFactory.Context renderContext;
 
-	public AlchemicalCircleRenderer(BlockEntityRendererFactory.Context ctx) {
-		renderContext = ctx;
-	}
+    public AlchemicalCircleRenderer(BlockEntityRendererFactory.Context ctx) {
+        renderContext = ctx;
+    }
 
-	@Override
-	public void render(AlchemicalCircleEntity entity, float tickDelta, MatrixStack matrices,
-					   VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		List<CirclePart> parts = entity.parts;
-		var world = entity.getWorld();
-		if (world == null)
-			return;
+    @Override
+    public void render(
+      AlchemicalCircleEntity entity, float tickDelta, MatrixStack matrices,
+      VertexConsumerProvider vertexConsumers, int light, int overlay
+    ) {
+        List<CirclePart> parts = entity.parts;
+        var world = entity.getWorld();
+        if (world == null)
+            return;
 
-		var blockState = world.getBlockState(entity.getPos());
-		var block = blockState.getBlock();
-		if (block != ModBlocks.AlchemicalCircle) {
-			return;
-		}
+        var blockState = world.getBlockState(entity.getPos());
+        var block = blockState.getBlock();
+        if (block != ModBlocks.AlchemicalCircle) {
+            return;
+        }
 
-		BlockState state = block.getDefaultState();
-		var facing = blockState.get(AlchemicalCircleBlock.FACING);
-		BlockRenderManager renderManager = renderContext.getRenderManager();
+        BlockState state = block.getDefaultState();
+        var facing = blockState.get(AlchemicalCircleBlock.FACING);
+        BlockRenderManager renderManager = renderContext.getRenderManager();
 
-		matrices.push();
+        matrices.push();
 
-		applyFacingRotation(matrices, facing);
+        applyFacingRotation(matrices, facing);
 
-		Color c = entity.getRenderColor();
-		RenderSystem.clearColor(c.getRedF(), c.getGreenF(), c.getBlueF(), 1f);
+        Color c = entity.getRenderColor();
+        RenderSystem.clearColor(c.getRedF(), c.getGreenF(), c.getBlueF(), 1f);
 
-		matrices.translate(0, 0.01f, 0);
-		for (CirclePart part : parts) {
-			BakedModel model = renderManager
-				.getModel(state.with(AlchemicalCircleBlock.CIRCLE_TYPE, part.part.id + (part.reverse && part.part.itemTexture != part.part.itemTextureRev ? 1 : 0)));
+        matrices.translate(0, 0.01f, 0);
+        for (CirclePart part : parts) {
+            BakedModel model = renderManager
+              .getModel(state.with(AlchemicalCircleBlock.CIRCLE_TYPE,
+                                   part.part.id +
+                                   (part.reverse && part.part.itemTexture != part.part.itemTextureRev ? 1 : 0)));
 
-			BlockModelRenderer renderer = renderManager.getModelRenderer();
-			renderer
-				.render(
-					matrices.peek(),
-					vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()),
-					state,
-					model,
-					c.getRedF(),
-					c.getGreenF(),
-					c.getBlueF(),
-					light,
-					overlay);
-		}
+            BlockModelRenderer renderer = renderManager.getModelRenderer();
+            renderer
+              .render(
+                matrices.peek(),
+                vertexConsumers.getBuffer(RenderLayer.getCutoutMipped()),
+                state,
+                model,
+                c.getRedF(),
+                c.getGreenF(),
+                c.getBlueF(),
+                light,
+                overlay);
+        }
 
-		if (!entity.inventory.get(0).isEmpty()) {
-			matrices.translate(0.5, 0.25, 0.5);
-			MinecraftClient
-				.getInstance()
-				.getItemRenderer()
-				.renderItem(
-					entity.inventory.get(0),
-					ModelTransformationMode.GROUND,
-					light,
-					OverlayTexture.DEFAULT_UV,
-					matrices,
-					vertexConsumers,
-					entity.getWorld(),
-					(int) entity.getWorld().getTime());
-		}
-		matrices.pop();
-	}
+        if (!entity.inventory.get(0).isEmpty()) {
+            matrices.translate(0.5, 0.25, 0.5);
+            MinecraftClient
+              .getInstance()
+              .getItemRenderer()
+              .renderItem(
+                entity.inventory.get(0),
+                ModelTransformationMode.GROUND,
+                light,
+                OverlayTexture.DEFAULT_UV,
+                matrices,
+                vertexConsumers,
+                entity.getWorld(),
+                (int) entity.getWorld().getTime());
+        }
+        matrices.pop();
+    }
 
-	private static void applyFacingRotation(MatrixStack matrices, Direction facing) {
-		matrices.translate(0.5f, 0.5f, 0.5f);
-		switch (facing) {
-			case DOWN -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI, 1, 0, 0)));
-			case NORTH -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, -1, 0, 0)));
-			case SOUTH -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 1, 0, 0)));
-			case EAST -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 0, 0, -1)));
-			case WEST -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 0, 0, 1)));
-		}
-		matrices.translate(-0.5f, -0.5f, -0.5f);
-	}
+    private static void applyFacingRotation(MatrixStack matrices, Direction facing) {
+        matrices.translate(0.5f, 0.5f, 0.5f);
+        switch (facing) {
+            case DOWN -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI, 1, 0, 0)));
+            case NORTH -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, -1, 0, 0)));
+            case SOUTH -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 1, 0, 0)));
+            case EAST -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 0, 0, -1)));
+            case WEST -> matrices.multiply(new Quaternionf(new AxisAngle4f((float) Math.PI / 2, 0, 0, 1)));
+        }
+        matrices.translate(-0.5f, -0.5f, -0.5f);
+    }
 }

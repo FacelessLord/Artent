@@ -1,8 +1,16 @@
 {
   "variants": {
-    "has_coal=false,is_burning=false": { "model": "artent:block/cauldron" },
-    "has_coal=false,is_burning=true": { "model": "artent:block/cauldron" },
-    "has_coal=true,is_burning=false": { "model": "artent:block/cauldron_black_embers" },
-    "has_coal=true,is_burning=true": { "model": "artent:block/cauldron_red_embers" }
+    "has_coal=false,is_burning=false": {
+      "model": "artent:block/cauldron"
+    },
+    "has_coal=false,is_burning=true": {
+      "model": "artent:block/cauldron"
+    },
+    "has_coal=true,is_burning=false": {
+      "model": "artent:block/cauldron_black_embers"
+    },
+    "has_coal=true,is_burning=true": {
+      "model": "artent:block/cauldron_red_embers"
+    }
   }
 }

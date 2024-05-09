@@ -23,7 +23,7 @@ public class CasterInfo {
         return heroInfo.getLevel(); // TODO
     }
 
-    public void restoreMana(PlayerEntity player){
+    public void restoreMana(PlayerEntity player) {
         mana = getMaxMana(player);
     }
 
@@ -36,7 +36,7 @@ public class CasterInfo {
     }
 
     public void tickCaster(World world, PlayerEntity player) {
-        mana = Math.min(mana + getManaRegenBase(player)*2, getMaxMana(player));
+        mana = Math.min(mana + getManaRegenBase(player) * 2, getMaxMana(player));
     }
 
     public void writeNbt(NbtCompound nbt) {

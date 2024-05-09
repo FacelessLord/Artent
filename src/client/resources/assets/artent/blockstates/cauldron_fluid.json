@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "artent:block/cauldron_fluid" }
+    "": {
+      "model": "artent:block/cauldron_fluid"
+    }
   }
 }

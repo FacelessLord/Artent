@@ -15,12 +15,13 @@ public class Nox extends ProjectileSpell {
 
     @Override
     public void blockCast(
-            ICaster caster,
-            World world,
-            ItemStack stack,
-            BlockPos hitPos,
-            Direction hitSide,
-            int actionTime) {
+      ICaster caster,
+      World world,
+      ItemStack stack,
+      BlockPos hitPos,
+      Direction hitSide,
+      int actionTime
+    ) {
         var blockPos = hitPos.offset(hitSide);
 
         var range = 8;

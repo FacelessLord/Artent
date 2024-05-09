@@ -40,9 +40,9 @@ public class InscriptionTableInventory extends ArtentInventory {
         var paperStack = getStack(1);
         var scrollStack = getStack(2);
         if (!paperStack.isEmpty() && !scrollStack.isEmpty()
-                && paperStack.getItem() == Items.PAPER
-                && scrollStack.getItem() instanceof ISpellScroll scroll
-                && scroll.getType(scrollStack) == ScrollType.Common) {
+            && paperStack.getItem() == Items.PAPER
+            && scrollStack.getItem() instanceof ISpellScroll scroll
+            && scroll.getType(scrollStack) == ScrollType.Common) {
             super.setStack(3, scrollStack.copyWithCount(1));
         } else {
             super.setStack(3, ItemStack.EMPTY);

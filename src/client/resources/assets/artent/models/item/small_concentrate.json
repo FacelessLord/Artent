@@ -1,8 +1,8 @@
 {
   "parent": "item/generated",
   "textures": {
-	"layer0": "artent:item/potions/small_concentrate",
-	"layer1": "artent:item/potions/small_concentrate_offset_0",
-	"particle": "artent:item/potions/small_concentrate"
+    "layer0": "artent:item/potions/small_concentrate",
+    "layer1": "artent:item/potions/small_concentrate_offset_0",
+    "particle": "artent:item/potions/small_concentrate"
   }
 }

@@ -19,22 +19,31 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class BlockEntityRegistry implements IRegistry {
-	@Override
-	public void register() {
-		ModBlockEntities.AlchemicalCircle = register(AlchemicalCircleEntity::new, "alchemical_circle",
-		  ModBlocks.AlchemicalCircle);
-		ModBlockEntities.SharpeningAnvil = register(SharpeningAnvilBlockEntity::new, "sharpening_anvil",
-		  ModBlocks.SharpeningAnvil);
-		ModBlockEntities.BrewingCauldron = register(BrewingCauldronBlockEntity::new, "cauldron_entity", ModBlocks.BrewingCauldron, ModBlocks.BrewingCauldronCopper);
-		ModBlockEntities.FermentingBarrel = register(FermentingBarrelBlockEntity::new, "fermenting_barrel", ModBlocks.FermentingBarrel);
-		ModBlockEntities.Trader = register(TraderBlockEntity::new, "trader", ModBlocks.Trader);
-		ModBlockEntities.InscriptionTable = register(InscriptionTableBlockEntity::new, "inscription_table", ModBlocks.InscriptionTable);
-		ModBlockEntities.VoidBlock = register(VoidBlockEntity::new, "void", ModBlocks.VoidBlock);
-	}
+    @Override
+    public void register() {
+        ModBlockEntities.AlchemicalCircle = register(AlchemicalCircleEntity::new, "alchemical_circle",
+                                                     ModBlocks.AlchemicalCircle);
+        ModBlockEntities.SharpeningAnvil = register(SharpeningAnvilBlockEntity::new, "sharpening_anvil",
+                                                    ModBlocks.SharpeningAnvil);
+        ModBlockEntities.BrewingCauldron = register(BrewingCauldronBlockEntity::new,
+                                                    "cauldron_entity",
+                                                    ModBlocks.BrewingCauldron,
+                                                    ModBlocks.BrewingCauldronCopper);
+        ModBlockEntities.FermentingBarrel = register(FermentingBarrelBlockEntity::new,
+                                                     "fermenting_barrel",
+                                                     ModBlocks.FermentingBarrel);
+        ModBlockEntities.Trader = register(TraderBlockEntity::new, "trader", ModBlocks.Trader);
+        ModBlockEntities.InscriptionTable = register(InscriptionTableBlockEntity::new,
+                                                     "inscription_table",
+                                                     ModBlocks.InscriptionTable);
+        ModBlockEntities.VoidBlock = register(VoidBlockEntity::new, "void", ModBlocks.VoidBlock);
+    }
 
-	public <T extends BlockEntity> BlockEntityType<T> register(FabricBlockEntityTypeBuilder.Factory<T> item, String id,
-															   Block... block) {
-		return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(Artent.MODID, id),
-		  FabricBlockEntityTypeBuilder.create(item, block).build(null));
-	}
+    public <T extends BlockEntity> BlockEntityType<T> register(
+      FabricBlockEntityTypeBuilder.Factory<T> item, String id,
+      Block... block
+    ) {
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(Artent.MODID, id),
+                                 FabricBlockEntityTypeBuilder.create(item, block).build(null));
+    }
 }

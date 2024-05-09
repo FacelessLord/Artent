@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "artent:block/shadowveil" }
+    "": {
+      "model": "artent:block/shadowveil"
+    }
   }
 }

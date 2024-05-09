@@ -18,36 +18,42 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class VoidBlock extends BlockWithEntity implements INamed {
-	public static final MapCodec<VoidBlock> CODEC = VoidBlock.createCodec(VoidBlock::new);
+    public static final MapCodec<VoidBlock> CODEC = VoidBlock.createCodec(VoidBlock::new);
 
-	public VoidBlock(Settings settings) {
-		super(settings);
-	}
+    public VoidBlock(Settings settings) {
+        super(settings);
+    }
 
-	@Override
-	protected MapCodec<? extends BlockWithEntity> getCodec() {
-		return CODEC;
-	}
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return CODEC;
+    }
 
-	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 //		return super.getOutlineShape(state, world, pos, context);
         return Block.createCuboidShape(0, 0, 0, 0, 0, 0);
-	}
+    }
 
-	@Override
-	public String getId() {
-		return "void";
-	}
+    @Override
+    public String getId() {
+        return "void";
+    }
 
-	@Nullable
-	@Override
-	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new VoidBlockEntity(pos, state);
-	}
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new VoidBlockEntity(pos, state);
+    }
 
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		return validateTicker(type, ModBlockEntities.VoidBlock, (world1, pos, state1, be) -> be.tick(world1, pos, state1));
-	}
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+      World world,
+      BlockState state,
+      BlockEntityType<T> type
+    ) {
+        return validateTicker(type,
+                              ModBlockEntities.VoidBlock,
+                              (world1, pos, state1, be) -> be.tick(world1, pos, state1));
+    }
 }

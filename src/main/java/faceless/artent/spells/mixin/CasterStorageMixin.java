@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.Unique;
 @SuppressWarnings("ALL")
 @Mixin(World.class)
 public class CasterStorageMixin implements IContainsCasterStorage {
-	@Unique
-	private CasterStorage casterStorage = new CasterStorage();
+    @Unique
+    private CasterStorage casterStorage = new CasterStorage();
 
-	@Unique
-	@Override
-	public CasterStorage getCasterStorage() {
-		return this.casterStorage;
-	}
+    @Unique
+    @Override
+    public CasterStorage getCasterStorage() {
+        return this.casterStorage;
+    }
 }

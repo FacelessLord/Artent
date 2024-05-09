@@ -7,12 +7,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
 public class CrimsonwoodSapling extends SaplingBlock {
-	public CrimsonwoodSapling(SaplingGenerator generator, Settings settings) {
-		super(generator, settings);
-	}
+    public CrimsonwoodSapling(SaplingGenerator generator, Settings settings) {
+        super(generator, settings);
+    }
 
-	@Override
-	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-		return super.canPlaceAt(state, world, pos);
-	}
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        return super.canPlaceAt(state, world, pos);
+    }
 }
