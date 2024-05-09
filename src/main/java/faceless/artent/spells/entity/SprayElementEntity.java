@@ -166,7 +166,7 @@ public class SprayElementEntity extends ThrownEntity {
             if (block == Blocks.DIRT) {
                 world.setBlockState(blockPos, Blocks.GRASS_BLOCK.getDefaultState());
             }
-            if (block instanceof FarmlandBlock farmland) {
+            if (block instanceof FarmlandBlock) {
                 getWorld().setBlockState(blockPos, blockState.with(FarmlandBlock.MOISTURE, FarmlandBlock.MAX_MOISTURE));
             }
             if (block instanceof Fertilizable fertilizable && getWorld().random.nextFloat() < 0.0125) {
@@ -296,7 +296,7 @@ public class SprayElementEntity extends ThrownEntity {
         }
     }
 
-    public static enum SprayElement {
+    public enum SprayElement {
         Fire, Water, Air;
 
         public static SprayElement fromInt(int id) {

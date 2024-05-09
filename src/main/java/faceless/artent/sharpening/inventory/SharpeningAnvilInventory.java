@@ -29,32 +29,31 @@ public class SharpeningAnvilInventory extends ArtentInventory {
         anvil.markDirty();
     }
 
-    private boolean checkCatalysts(ItemStack modifier, int level) {
+    public static boolean checkCatalysts(ItemStack modifier, int level) {
         var item = modifier.getItem();
-        var count = modifier.getCount();
 
-        // StoneOfTheSea at correct catalyst count, or one higher catalyst
-        if (level < 7 && (item == ModItems.StoneOfTheSea && modifier.getCount() >= getCatalystCount(level + 1) || ((item == ModItems.FortitudeSpiritStone || item == ModItems.AmberSphere) && count > 0)))
-            return true;
-        // FortitudeSpiritStone at correct catalyst count, or one higher catalyst
-        if (level < 12 && (item == ModItems.FortitudeSpiritStone && modifier.getCount() >= getCatalystCount(level + 1) || item == ModItems.AmberSphere && count > 0))
-            return true;
-        // AmberSphere at correct catalyst count
-        if (level < 15 && item == ModItems.AmberSphere && modifier.getCount() >= getCatalystCount(level + 1))
-            return true;
-
-        return false;
+        var catalystLevel = getCatalystLevel(item);
+        var catalystCount = getCatalystCount(level + 1, catalystLevel);
+        return modifier.getCount() >= catalystCount && catalystCount != 0;
     }
 
-    public static int getCatalystCount(int level) {
+    public static int getCatalystCount(int level, int catalystLevel) {
         if (level <= 7) {
-            return (int) Math.ceil(level / 2f);
+            if (catalystLevel == 1)
+                return (int) Math.ceil(level / 2f);
+            return 1;
         }
         if (level <= 12) {
-            return (int) Math.ceil(level / 2f) - 3;
+            if (catalystLevel == 2)
+                return (int) Math.ceil(level / 2f) - 3;
+            if (catalystLevel > 2)
+                return 1;
         }
         if (level <= 15) {
-            return level - 12;
+            if (catalystLevel == 3)
+                return level - 12;
+            if (catalystLevel > 3)
+                return 1;
         }
         return 0;
     }
@@ -65,7 +64,10 @@ public class SharpeningAnvilInventory extends ArtentInventory {
         var modifier = getStack(1);
         var hammer = getStack(2);
 
-        if (hammer.isEmpty() || target.isEmpty() || modifier.isEmpty() || !(target.getItem() instanceof ISharpenable sharpenable)) {
+        if (hammer.isEmpty() ||
+            target.isEmpty() ||
+            modifier.isEmpty() ||
+            !(target.getItem() instanceof ISharpenable sharpenable)) {
             items.set(3, ItemStack.EMPTY);
             return;
         }
@@ -98,7 +100,7 @@ public class SharpeningAnvilInventory extends ArtentInventory {
             var modifier = this.getStack(1);
             var modifierItem = modifier.getItem();
             if (isCatalyst(modifierItem)) {
-                this.getStack(1).decrement(getCatalystCount(level));
+                this.getStack(1).decrement(getCatalystCount(level, getCatalystLevel(modifierItem)));
             } else if (modifierItem instanceof IEnhancer) {
                 this.getStack(1).decrement(1);
             }
@@ -106,12 +108,22 @@ public class SharpeningAnvilInventory extends ArtentInventory {
         var target = getStack(0);
         var modifier = getStack(1);
         var hammer = getStack(2);
-        if (hammer.isEmpty() || target.isEmpty() || modifier.isEmpty() || !(target.getItem() instanceof ISharpenable sharpenable)) {
+        if (hammer.isEmpty() ||
+            target.isEmpty() ||
+            modifier.isEmpty() ||
+            !(target.getItem() instanceof ISharpenable sharpenable)) {
             items.set(3, ItemStack.EMPTY);
         }
     }
 
-    private boolean isCatalyst(Item modifierItem) {
-        return modifierItem == ModItems.StoneOfTheSea || modifierItem == ModItems.FortitudeSpiritStone || modifierItem == ModItems.AmberSphere;
+    private static int getCatalystLevel(Item item) {
+        return item == ModItems.StoneOfTheSea ? 1 : item == ModItems.FortitudeSpiritStone ? 2 : item ==
+                                                                                                ModItems.AmberSphere ? 3 : 1;
+    }
+
+    public static boolean isCatalyst(Item modifierItem) {
+        return modifierItem == ModItems.StoneOfTheSea ||
+               modifierItem == ModItems.FortitudeSpiritStone ||
+               modifierItem == ModItems.AmberSphere;
     }
 }
