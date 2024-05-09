@@ -71,6 +71,7 @@ public class MageAttackGoal extends Goal {
 		super.tick();
 		castTime++;
 		var spell = caster.getCurrentSpell();
+		var rangeSquared = Math.min(squaredRange, spell.maxActionDistance*spell.maxActionDistance);
 		var target = mage.getTarget();
 		var wand = mage.getMainHandStack();
 		if (target == null || wand == null)
@@ -88,9 +89,8 @@ public class MageAttackGoal extends Goal {
 		} else {
 			this.targetSeeingTicker--;
 		}
-		// TODO squaredRange depends on current spell
 
-		if (distanceSqr > this.squaredRange || this.targetSeeingTicker < 20) {
+		if (distanceSqr > rangeSquared || this.targetSeeingTicker < 20) {
 			mage.getNavigation().startMovingTo(target, this.speed);
 			this.combatTicks = -1;
 		} else {
@@ -107,9 +107,9 @@ public class MageAttackGoal extends Goal {
 			this.combatTicks = 0;
 		}
 		if (this.combatTicks > -1) {
-			if (distanceSqr > (this.squaredRange * 0.75f)) {
+			if (distanceSqr > (rangeSquared * 0.75f)) {
 				this.backward = false;
-			} else if (distanceSqr < (this.squaredRange * 0.25f)) {
+			} else if (distanceSqr < (rangeSquared * 0.25f)) {
 				this.backward = true;
 			}
 			mage.getMoveControl().strafeTo(this.backward ? -0.5f : 0.5f, this.movingToLeft ? 0.5f : -0.5f);
@@ -131,7 +131,6 @@ public class MageAttackGoal extends Goal {
 						if (caster.consumeMana(castMana)) {
 							prepareDirectedCast(target);
 							wand.onStoppedUsing(mage.getWorld(), mage, wand.getMaxUseTime() - castTime);
-//						spell.action(caster, mage.getWorld(), mage.getMainHandStack(), castTime);
 							afterCast();
 						}
 					}
@@ -144,7 +143,6 @@ public class MageAttackGoal extends Goal {
 					if (caster.consumeMana(tickMana)) {
 						prepareDirectedCast(target);
 						wand.usageTick(mage.getWorld(), mage, wand.getMaxUseTime() - castTime);
-						//				spell.spellTick(caster, mage.getWorld(), mage.getMainHandStack(), castTime);
 						afterCast();
 					}
 				}

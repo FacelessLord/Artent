@@ -56,7 +56,7 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 
 	@Override
 	protected void initGoals() {
-		this.goalSelector.add(5, new WanderAroundFarGoal(this, 1f));
+		this.goalSelector.add(5, new WanderAroundFarGoal(this, 1));
 		this.goalSelector.add(6, new LookAtEntityGoal(this, SkeletonEntity.class, 16.0f));
 		this.goalSelector.add(6, new LookAroundGoal(this));
 		this.goalSelector.add(4, new MageAttackGoal(this, this, new ArrayList<>(0), 8, 1));
@@ -78,7 +78,7 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 		  .builder()
 		  .add(EntityAttributes.GENERIC_MAX_HEALTH)
 		  .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)
-		  .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+		  .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
 		  .add(EntityAttributes.GENERIC_ARMOR)
 		  .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS)
 		  .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32)

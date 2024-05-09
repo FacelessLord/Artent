@@ -13,6 +13,8 @@ public class Spell {
 	public int baseCost;
 	public int cooldown;
 	public Vector3f color = new Vector3f(1, 1, 1);
+	// used for calculating mage position for successful cast
+	public float maxActionDistance = 32;
 
 	public AffinityType affinityType = AffinityType.None;
 

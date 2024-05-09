@@ -19,6 +19,7 @@ public class SpraySpell extends Spell {
 	public SpraySpell(String id, SprayElementEntity.SprayElement element, int baseCost) {
 		super(id, ActionType.Tick, baseCost, 20);
 		this.element = element;
+		maxActionDistance = 6;
 	}
 
 	@Override
