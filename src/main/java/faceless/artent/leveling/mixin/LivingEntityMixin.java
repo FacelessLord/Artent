@@ -96,11 +96,6 @@ public abstract class LivingEntityMixin implements ILeveledMob, ISpecialMob {
     }
 
     @Override
-    public float getXpModifier(int level) {
-        return getLevelModifier();
-    }
-
-    @Override
     public SpecialMobType getSpecialMobType() {
         return SpecialMobType.fromInt(this.asEntity().getDataTracker().get(SPECIAL_MOB_TYPE));
     }

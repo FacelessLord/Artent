@@ -18,7 +18,7 @@ public class Gust extends Spell {
     public void action(ICaster caster, World world, ItemStack stack, int castTime) {
         super.action(caster, world, stack, castTime);
 
-        var rotation = caster.getCasterRotation(); // TODO move caster rotation access to interface
+        var rotation = caster.getCasterRotation();
         var coefficient = 1.25f + Math.min(castTime / 20f, 3f);
 
         var entityPos = caster.getCasterPosition();

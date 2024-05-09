@@ -25,7 +25,7 @@ public class InscriptionTableScreenHandler extends ScreenHandler {
 
     //	slotId - id of the slot in order: [...this.inventorySlots, ...player.slots]
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slotId) { // TODO
+    public ItemStack quickMove(PlayerEntity player, int slotId) {
         Slot slot = this.slots.get(slotId);
         if (slot.hasStack()) {
             ItemStack slotStack = slot.getStack();

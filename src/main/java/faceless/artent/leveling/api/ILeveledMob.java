@@ -24,6 +24,4 @@ public interface ILeveledMob {
     void makeLevelDrops(List<ItemStack> drops);
 
     float getLevelMoneyDropModifier();
-
-    float getXpModifier(int level); // TODO possibily remove
 }

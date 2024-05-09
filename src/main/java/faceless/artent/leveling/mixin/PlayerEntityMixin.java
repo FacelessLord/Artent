@@ -36,8 +36,6 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
     @Override
     public float getLevelModifier() {
         return 1;
-//        var dLevel = getLevel() - getBaseLevel(); TODO custom player leveling
-//        return Math.max(1 + dLevel / 100f, 0) - 1;
     }
 
     @Override
