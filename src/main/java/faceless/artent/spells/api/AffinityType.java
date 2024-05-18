@@ -5,5 +5,8 @@ public enum AffinityType {
     Mana,
     Light,
     Air,
-    Void
+    Void,
+    Fire,
+    Water,
+    Cold
 }

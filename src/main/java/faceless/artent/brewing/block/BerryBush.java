@@ -65,7 +65,7 @@ public class BerryBush extends Block implements INamed, Fertilizable {
         var stack = player.getEquippedStack(hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         if (stack.getItem() == Items.BONE_MEAL) {
             if (!world.isClient()) {
-                if (world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2 && world.random.nextFloat() < 0.80) {
+                if (world.getBaseLightLevel(pos, 0) >= 9 && state.get(AGE) < 2 && Math.random() < 0.80) {
                     world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), Block.NOTIFY_LISTENERS);
                 }
                 var newStack = stack.copy();

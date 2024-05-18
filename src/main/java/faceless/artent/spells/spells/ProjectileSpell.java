@@ -5,6 +5,8 @@ import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
 import faceless.artent.spells.entity.SpellParticleEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class ProjectileSpell extends Spell {
@@ -24,4 +26,16 @@ public class ProjectileSpell extends Spell {
             world.spawnEntity(projectile);
         }
     }
+
+    public void blockCast(
+      ICaster caster,
+      World world,
+      ItemStack stack,
+      BlockPos hitPos,
+      Direction hitSide,
+      int actionTime
+    ) {
+
+    }
+
 }

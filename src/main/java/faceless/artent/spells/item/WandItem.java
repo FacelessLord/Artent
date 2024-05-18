@@ -44,10 +44,9 @@ public class WandItem extends ArtentItem implements ISharpenable {
         var stack = player.getStackInHand(hand);
 
         var spell = ((ICaster) player).getCurrentSpell();
-        if (spell == null)
-            return TypedActionResult.fail(stack);
+        if (spell == null) return TypedActionResult.fail(stack);
 
-        if (world.random.nextFloat() < spell.getRecoilChance(player, world)) {
+        if (Math.random() < spell.getRecoilChance(player, world)) {
             spell.onRecoil(DataUtil.asCaster(player), world, stack, getMaxUseTime(stack));
             return TypedActionResult.fail(stack);
         }
@@ -61,16 +60,14 @@ public class WandItem extends ArtentItem implements ISharpenable {
 
     public static Spell getSelectedSpell(PlayerEntity player, Hand hand) {
         var book = player.getStackInHand(getOppositeHand(hand));
-        if (book.isEmpty() || !(book.getItem() instanceof ISpellInventoryItem))
-            return null;
+        if (book.isEmpty() || !(book.getItem() instanceof ISpellInventoryItem)) return null;
 
         var bookInventory = new ItemSpellInventory(book);
 
         var casterInfo = DataUtil.getCasterInfo(player);
         var spellIndex = casterInfo.getSpellBookIndex() % bookInventory.getSize();
         var scrollStack = bookInventory.getSpell(spellIndex);
-        if (scrollStack == null)
-            return null;
+        if (scrollStack == null) return null;
 
         return scrollStack.spell;
     }
@@ -82,77 +79,78 @@ public class WandItem extends ArtentItem implements ISharpenable {
 
         var spell = caster.getCurrentSpell();
         if (spell == null) return;
-        if (!spell.isSingleCastAction())
-            return;
+        if (!spell.isSingleCastAction()) return;
 
         var actionTime = getMaxUseTime(stack) - remainingUseTicks; // TODO minimal spellcast time
         if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
             spell.onRecoil(caster, world, stack, actionTime);
         } else {
             var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
-            if (caster.consumeMana(manaToConsume))
-                spell.action(caster, world, stack, actionTime);
+            if (caster.consumeMana(manaToConsume)) spell.action(caster, world, stack, actionTime);
         }
     }
 
     public void usageTick(World world, LivingEntity living, ItemStack stack, int remainingUseTicks) {
-        if (!(living instanceof ICaster caster))
-            return;
+        if (!(living instanceof ICaster caster)) return;
         var spell = caster.getCurrentSpell();
         if (spell == null) return;
 
         var actionTime = getMaxUseTime(stack) - remainingUseTicks;
 
-        if (!spell.isTickAction())
-            return;
+        if (actionTime < spell.prepareTime) {
+            var manaToConsume = ManaUtils.evaluatePrepareManaToConsume(spell, this.affinities, spell.type);
+            if (caster.consumeMana(manaToConsume)) {
+                spell.prepareTick(caster, world, stack, actionTime);
+                return;
+            } else {
+                spell.onRecoil(caster, world, stack, actionTime);
+            }
+            living.stopUsingItem();
+        }
 
-        var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+        actionTime -= spell.prepareTime;
+
+        if (!spell.isTickAction()) return;
+
+        var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.Tick);
         SpellActionResult result = null;
 
-        if (caster.consumeMana(manaToConsume))
-            result = spell.spellTick(caster,
-                                     world,
-                                     stack,
-                                     actionTime);
-        if (result == null) {
+        if (caster.consumeMana(manaToConsume)) result = spell.spellTick(caster, world, stack, actionTime);
+        if (result == null ||
+            result.type == SpellActionResultType.Stop ||
+            result.type == SpellActionResultType.Recoil) {
             living.stopUsingItem();
-            return;
-        }
-        if (result.type == SpellActionResultType.Stop || result.type == SpellActionResultType.Recoil) {
-            living.clearActiveItem();
-        }
-        if (result.type == SpellActionResultType.Recoil) {
-            spell.onRecoil(caster, world, stack, actionTime);
         }
     }
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
-        if (context.shouldCancelInteraction())
-            return ActionResult.FAIL;
-
-        var player = context.getPlayer();
-
-        if (player == null || player.getWorld() == null)
-            return ActionResult.FAIL;
-
-        var stack = context.getStack();
-        var side = context.getSide();
-        var blockPos = context.getBlockPos();
-        var spell = getSelectedSpell(player, context.getHand());
-        if (spell == null)
-            return ActionResult.FAIL;
-
-        if (!spell.isBlockCastAction()) {
-            return ActionResult.PASS;
-        } // TODO recoil
-
-        var caster = DataUtil.asCaster(player);
-        var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
-        if (caster.consumeMana(manaToConsume)) {
-            spell.blockCast(caster, player.getWorld(), stack, blockPos, side, 0);
-            return ActionResult.SUCCESS;
-        }
-        return ActionResult.FAIL;
+        return ActionResult.PASS;
+//        if (context.shouldCancelInteraction())
+//            return ActionResult.FAIL;
+//
+//        var player = context.getPlayer();
+//
+//        if (player == null || player.getWorld() == null)
+//            return ActionResult.FAIL;
+//
+//        var stack = context.getStack();
+//        var side = context.getSide();
+//        var blockPos = context.getBlockPos();
+//        var spell = getSelectedSpell(player, context.getHand());
+//        if (spell == null)
+//            return ActionResult.FAIL;
+//
+//        if (!spell.isBlockCastAction()) {
+//            return ActionResult.PASS;
+//        } // TODO recoil
+//
+//        var caster = DataUtil.asCaster(player);
+//        var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+//        if (caster.consumeMana(manaToConsume)) {
+//            spell.blockCast(caster, player.getWorld(), stack, blockPos, side, 0);
+//            return ActionResult.SUCCESS;
+//        }
+//        return ActionResult.FAIL;
     }
 }

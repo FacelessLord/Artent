@@ -1,5 +1,6 @@
 package faceless.artent.spells.entity;
 
+import faceless.artent.objects.ModPotionEffects;
 import faceless.artent.spells.api.CasterStorage;
 import faceless.artent.spells.api.ICaster;
 import net.minecraft.block.Blocks;
@@ -11,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
@@ -88,18 +90,25 @@ public class SprayElementEntity extends ThrownEntity {
                 world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
                 discard();
             }
-            if (block instanceof Fertilizable fertilizable && !world.isClient && world.random.nextFloat() < 0.0125) {
+            if (block instanceof Fertilizable fertilizable && !world.isClient && Math.random() < 0.0125) {
                 fertilizable.grow((ServerWorld) world, world.random, blockPos, blockState);
             }
+        }
+        if (getSprayElement() == SprayElement.Cold) {
+            if (block == Blocks.WATER) world.setBlockState(blockPos, Blocks.ICE.getDefaultState());
+            if (block == Blocks.LAVA) world.setBlockState(blockPos, Blocks.OBSIDIAN.getDefaultState());
         }
         if (getSprayElement() == SprayElement.Fire) {
             if (block == Blocks.SNOW) {
                 world.setBlockState(blockPos, Blocks.WATER.getDefaultState().with(FluidBlock.LEVEL, 5));
+            }
+            if (block instanceof FluidBlock) {
+                discard();
             } else if (blockState.isBurnable()) {
                 var center = blockPos.toCenterPos();
                 var offset = getPos().subtract(center);
 
-                var dir = Direction.UP;
+                var dir = Direction.UP; // TODO
 
                 var ax = Math.abs(offset.x);
                 var ay = Math.abs(offset.y);
@@ -130,7 +139,9 @@ public class SprayElementEntity extends ThrownEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         if (getWorld().isClient || caster == null || entityHitResult.getEntity() == caster) return;
 
-        var damageSource = caster instanceof LivingEntity livingCaster ? getDamageSources().mobAttack(livingCaster) : getDamageSources().magic();
+        var damageSource = caster instanceof LivingEntity livingCaster
+          ? getDamageSources().mobAttack(livingCaster)
+          : getDamageSources().magic();
 
         if (getSprayElement() == SprayElement.Fire) {
             var entity = entityHitResult.getEntity();
@@ -138,6 +149,14 @@ public class SprayElementEntity extends ThrownEntity {
 
             if (entity instanceof LivingEntity living) {
                 living.damage(damageSource, caster.getPotency());
+            }
+        }
+        if (getSprayElement() == SprayElement.Cold) {
+            var entity = entityHitResult.getEntity();
+
+            if (entity instanceof LivingEntity living) {
+                living.addStatusEffect(new StatusEffectInstance(ModPotionEffects.FREEZING, 20 * caster.getPotency()));
+                living.damage(damageSource, caster.getPotency() / 2f);
             }
         }
         if (getSprayElement() == SprayElement.Water) {
@@ -167,8 +186,11 @@ public class SprayElementEntity extends ThrownEntity {
                 block == Blocks.FROSTED_ICE ||
                 block == Blocks.PACKED_ICE ||
                 block == Blocks.SNOW_BLOCK ||
-                block == Blocks.POWDER_SNOW)
-                world.setBlockState(blockPos, Blocks.WATER.getDefaultState());
+                block == Blocks.POWDER_SNOW) world.setBlockState(blockPos, Blocks.WATER.getDefaultState());
+        }
+        if (getSprayElement() == SprayElement.Cold && !world.isClient) {
+            if (block == Blocks.ICE && Math.random() < 1 / 256f)
+                world.setBlockState(blockPos, Blocks.PACKED_ICE.getDefaultState());
         }
 
         if (getMovementType() == RotatingMovent) return;
@@ -186,7 +208,7 @@ public class SprayElementEntity extends ThrownEntity {
             for (int i = -r; i <= r; i++) {
                 for (int j = -r; j <= r; j++) {
                     for (int k = -r; k <= r; k++) {
-                        if (world.random.nextFloat() < 0.25f) {
+                        if (Math.random() < 0.25f) {
                             var offsetPos = blockPos.add(i, j, k);
                             var offsetBlock = getWorld().getBlockState(offsetPos).getBlock();
                             if (offsetBlock == Blocks.FIRE) {
@@ -309,13 +331,14 @@ public class SprayElementEntity extends ThrownEntity {
     }
 
     public enum SprayElement {
-        Fire, Water, Air;
+        Fire, Water, Air, Cold; // Icd -> Cold
 
         public static SprayElement fromInt(int id) {
             return switch (id) {
                 case 0 -> Fire;
                 case 1 -> Water;
                 case 2 -> Air;
+                case 3 -> Cold;
                 default -> Fire;
             };
         }

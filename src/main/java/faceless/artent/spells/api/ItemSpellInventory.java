@@ -32,6 +32,10 @@ public class ItemSpellInventory implements ISpellInventory {
         var spellId = tag.getString(INVENTORY_SLOT_SPELL_KEY + slot);
         var scrollTypeId = tag.getInt(INVENTORY_SLOT_TYPE_KEY + slot);
         var spell = SpellRegistry.getSpell(spellId);
+        if(spell == null && spellId != null) { // removed spell
+            setSpell(slot, null);
+            return null;
+        }
         var scrollType = scrollTypeId <
                          ScrollUtils.ScrollTypes.length ? ScrollUtils.ScrollTypes[scrollTypeId] : ScrollType.Common;
 

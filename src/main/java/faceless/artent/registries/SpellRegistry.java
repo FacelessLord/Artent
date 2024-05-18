@@ -20,10 +20,11 @@ public class SpellRegistry implements IRegistry {
     public void register() {
         register(ModSpells.MakeLight);
         register(ModSpells.Nox);
-        register(ModSpells.Wormhole);
+//        register(ModSpells.Wormhole);
         register(ModSpells.LightSword);
         register(ModSpells.GilgameshLightStorm);
         register(ModSpells.Flamethrower);
+        register(ModSpells.Coldthrower);
         register(ModSpells.WaterJet);
         register(ModSpells.Dash);
         register(ModSpells.Gust);

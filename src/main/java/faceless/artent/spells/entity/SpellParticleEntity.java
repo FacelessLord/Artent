@@ -4,6 +4,7 @@ import faceless.artent.registries.SpellRegistry;
 import faceless.artent.spells.api.CasterStorage;
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.spells.ProjectileSpell;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -95,12 +96,12 @@ public class SpellParticleEntity extends ThrownEntity {
         var world = getWorld();
         if (!world.isClient) {
             var spell = SpellRegistry.getSpell(this.getSpellId());
-            if (spell == null || getCaster() == null) {
+            if (spell == null || getCaster() == null || !(spell instanceof ProjectileSpell spray)) {
                 discard();
                 return;
             }
 
-            spell.blockCast(getCaster(),
+            spray.blockCast(getCaster(),
                             getWorld(),
                             getWandStack(),
                             blockHitResult.getBlockPos(),

@@ -66,7 +66,7 @@ public class ArtentHudRenderer {
                 context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 24, 18, 18, 256, 256);
 
                 var spell = spellInventory.getSpell(j);
-                if (spell != null) {
+                if (spell != null && spell.spell != null) {
                     var spellIconPath = new Identifier(Artent.MODID, "textures/spell/" + spell.spell.id + ".png");
                     context.drawTexture(spellIconPath, 0, 0, 18, 18, 0, 0, 32, 32, 32, 32);
                 }

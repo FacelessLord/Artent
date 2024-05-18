@@ -14,12 +14,15 @@ public class ModSpells {
     public static final Spell Wormhole = new WormHole().setColor(0.17f, 0.03f, 0.38f).setAffinity(AffinityType.Void);
     public static final Spell Flamethrower = new Flamethrower()
       .setColor(0.70f, 0.05f, 0.05f)
-      .setAffinity(AffinityType.Void);
-    public static final Spell WaterJet = new WaterJet().setColor(0.05f, 0.45f, 0.70f).setAffinity(AffinityType.Void);
+      .setAffinity(AffinityType.Fire);
+    public static final Spell Coldthrower = new Coldthrower()
+      .setColor(0.52f, 0.78f, 0.84f)
+      .setAffinity(AffinityType.Cold);
+    public static final Spell WaterJet = new WaterJet().setColor(0.05f, 0.45f, 0.70f).setAffinity(AffinityType.Water);
     public static final Spell Dash = new Dash().setAffinity(AffinityType.Air);
     public static final Spell Gust = new Gust().setAffinity(AffinityType.Air);
     public static final Spell FireHurricane = new FireHurricane()
       .setColor(0.70f, 0.05f, 0.05f)
-      .setAffinity(AffinityType.Void);
+      .setAffinity(AffinityType.Fire);
 
 }

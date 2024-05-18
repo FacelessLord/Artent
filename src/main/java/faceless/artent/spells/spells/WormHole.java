@@ -2,11 +2,9 @@ package faceless.artent.spells.spells;
 
 import faceless.artent.api.DirectionUtils;
 import faceless.artent.objects.ModBlocks;
-import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
 import faceless.artent.spells.blockEntity.VoidBlockEntity;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.math.BlockPos;
@@ -18,17 +16,17 @@ public class WormHole extends Spell {
         super("wormhole", ActionType.BlockCast, 8, 30);
     }
 
-    @Override
-    public void blockCast(
-      ICaster caster,
-      World world,
-      ItemStack stack,
-      BlockPos blockPos,
-      Direction hitSide,
-      int actionTime
-    ) {
-        voidLayer(world, blockPos, hitSide.getOpposite(), 8);
-    }
+//    @Override
+//    public void blockCast(
+//      ICaster caster,
+//      World world,
+//      ItemStack stack,
+//      BlockPos blockPos,
+//      Direction hitSide,
+//      int actionTime
+//    ) {
+//        voidLayer(world, blockPos, hitSide.getOpposite(), 8);
+//    }
 
     public static void voidLayer(World world, BlockPos blockPos, Direction hitSide, int depth) {
         for (int i = -1; i <= 1; i++) {
