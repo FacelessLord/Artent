@@ -184,7 +184,7 @@ public class InscriptionTable extends BlockWithEntity implements INamed {
         var facing = getFacing(state);
         var directionToPt2 = facing.rotateCounterclockwise(Direction.Axis.Y);
         var pt2Pos = pos.offset(directionToPt2);
-        if (world.getBlockState(pt2Pos).isAir())
+        if (world.getBlockState(pt2Pos).isReplaceable())
             world.setBlockState(pt2Pos,
                                 ModBlocks.InscriptionTable2.getDefaultState().with(FACING, facing),
                                 Block.NOTIFY_ALL_AND_REDRAW);

@@ -1,24 +1,19 @@
 package faceless.artent.spells.entity;
 
-import faceless.artent.objects.ModPotionEffects;
+import faceless.artent.registries.SpellRegistry;
 import faceless.artent.spells.api.CasterStorage;
 import faceless.artent.spells.api.ICaster;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.block.Fertilizable;
-import net.minecraft.block.FluidBlock;
+import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.spells.SpraySpell;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
@@ -37,6 +32,11 @@ public class SprayElementEntity extends ThrownEntity {
     @Unique
     private static final TrackedData<Integer> LIFE_TIME_LEFT = DataTracker.registerData(SprayElementEntity.class,
                                                                                         TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<String> SPELL = DataTracker.registerData(SprayElementEntity.class,
+                                                                              TrackedDataHandlerRegistry.STRING);
+
+    public static final int DirectMovement = 1;
+    public static final int RotatingMovement = 2;
 
     private ICaster caster;
     private ItemStack wandStack = ItemStack.EMPTY;
@@ -50,177 +50,127 @@ public class SprayElementEntity extends ThrownEntity {
     @Override
     protected void initDataTracker() {
         getDataTracker().startTracking(SPRAY_ELEMENT, SprayElement.Fire.ordinal());
-        getDataTracker().startTracking(MOVEMENT_TYPE, DirectMovent);
+        getDataTracker().startTracking(MOVEMENT_TYPE, DirectMovement);
         getDataTracker().startTracking(LIFE_TIME_LEFT, 10);
+        this.getDataTracker().startTracking(SPELL, "");
     }
 
     @Override
     public void tick() {
         super.tick();
         setLifeTimeLeft(getLifeTimeLeft() - 1);
-        if (getLifeTimeLeft() <= 0) discard();
-
-        if (getWorld().isClient) return;
+        var spellId = getSpellId();
+        if (getLifeTimeLeft() <= 0 ||
+            spellId == null ||
+            spellId.isEmpty() ||
+            getWorld().isClient ||
+            !(SpellRegistry.getSpell(spellId) instanceof SpraySpell spray)) {
+            discard();
+            return;
+        }
         var world = getWorld();
         var blockPos = getBlockPos();
         var blockState = world.getBlockState(blockPos);
-        var block = blockState.getBlock();
 
-        var entities = world.getEntitiesByClass(ProjectileEntity.class,
-                                                Box.of(getPos(), 3, 3, 3),
-                                                e -> !(e instanceof SprayElementEntity));
-        for (var e : entities) {
-            e.discard();
-        }
+        world.getEntitiesByClass(
+          ProjectileEntity.class,
+          Box.of(getPos(), 3, 3, 3),
+          e -> !(e instanceof SprayElementEntity)
+        ).forEach(Entity::discard);
 
-        if (getMovementType() == RotatingMovent) {
+        if (getMovementType() == RotatingMovement) {
             if (getStartingPos() == null) {
                 discard();
                 return;
             }
-            var vecToCenter = getStartingPos().subtract(getPos()).multiply(1, 0, 1);
-            var normToCenter = vecToCenter.normalize();
-            var coeff = centerCoeff(vecToCenter.length());
-            var velocity = getVelocity().add(normToCenter.multiply(coeff * 0.48f));
-            setVelocity(velocity.normalize());
+            makeRotation();
         }
 
-        if (getSprayElement() == SprayElement.Water) {
-            if (block == Blocks.FIRE) {
-                world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
-                discard();
-            }
-            if (block instanceof Fertilizable fertilizable && !world.isClient && Math.random() < 0.0125) {
-                fertilizable.grow((ServerWorld) world, world.random, blockPos, blockState);
-            }
-        }
-        if (getSprayElement() == SprayElement.Cold) {
-            if (block == Blocks.WATER) world.setBlockState(blockPos, Blocks.ICE.getDefaultState());
-            if (block == Blocks.LAVA) world.setBlockState(blockPos, Blocks.OBSIDIAN.getDefaultState());
-        }
-        if (getSprayElement() == SprayElement.Fire) {
-            if (block == Blocks.SNOW) {
-                world.setBlockState(blockPos, Blocks.WATER.getDefaultState().with(FluidBlock.LEVEL, 5));
-            }
-            if (block instanceof FluidBlock) {
-                discard();
-            } else if (blockState.isBurnable()) {
-                var center = blockPos.toCenterPos();
-                var offset = getPos().subtract(center);
-
-                var dir = Direction.UP; // TODO
-
-                var ax = Math.abs(offset.x);
-                var ay = Math.abs(offset.y);
-                var az = Math.abs(offset.z);
-                var axisVec = new Vec3d(0, 1, 0);
-                if (ax > ay && ax > az) axisVec = new Vec3d(offset.x, 0, 0);
-                if (ay > ax && ay > az) axisVec = new Vec3d(0, offset.y, 0);
-                if (az > ay && az > ax) axisVec = new Vec3d(0, 0, offset.z);
-                axisVec = axisVec.normalize();
-
-                dir = Direction.fromVector((int) axisVec.x, (int) axisVec.y, (int) axisVec.z);
-                var offsetPos = blockPos.offset(dir, 1);
-                if (world.getBlockState(offsetPos).isAir()) {
-                    discard();
-                }
-            }
+        if (spray.projectileTick(world, caster, blockState, blockPos)) {
+            discard();
         }
     }
 
-    private double centerCoeff(double distance) {
+    private void makeRotation() {
+        var vecToCenter = getStartingPos().subtract(getPos()).multiply(1, 0, 1);
+        var normToCenter = vecToCenter.normalize();
+        var coefficient = centerCoefficient(vecToCenter.length());
+        var velocity = getVelocity().add(normToCenter.multiply(coefficient * 0.48f));
+        setVelocity(velocity.normalize());
+    }
+
+    @Override
+    protected void onEntityHit(EntityHitResult entityHitResult) {
+        var spell = SpellRegistry.getSpell(getSpellId());
+        if (getWorld().isClient ||
+            caster == null ||
+            entityHitResult.getEntity() == null ||
+            entityHitResult.getEntity() == caster ||
+            !(spell instanceof SpraySpell spray)) {
+            discard();
+            return;
+        }
+
+        spray.onCollideWithEntity(getWorld(), caster, entityHitResult.getEntity());
+        discard();
+    }
+
+    @Override
+    protected void onBlockHit(BlockHitResult blockHitResult) {
+        var spell = SpellRegistry.getSpell(getSpellId());
+        if (getWorld().isClient || caster == null || !(spell instanceof SpraySpell spray)) {
+            discard();
+            return;
+        }
+
+        var blockPos = blockHitResult.getBlockPos();
+        var world = getWorld();
+        var blockState = this.getWorld().getBlockState(blockPos);
+
+        if (!world.isClient) {
+            var center = blockPos.toCenterPos();
+            var offset = getPos().subtract(center);
+            var dir = getHitDirection(offset);
+            spray.onCollideWithBlock(world, caster, blockState, blockPos, dir);
+        }
+
+        discard();
+    }
+
+    private static Direction getHitDirection(Vec3d offset) {
+        var dir = Direction.UP;
+
+        var ax = Math.abs(offset.x);
+        var ay = Math.abs(offset.y);
+        var az = Math.abs(offset.z);
+        var axisVec = new Vec3d(0, 1, 0);
+        if (ax > ay && ax > az) axisVec = new Vec3d(offset.x, 0, 0);
+        if (ay > ax && ay > az) axisVec = new Vec3d(0, offset.y, 0);
+        if (az > ay && az > ax) axisVec = new Vec3d(0, 0, offset.z);
+        axisVec = axisVec.normalize();
+
+        dir = Direction.fromVector((int) axisVec.x, (int) axisVec.y, (int) axisVec.z);
+        return dir;
+    }
+
+    private double centerCoefficient(double distance) {
         var x = (distance - 3) * 3;
         var exp = Math.exp(x);
         var s = (exp - 1) / (exp + 1);
         return s * s * s;
     }
 
-    @Override
-    protected void onEntityHit(EntityHitResult entityHitResult) {
-        if (getWorld().isClient || caster == null || entityHitResult.getEntity() == caster) return;
-
-        var damageSource = caster instanceof LivingEntity livingCaster
-          ? getDamageSources().mobAttack(livingCaster)
-          : getDamageSources().magic();
-
-        if (getSprayElement() == SprayElement.Fire) {
-            var entity = entityHitResult.getEntity();
-            entity.setOnFireFor(20);
-
-            if (entity instanceof LivingEntity living) {
-                living.damage(damageSource, caster.getPotency());
-            }
-        }
-        if (getSprayElement() == SprayElement.Cold) {
-            var entity = entityHitResult.getEntity();
-
-            if (entity instanceof LivingEntity living) {
-                living.addStatusEffect(new StatusEffectInstance(ModPotionEffects.FREEZING, 20 * caster.getPotency()));
-                living.damage(damageSource, caster.getPotency() / 2f);
-            }
-        }
-        if (getSprayElement() == SprayElement.Water) {
-            var entity = entityHitResult.getEntity();
-
-            if (entity instanceof EndermanEntity enderman) {
-                enderman.damage(damageSource, caster.getPotency());
-            }
-            if (entity.isOnFire()) {
-                entity.extinguish();
-            }
-        }
-        discard();
+    //region Properties
+    public String getSpellId() {
+        return getDataTracker().get(SPELL);
     }
 
-    @Override
-    protected void onBlockHit(BlockHitResult blockHitResult) {
-        var blockPos = blockHitResult.getBlockPos();
-        var world = getWorld();
-        var blockState = this.getWorld().getBlockState(blockPos);
-        var block = blockState.getBlock();
+    public void setSpell(Spell spell) {
+        getDataTracker().set(SPELL, spell.id);
+    }
 
-
-        if (getSprayElement() == SprayElement.Fire && !world.isClient) {
-            if (block == Blocks.ICE ||
-                block == Blocks.BLUE_ICE ||
-                block == Blocks.FROSTED_ICE ||
-                block == Blocks.PACKED_ICE ||
-                block == Blocks.SNOW_BLOCK ||
-                block == Blocks.POWDER_SNOW) world.setBlockState(blockPos, Blocks.WATER.getDefaultState());
-        }
-        if (getSprayElement() == SprayElement.Cold && !world.isClient) {
-            if (block == Blocks.ICE && Math.random() < 1 / 256f)
-                world.setBlockState(blockPos, Blocks.PACKED_ICE.getDefaultState());
-        }
-
-        if (getMovementType() == RotatingMovent) return;
-        if (getSprayElement() == SprayElement.Water && !world.isClient) {
-            if (block == Blocks.DIRT) {
-                world.setBlockState(blockPos, Blocks.GRASS_BLOCK.getDefaultState());
-            }
-            if (block instanceof FarmlandBlock) {
-                getWorld().setBlockState(blockPos, blockState.with(FarmlandBlock.MOISTURE, FarmlandBlock.MAX_MOISTURE));
-            }
-            if (block instanceof Fertilizable fertilizable && getWorld().random.nextFloat() < 0.0125) {
-                fertilizable.grow((ServerWorld) world, world.random, blockPos, blockState);
-            }
-            int r = 2;
-            for (int i = -r; i <= r; i++) {
-                for (int j = -r; j <= r; j++) {
-                    for (int k = -r; k <= r; k++) {
-                        if (Math.random() < 0.25f) {
-                            var offsetPos = blockPos.add(i, j, k);
-                            var offsetBlock = getWorld().getBlockState(offsetPos).getBlock();
-                            if (offsetBlock == Blocks.FIRE) {
-                                getWorld().setBlockState(offsetPos, Blocks.AIR.getDefaultState());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        discard();
+    public void setSpellId(String spellId) {
+        getDataTracker().set(SPELL, spellId);
     }
 
     public ICaster getCaster() {
@@ -258,7 +208,7 @@ public class SprayElementEntity extends ThrownEntity {
     public void setMovementType(int movementType) {
         getDataTracker().set(MOVEMENT_TYPE, movementType);
 
-        if (movementType == RotatingMovent) {
+        if (movementType == RotatingMovement) {
             setLifeTimeLeft(10);
         }
     }
@@ -267,8 +217,30 @@ public class SprayElementEntity extends ThrownEntity {
         return getDataTracker().get(MOVEMENT_TYPE);
     }
 
+    public Vec3d getStartingPos() {
+        return startingPos;
+    }
+
+    public void setStartingPos(Vec3d startingPos) {
+        this.startingPos = startingPos;
+        if (getMovementType() == RotatingMovement) {
+            var random = getWorld().random;
+            var randomAngle = random.nextFloat() * Math.PI * 2;
+
+            var offset = new Vec3d(Math.sin(randomAngle) * (1 + random.nextFloat()),
+                                   random.nextFloat() * 4 - 2,
+                                   Math.cos(randomAngle) * (1 + random.nextFloat())).multiply(3, 1, 3);
+            setPosition(startingPos.add(offset));
+            var velocity = offset.crossProduct(new Vec3d(0, 1, 0));
+            setVelocity(velocity);
+        }
+    }
+
+    //endregion
+
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
+        setSpellId(nbt.getString("spell"));
         var sprayElement = SprayElement.fromInt(nbt.getInt("sprayElement"));
         setSprayElement(sprayElement);
         setMovementType(nbt.getInt("movementType"));
@@ -282,9 +254,9 @@ public class SprayElementEntity extends ThrownEntity {
         }
 
 
-        ItemStack wandStack = ItemStack.fromNbt(nbt.getCompound("Item"));
-        if (nbt.contains("Caster")) {
-            var casterUuid = nbt.getUuid("Caster");
+        ItemStack wandStack = ItemStack.fromNbt(nbt.getCompound("wandStack"));
+        if (nbt.contains("caster")) {
+            var casterUuid = nbt.getUuid("caster");
             var player = CasterStorage.getCasterById(getWorld(), casterUuid);
             if (player != null && wandStack != null) {
                 this.setCaster(player);
@@ -295,6 +267,7 @@ public class SprayElementEntity extends ThrownEntity {
 
     @Override
     protected void writeCustomDataToNbt(NbtCompound nbt) {
+        nbt.putString("spell", getSpellId());
         nbt.putInt("sprayElement", getSprayElement().ordinal());
         nbt.putInt("movementType", getMovementType());
         nbt.putInt("lifeTimeLeft", getLifeTimeLeft());
@@ -304,29 +277,10 @@ public class SprayElementEntity extends ThrownEntity {
             nbt.putDouble("startingPosZ", startingPos.z);
         }
 
-        nbt.putUuid("Caster", getCaster().getCasterUuid());
+        nbt.putUuid("caster", getCaster().getCasterUuid());
         ItemStack wandStack = this.getWandStack();
         if (!wandStack.isEmpty()) {
-            nbt.put("WandStack", wandStack.writeNbt(new NbtCompound()));
-        }
-    }
-
-    public Vec3d getStartingPos() {
-        return startingPos;
-    }
-
-    public void setStartingPos(Vec3d startingPos) {
-        this.startingPos = startingPos;
-        if (getMovementType() == RotatingMovent) {
-            var random = getWorld().random;
-            var randomAngle = random.nextFloat() * Math.PI * 2;
-
-            var offset = new Vec3d(Math.sin(randomAngle) * (1 + random.nextFloat()),
-                                   random.nextFloat() * 4 - 2,
-                                   Math.cos(randomAngle) * (1 + random.nextFloat())).multiply(3, 1, 3);
-            setPosition(startingPos.add(offset));
-            var velocity = offset.crossProduct(new Vec3d(0, 1, 0));
-            setVelocity(velocity);
+            nbt.put("wandStack", wandStack.writeNbt(new NbtCompound()));
         }
     }
 
@@ -343,7 +297,4 @@ public class SprayElementEntity extends ThrownEntity {
             };
         }
     }
-
-    public static final int DirectMovent = 1;
-    public static final int RotatingMovent = 2;
 }

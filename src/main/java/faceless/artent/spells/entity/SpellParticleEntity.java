@@ -67,20 +67,20 @@ public class SpellParticleEntity extends ThrownEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putString("Spell", getSpellId());
-        nbt.putUuid("Caster", getCaster().getCasterUuid());
+        nbt.putString("spell", getSpellId());
+        nbt.putUuid("caster", getCaster().getCasterUuid());
         ItemStack wandStack = this.getWandStack();
         if (!wandStack.isEmpty()) {
-            nbt.put("WandStack", wandStack.writeNbt(new NbtCompound()));
+            nbt.put("wandStack", wandStack.writeNbt(new NbtCompound()));
         }
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        setSpellId(nbt.getString("Spell"));
-        ItemStack wandStack = ItemStack.fromNbt(nbt.getCompound("WandStack"));
-        var casterUuid = nbt.getUuid("Caster");
+        setSpellId(nbt.getString("spell"));
+        ItemStack wandStack = ItemStack.fromNbt(nbt.getCompound("wandStack"));
+        var casterUuid = nbt.getUuid("caster");
 
         var player = CasterStorage.getCasterById(getWorld(), casterUuid);
         if (player != null && wandStack != null) {

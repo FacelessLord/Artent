@@ -6,13 +6,18 @@ import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
 import faceless.artent.spells.api.SpellActionResult;
 import faceless.artent.spells.entity.SprayElementEntity;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class SpraySpell extends Spell {
+public abstract class SpraySpell extends Spell {
     public SprayElementEntity.SprayElement element;
     public boolean isHurricane = false;
 
@@ -45,9 +50,10 @@ public class SpraySpell extends Spell {
                 var particle = new SprayElementEntity(ModEntities.SPRAY_ELEMENT_ENTITY, world);
                 particle.setCaster(caster);
                 particle.setSprayElement(this.element);
+                particle.setSpell(this);
                 particle.setMovementType(isHurricane
-                                           ? SprayElementEntity.RotatingMovent
-                                           : SprayElementEntity.DirectMovent);
+                                           ? SprayElementEntity.RotatingMovement
+                                           : SprayElementEntity.DirectMovement);
                 particle.setVelocity(e1.add(offsetVector.multiply(0.4f)));
                 particle.setPosition(startPos.add(e1.multiply(1.5f)));
                 particle.setStartingPos(startPos);
@@ -97,5 +103,17 @@ public class SpraySpell extends Spell {
         }
 
         return SpellActionResult.Continue(baseCost);
+    }
+
+    public abstract void onCollideWithBlock(World world, ICaster caster, BlockState blockState, BlockPos blockPos, Direction dir);
+
+    public abstract void onCollideWithEntity(World world, ICaster caster, Entity entity);
+
+    public abstract boolean projectileTick(World world, ICaster caster, BlockState blockState, BlockPos blockPos);
+
+    public static DamageSource createDamageSource(World world, ICaster caster) {
+        return caster instanceof LivingEntity livingCaster
+          ? world.getDamageSources().mobAttack(livingCaster)
+          : world.getDamageSources().magic();
     }
 }
