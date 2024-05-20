@@ -1,6 +1,7 @@
 package faceless.artent.spells.spells;
 
 import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.SprayElementEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,8 +15,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class WaterJet extends SpraySpell {
-    public WaterJet() {
-        super("water_jet", SprayElementEntity.SprayElement.Water, 5);
+    public WaterJet(SpellSettings settings) {
+        super("water_jet", SprayElementEntity.SprayElement.Water, settings);
     }
 
     @Override

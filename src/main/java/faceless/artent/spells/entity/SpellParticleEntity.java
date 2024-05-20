@@ -131,7 +131,7 @@ public class SpellParticleEntity extends ThrownEntity {
                 return;
             }
 
-            world.addParticle(new DustParticleEffect(spell.color, 1),
+            world.addParticle(new DustParticleEffect(spell.settings.color, 1),
                               getParticleX(0.05f),
                               this.getRandomBodyY(),
                               getParticleZ(0.05f),

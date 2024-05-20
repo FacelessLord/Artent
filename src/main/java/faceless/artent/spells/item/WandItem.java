@@ -85,7 +85,9 @@ public class WandItem extends ArtentItem implements ISharpenable {
         if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
             spell.onRecoil(caster, world, stack, actionTime);
         } else {
-            var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+            var manaToConsume = ManaUtils.evaluateManaToConsume(spell,
+                                                                this.affinities,
+                                                                SpellSettings.ActionType.SingleCast);
             if (caster.consumeMana(manaToConsume)) spell.action(caster, world, stack, actionTime);
         }
     }
@@ -97,22 +99,27 @@ public class WandItem extends ArtentItem implements ISharpenable {
 
         var actionTime = getMaxUseTime(stack) - remainingUseTicks;
 
-        if (actionTime < spell.prepareTime) {
-            var manaToConsume = ManaUtils.evaluatePrepareManaToConsume(spell, this.affinities, spell.type);
+        if (actionTime < spell.settings.prepareTime) {
+            var manaToConsume = ManaUtils.evaluatePrepareManaToConsume(spell, this.affinities, spell.settings.type);
             if (caster.consumeMana(manaToConsume)) {
                 spell.prepareTick(caster, world, stack, actionTime);
                 return;
-            } else {
-                spell.onRecoil(caster, world, stack, actionTime);
             }
+            spell.onRecoil(caster, world, stack, actionTime);
             living.stopUsingItem();
         }
 
-        actionTime -= spell.prepareTime;
+        actionTime -= spell.settings.prepareTime;
 
         if (!spell.isTickAction()) return;
 
-        var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.Tick);
+        if (actionTime > spell.settings.maxCastTime) {
+            living.stopUsingItem();
+            // TODO set cooldown
+            return;
+        }
+
+        var manaToConsume = ManaUtils.evaluateManaToConsume(spell, this.affinities, SpellSettings.ActionType.Tick);
         SpellActionResult result = null;
 
         if (caster.consumeMana(manaToConsume)) result = spell.spellTick(caster, world, stack, actionTime);

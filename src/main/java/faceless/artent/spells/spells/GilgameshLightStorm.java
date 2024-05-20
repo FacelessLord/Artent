@@ -3,6 +3,7 @@ package faceless.artent.spells.spells;
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
 import faceless.artent.spells.api.SpellActionResult;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.LightSwordProjectileEntity;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
@@ -14,8 +15,8 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 public class GilgameshLightStorm extends Spell {
-    public GilgameshLightStorm() {
-        super("gilgamesh_light_storm", ActionType.Tick, 1, 80);
+    public GilgameshLightStorm(SpellSettings settings) {
+        super("gilgamesh_light_storm", settings);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class GilgameshLightStorm extends Spell {
                 }
             }
             if (targetPos == null)
-                return SpellActionResult.Continue(0);
+                return SpellActionResult.Continue();
 
             for (int i = 0; i < 5; i++) {
                 var targetRange = 3;
@@ -78,9 +79,9 @@ public class GilgameshLightStorm extends Spell {
                 projectile.setVelocity(velocityVec.multiply(2));
                 world.spawnEntity(projectile);
             }
-            return SpellActionResult.Continue(1);
+            return SpellActionResult.Continue();
         }
 
-        return SpellActionResult.Continue(0);
+        return SpellActionResult.Continue();
     }
 }

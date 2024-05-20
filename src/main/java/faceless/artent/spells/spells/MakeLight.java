@@ -2,14 +2,15 @@ package faceless.artent.spells.spells;
 
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.SpellSettings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class MakeLight extends ProjectileSpell {
-    public MakeLight() {
-        super("lightbulb", 3);
+    public MakeLight(SpellSettings settings) {
+        super("lightbulb", settings);
     }
 
 

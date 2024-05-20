@@ -2,13 +2,14 @@ package faceless.artent.spells.spells;
 
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.api.SpellSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class Dash extends Spell {
-    public Dash() {
-        super("dash", ActionType.SingleCast, 5, 10);
+    public Dash(SpellSettings settings) {
+        super("dash", settings);// SpellSettings.ActionType.SingleCast, 5, 10);
     }
 
     @Override

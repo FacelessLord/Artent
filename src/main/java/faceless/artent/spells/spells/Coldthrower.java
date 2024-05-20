@@ -2,6 +2,7 @@ package faceless.artent.spells.spells;
 
 import faceless.artent.objects.ModPotionEffects;
 import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.SprayElementEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,8 +14,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class Coldthrower extends SpraySpell {
-    public Coldthrower() {
-        super("coldthrower", SprayElementEntity.SprayElement.Cold, 5);
+    public Coldthrower(SpellSettings settings) {
+        super("coldthrower", SprayElementEntity.SprayElement.Cold, settings);
     }
 
     @Override

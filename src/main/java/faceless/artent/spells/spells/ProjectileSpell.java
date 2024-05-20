@@ -3,6 +3,7 @@ package faceless.artent.spells.spells;
 import faceless.artent.objects.ModEntities;
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.SpellParticleEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -10,8 +11,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class ProjectileSpell extends Spell {
-    public ProjectileSpell(String id, int baseCost) {
-        super(id, ActionType.SingleCast | ActionType.BlockCast, baseCost, 5);
+    public ProjectileSpell(String id, SpellSettings settings) {
+        super(id, settings);
     }
 
     public void action(ICaster caster, World world, ItemStack stack, int castTime) {

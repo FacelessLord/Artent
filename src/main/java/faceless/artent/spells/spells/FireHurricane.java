@@ -1,6 +1,7 @@
 package faceless.artent.spells.spells;
 
 import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.SprayElementEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -9,8 +10,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class FireHurricane extends SpraySpell {
-    public FireHurricane() {
-        super("fire_hurricane", SprayElementEntity.SprayElement.Fire, 5);
+    public FireHurricane(SpellSettings settings) {
+        super("fire_hurricane", SprayElementEntity.SprayElement.Fire, settings);
         isHurricane = true;
     }
 

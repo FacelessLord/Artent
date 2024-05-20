@@ -3,7 +3,7 @@ package faceless.artent.spells.entity.ai;
 import faceless.artent.spells.api.Affinity;
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.ManaUtils;
-import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.MageEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -41,13 +41,17 @@ public class MageAttackGoal extends Goal {
     @Override
     public boolean canStart() {
         var spell = caster.getCurrentSpell();
-        if (spell == null)
-            return false;
+        if (spell == null) return false;
         var neededMana = 0;
         if (spell.isSingleCastAction())
-            neededMana = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.SingleCast);
+            neededMana = ManaUtils.evaluateManaToConsume(spell, this.affinities, SpellSettings.ActionType.SingleCast);
         if (spell.isTickAction())
-            neededMana += ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.Tick) * 10;
+            neededMana = ManaUtils.evaluateManaToConsume(spell, this.affinities, SpellSettings.ActionType.Tick) *
+                         spell.settings.maxCastTime +
+                         ManaUtils.evaluatePrepareManaToConsume(spell,
+                                                                this.affinities,
+                                                                SpellSettings.ActionType.Tick) *
+                         spell.settings.prepareTime;
         return caster.getMana() >= neededMana && mage.getTarget() != null;
     }
 
@@ -69,13 +73,11 @@ public class MageAttackGoal extends Goal {
 
     public void tick() {
         super.tick();
-        castTime++;
         var spell = caster.getCurrentSpell();
-        var rangeSquared = Math.min(squaredRange, spell.maxActionDistance * spell.maxActionDistance);
+        var rangeSquared = Math.min(squaredRange, spell.settings.maxActionDistance * spell.settings.maxActionDistance);
         var target = mage.getTarget();
         var wand = mage.getMainHandStack();
-        if (target == null || wand == null)
-            return;
+        if (target == null || wand == null) return;
 
         double distanceSqr = mage.squaredDistanceTo(target.getX(), target.getY(), target.getZ());
         boolean canSeeTarget = mage.getVisibilityCache().canSee(target);
@@ -125,29 +127,50 @@ public class MageAttackGoal extends Goal {
             if (!canSeeTarget && this.targetSeeingTicker < -60) {
                 mage.clearActiveItem();
             } else if (canSeeTarget) {
-                if (mage.getItemUseTime() >= 20) {
-                    if (spell.isSingleCastAction()) {
-                        var castMana = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.Tick);
-                        if (caster.consumeMana(castMana)) {
-                            prepareDirectedCast(target);
-                            wand.onStoppedUsing(mage.getWorld(), mage, wand.getMaxUseTime() - castTime);
-                            afterCast();
-                        }
+                if (mage.getItemUseTime() < spell.settings.prepareTime) {
+                    prepareDirectedCast(target);
+                    wand.usageTick(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
+                    afterCast();
+                    if (!mage.isUsingItem()) {
+                        stop();
                     }
-
-                    mage.clearActiveItem();
-                    this.cooldown = mage.getCurrentSpell().cooldown;
+                    return;
                 }
-                if (spell.isTickAction()) {
-                    var tickMana = ManaUtils.evaluateManaToConsume(spell, this.affinities, Spell.ActionType.Tick);
-                    if (caster.consumeMana(tickMana)) {
+                var actionTime = mage.getItemUseTime() - spell.settings.prepareTime;
+                if (spell.isSingleCastAction()) {
+                    var castMana = ManaUtils.evaluateManaToConsume(spell,
+                                                                   this.affinities,
+                                                                   SpellSettings.ActionType.Tick);
+                    if (caster.consumeMana(castMana)) {
                         prepareDirectedCast(target);
-                        wand.usageTick(mage.getWorld(), mage, wand.getMaxUseTime() - castTime);
+                        wand.onStoppedUsing(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
                         afterCast();
                     }
+
+                    stop(); // TODO use custom stops to enable cooldowns
+                    mage.stopUsingItem();
+                    this.cooldown = spell.settings.cooldown;
                 }
+
+                if (spell.isTickAction()) {
+                    if (actionTime < spell.settings.maxCastTime) { // duplicating WandItem behaviour
+                        var tickMana = ManaUtils.evaluateManaToConsume(spell,
+                                                                       this.affinities,
+                                                                       SpellSettings.ActionType.Tick);
+                        if (caster.consumeMana(tickMana)) {
+                            prepareDirectedCast(target);
+                            wand.usageTick(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
+                            afterCast();
+                            return;
+                        }
+                    }
+                    stop();
+                    mage.stopUsingItem();
+                    this.cooldown = spell.settings.cooldown; // TODO will be set by WandItem and I would remove this if-else statement
+                }
+
             }
-        } else if (--this.cooldown <= 0 && this.targetSeeingTicker >= -60) {
+        } else if (--this.cooldown <= 0 && this.targetSeeingTicker >= -60 && canStart()) {
             mage.setCurrentHand(Hand.MAIN_HAND);
         }
     }
@@ -171,7 +194,7 @@ public class MageAttackGoal extends Goal {
     @Override
     public void stop() {
         super.stop();
-        mage.clearActiveItem();
+        mage.stopUsingItem();
         this.targetSeeingTicker = 0;
         this.cooldown = -1;
     }

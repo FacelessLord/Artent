@@ -1,6 +1,7 @@
 package faceless.artent.spells.spells;
 
 import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.SprayElementEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -12,10 +13,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class Flamethrower extends SpraySpell {
-    public Flamethrower() {
-        super("flamethrower", SprayElementEntity.SprayElement.Fire, 5);
+    public Flamethrower(SpellSettings settings) {
+        super("flamethrower", SprayElementEntity.SprayElement.Fire, settings);
     }
-
 
     @Override
     public void onCollideWithBlock(World world, ICaster caster, BlockState state, BlockPos pos, Direction dir) {

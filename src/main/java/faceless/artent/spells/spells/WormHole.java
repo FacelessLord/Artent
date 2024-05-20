@@ -3,6 +3,7 @@ package faceless.artent.spells.spells;
 import faceless.artent.api.DirectionUtils;
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.blockEntity.VoidBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -13,7 +14,7 @@ import net.minecraft.world.World;
 
 public class WormHole extends Spell {
     public WormHole() {
-        super("wormhole", ActionType.BlockCast, 8, 30);
+        super("wormhole", SpellSettings.action(0).build()); // TODO
     }
 
 //    @Override
@@ -43,8 +44,7 @@ public class WormHole extends Spell {
     public static void voidBlock(World world, BlockPos offsetPos, Direction direction, int depth, BlockPos centerPos) {
         var blockState = world.getBlockState(offsetPos);
         NbtCompound tileState = new NbtCompound();
-        if (!world.getBlockState(offsetPos).isOpaqueFullCube(world, offsetPos))
-            return;
+        if (!world.getBlockState(offsetPos).isOpaqueFullCube(world, offsetPos)) return;
         if (blockState.hasBlockEntity()) {
             var blockEntity = world.getBlockEntity(offsetPos);
             if (blockEntity != null) {

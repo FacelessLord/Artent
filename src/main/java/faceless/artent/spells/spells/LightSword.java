@@ -2,13 +2,14 @@ package faceless.artent.spells.spells;
 
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.LightSwordProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class LightSword extends Spell {
-    public LightSword() {
-        super("light_sword", ActionType.SingleCast, 10, 10);
+    public LightSword(SpellSettings settings) {
+        super("light_sword", settings); //SpellSettings.ActionType.SingleCast, 10, 10);
     }
 
     public void action(ICaster caster, World world, ItemStack stack, int castTime) {

@@ -5,6 +5,7 @@ import faceless.artent.objects.ModParticles;
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
 import faceless.artent.spells.api.SpellActionResult;
+import faceless.artent.spells.api.SpellSettings;
 import faceless.artent.spells.entity.SprayElementEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -21,16 +22,14 @@ public abstract class SpraySpell extends Spell {
     public SprayElementEntity.SprayElement element;
     public boolean isHurricane = false;
 
-    public SpraySpell(String id, SprayElementEntity.SprayElement element, int baseCost) {
-        super(id, ActionType.Tick, baseCost, 20);
+    public SpraySpell(String id, SprayElementEntity.SprayElement element, SpellSettings settings) {
+        super(id, settings);
         this.element = element;
-        maxActionDistance = 6;
-        prepareTime = 10;
     }
 
     @Override
     public SpellActionResult spellTick(ICaster caster, World world, ItemStack stack, int actionTime) {
-        if (!(caster instanceof LivingEntity living)) return SpellActionResult.Stop(0);
+        if (!(caster instanceof LivingEntity living)) return SpellActionResult.Stop();
         var e1 = living.getRotationVector().normalize();
         var e2 = new Vec3d(-e1.y, e1.x, 0).normalize();
         var e3 = new Vec3d(-e1.x * e1.z, -e1.y * e1.z, e1.x * e1.x + e1.y * e1.y).normalize();
@@ -102,7 +101,7 @@ public abstract class SpraySpell extends Spell {
             }
         }
 
-        return SpellActionResult.Continue(baseCost);
+        return SpellActionResult.Continue();
     }
 
     public abstract void onCollideWithBlock(World world, ICaster caster, BlockState blockState, BlockPos blockPos, Direction dir);

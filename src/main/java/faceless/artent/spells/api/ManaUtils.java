@@ -5,26 +5,25 @@ import java.util.List;
 public class ManaUtils {
 
     public static int evaluateManaToConsume(Spell spell, List<Affinity> wandAffinities, int actionType) {
-        if (actionType != Spell.ActionType.Tick)
-            return 0;
-
-        var spellAffinityType = spell.affinityType;
+        var spellAffinityType = spell.settings.affinityType;
         var correspondingWandAffinity = getCorrespondingWandAffinity(wandAffinities, spellAffinityType);
         if (correspondingWandAffinity != null) {
-            return (int) (spell.baseCost * (1 - correspondingWandAffinity.value));
+            return (int) (spell.settings.baseCost * (1 - correspondingWandAffinity.value));
         }
-        return spell.baseCost;
+        return spell.settings.baseCost;
     }
 
     public static int evaluatePrepareManaToConsume(Spell spell, List<Affinity> wandAffinities, int actionType) {
-        var spellAffinityType = spell.affinityType;
+        var spellAffinityType = spell.settings.affinityType;
         var correspondingWandAffinity = getCorrespondingWandAffinity(wandAffinities, spellAffinityType);
         if (correspondingWandAffinity != null) {
-            var cost = actionType == Spell.ActionType.SingleCast ? spell.baseCost : spell.prepareCost;
-            var divider = actionType == Spell.ActionType.SingleCast ? spell.prepareTime : 2;
+            var cost = actionType == SpellSettings.ActionType.SingleCast
+              ? spell.settings.baseCost
+              : spell.settings.prepareCost;
+            var divider = actionType == SpellSettings.ActionType.SingleCast ? spell.settings.prepareTime : 2;
             return (int) (cost * (1 - correspondingWandAffinity.value)) / divider;
         }
-        return spell.baseCost;
+        return spell.settings.baseCost;
     }
 
     public static Affinity getCorrespondingWandAffinity(List<Affinity> wandAffinities, AffinityType spellAffinity) {

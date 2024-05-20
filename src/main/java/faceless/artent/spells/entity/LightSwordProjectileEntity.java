@@ -146,7 +146,7 @@ public class LightSwordProjectileEntity extends ThrownEntity {
                 return;
             }
 
-            world.addParticle(new DustParticleEffect(ModSpells.MakeLight.color, 1),
+            world.addParticle(new DustParticleEffect(ModSpells.MakeLight.settings.color, 1),
                               getParticleX(0.05f),
                               this.getRandomBodyY(),
                               getParticleZ(0.05f),

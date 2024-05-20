@@ -2,6 +2,7 @@ package faceless.artent.spells.spells;
 
 import faceless.artent.objects.ModBlocks;
 import faceless.artent.spells.api.ICaster;
+import faceless.artent.spells.api.SpellSettings;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -9,8 +10,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class Nox extends ProjectileSpell {
-    public Nox() {
-        super("nox", 1);
+    public Nox(SpellSettings settings) {
+        super("nox", settings);
     }
 
     @Override

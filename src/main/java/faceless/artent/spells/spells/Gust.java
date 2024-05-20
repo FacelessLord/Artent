@@ -2,6 +2,7 @@ package faceless.artent.spells.spells;
 
 import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.Spell;
+import faceless.artent.spells.api.SpellSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Box;
@@ -9,9 +10,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class Gust extends Spell {
-    public Gust() {
-        super("gust", ActionType.SingleCast, 5, 10);
-        maxActionDistance = 6;
+    public Gust(SpellSettings settings) {
+        super("gust", settings);
     }
 
     @Override
