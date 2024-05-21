@@ -28,7 +28,7 @@ public class ModSpells {
                                               .affinity(AffinityType.Void)
                                               .build());
     public static final Spell GilgameshLightStorm = new GilgameshLightStorm(SpellSettings
-                                                                              .tick(10, 10)
+                                                                              .tick(10, 4)
                                                                               .prepareTime(80)
                                                                               .cooldown(80)
                                                                               .color(1, 1, 0.5f)
@@ -37,7 +37,7 @@ public class ModSpells {
 //    public static final Spell Wormhole = new WormHole().setColor(0.17f, 0.03f, 0.38f).setAffinity(AffinityType.Void);
 
     public static final SpellSettings.SpellSettingsBuilder sprayBuilder = SpellSettings
-      .tick(3, 5)
+      .tick(5, 3)
       .prepareTime(10)
       .cooldown(20)
       .maxActionDistance(6);
@@ -75,6 +75,14 @@ public class ModSpells {
                                                 .affinity(AffinityType.Air)
                                                 .maxActionDistance(6)
                                                 .prepareTime(20)
+                                                .build());
+
+    public static final Spell SmallFireball = new SmallFireball(SpellSettings
+                                                .action(2)
+                                                .cooldown(10)
+                                                .affinity(AffinityType.Fire)
+                                                .maxActionDistance(32)
+                                                .prepareTime(10)
                                                 .build());
 
 }

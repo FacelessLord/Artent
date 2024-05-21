@@ -1,8 +1,13 @@
 package faceless.artent.spells.api;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -59,5 +64,24 @@ public class Spell {
 
     public boolean isSingleCastAction() {
         return settings.isSingleCastAction();
+    }
+
+
+    public void onProjectileBlockHit(ICaster caster, World world, ItemStack stack, BlockState blockState, BlockPos blockPos, Direction hitSide) {
+
+    }
+    public void onProjectileEntityHit(
+      ICaster caster,
+      World world,
+      ItemStack stack,
+      Entity entity
+    ) {
+
+    }
+
+    public static DamageSource createDamageSource(World world, ICaster caster) {
+        return caster instanceof LivingEntity livingCaster
+          ? world.getDamageSources().mobAttack(livingCaster)
+          : world.getDamageSources().magic();
     }
 }

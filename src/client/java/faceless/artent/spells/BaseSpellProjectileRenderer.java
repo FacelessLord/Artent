@@ -1,6 +1,6 @@
 package faceless.artent.spells;
 
-import faceless.artent.spells.entity.SpellParticleEntity;
+import faceless.artent.spells.entity.BaseSpellProjectile;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -8,15 +8,15 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class SpellParticleRenderer extends EntityRenderer<SpellParticleEntity> {
+public class BaseSpellProjectileRenderer extends EntityRenderer<BaseSpellProjectile> {
 
-    public SpellParticleRenderer(EntityRendererFactory.Context context) {
+    public BaseSpellProjectileRenderer(EntityRendererFactory.Context context) {
         super(context);
     }
 
     @Override
     public void render(
-      SpellParticleEntity lightbulb,
+      BaseSpellProjectile lightbulb,
       float f,
       float g,
       MatrixStack matrixStack,
@@ -26,7 +26,7 @@ public class SpellParticleRenderer extends EntityRenderer<SpellParticleEntity> {
     }
 
     @Override
-    public Identifier getTexture(SpellParticleEntity coinEntity) {
+    public Identifier getTexture(BaseSpellProjectile coinEntity) {
         return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
     }
 }

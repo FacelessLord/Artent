@@ -16,6 +16,7 @@ public class EntityRegistry implements IRegistry {
     public void register() {
         register("potion_phial_entity", ModEntities.POTION_PHIAL);
         register("spell_particle", ModEntities.SPELL_PARTICLE);
+        register("small_fireball", ModEntities.SMALL_FIREBALL);
         register("coin", ModEntities.COIN_ENTITY);
         register("crow", ModEntities.CROW_ENTITY);
         register("light_sword", ModEntities.LIGHT_SWORD);

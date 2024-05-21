@@ -24,16 +24,24 @@ import org.spongepowered.asm.mixin.Unique;
 
 public class SprayElementEntity extends ThrownEntity {
     @Unique
-    private static final TrackedData<Integer> SPRAY_ELEMENT = DataTracker.registerData(SprayElementEntity.class,
-                                                                                       TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> SPRAY_ELEMENT = DataTracker.registerData(
+      SprayElementEntity.class,
+      TrackedDataHandlerRegistry.INTEGER
+    );
     @Unique
-    private static final TrackedData<Integer> MOVEMENT_TYPE = DataTracker.registerData(SprayElementEntity.class,
-                                                                                       TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> MOVEMENT_TYPE = DataTracker.registerData(
+      SprayElementEntity.class,
+      TrackedDataHandlerRegistry.INTEGER
+    );
     @Unique
-    private static final TrackedData<Integer> LIFE_TIME_LEFT = DataTracker.registerData(SprayElementEntity.class,
-                                                                                        TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<String> SPELL = DataTracker.registerData(SprayElementEntity.class,
-                                                                              TrackedDataHandlerRegistry.STRING);
+    private static final TrackedData<Integer> LIFE_TIME_LEFT = DataTracker.registerData(
+      SprayElementEntity.class,
+      TrackedDataHandlerRegistry.INTEGER
+    );
+    private static final TrackedData<String> SPELL = DataTracker.registerData(
+      SprayElementEntity.class,
+      TrackedDataHandlerRegistry.STRING
+    );
 
     public static final int DirectMovement = 1;
     public static final int RotatingMovement = 2;
@@ -111,7 +119,7 @@ public class SprayElementEntity extends ThrownEntity {
             return;
         }
 
-        spray.onCollideWithEntity(getWorld(), caster, entityHitResult.getEntity());
+        spray.onProjectileEntityHit(caster, getWorld(), wandStack, entityHitResult.getEntity());
         discard();
     }
 
@@ -131,7 +139,7 @@ public class SprayElementEntity extends ThrownEntity {
             var center = blockPos.toCenterPos();
             var offset = getPos().subtract(center);
             var dir = getHitDirection(offset);
-            spray.onCollideWithBlock(world, caster, blockState, blockPos, dir);
+            spray.onProjectileBlockHit(caster, world, wandStack, blockState, blockPos, dir);
         }
 
         discard();
@@ -227,9 +235,11 @@ public class SprayElementEntity extends ThrownEntity {
             var random = getWorld().random;
             var randomAngle = random.nextFloat() * Math.PI * 2;
 
-            var offset = new Vec3d(Math.sin(randomAngle) * (1 + random.nextFloat()),
-                                   random.nextFloat() * 4 - 2,
-                                   Math.cos(randomAngle) * (1 + random.nextFloat())).multiply(3, 1, 3);
+            var offset = new Vec3d(
+              Math.sin(randomAngle) * (1 + random.nextFloat()),
+              random.nextFloat() * 4 - 2,
+              Math.cos(randomAngle) * (1 + random.nextFloat())
+            ).multiply(3, 1, 3);
             setPosition(startingPos.add(offset));
             var velocity = offset.crossProduct(new Vec3d(0, 1, 0));
             setVelocity(velocity);

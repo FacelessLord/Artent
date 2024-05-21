@@ -2,9 +2,9 @@ package faceless.artent.registries;
 
 import faceless.artent.mobs.CrowEntityRenderer;
 import faceless.artent.objects.ModEntities;
+import faceless.artent.spells.BaseSpellProjectileRenderer;
 import faceless.artent.spells.LightSwordProjectileEntityRenderer;
 import faceless.artent.spells.MageEntityRenderer;
-import faceless.artent.spells.SpellParticleRenderer;
 import faceless.artent.spells.SprayParticleEntityRenderer;
 import faceless.artent.trading.CoinEntityRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -17,7 +17,8 @@ public class EntityRenderersRegistry implements IRegistry {
         EntityRendererRegistry.register(ModEntities.POTION_PHIAL, FlyingItemEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.COIN_ENTITY, CoinEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.CROW_ENTITY, CrowEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SPELL_PARTICLE, SpellParticleRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SPELL_PARTICLE, BaseSpellProjectileRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SMALL_FIREBALL, BaseSpellProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.LIGHT_SWORD, LightSwordProjectileEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.SPRAY_ELEMENT_ENTITY, SprayParticleEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.MAGE_ENTITY, MageEntityRenderer::new);

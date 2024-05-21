@@ -2,10 +2,7 @@ package faceless.artent.objects;
 
 import faceless.artent.brewing.entity.ThrowablePotionPhialEntity;
 import faceless.artent.mobs.entity.CrowEntity;
-import faceless.artent.spells.entity.LightSwordProjectileEntity;
-import faceless.artent.spells.entity.MageEntity;
-import faceless.artent.spells.entity.SpellParticleEntity;
-import faceless.artent.spells.entity.SprayElementEntity;
+import faceless.artent.spells.entity.*;
 import faceless.artent.trading.entity.CoinEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -44,6 +41,13 @@ public class ModEntities {
       FabricEntityTypeBuilder
         .create(SpawnGroup.MISC,
                 SpellParticleEntity::new)
+        .dimensions(EntityDimensions.fixed(0.5f, 0.5f))
+        .trackRangeChunks(10)
+        .build();
+    public static EntityType<? extends SmallFireballEntity> SMALL_FIREBALL =
+      FabricEntityTypeBuilder
+        .create(SpawnGroup.MISC,
+                SmallFireballEntity::new)
         .dimensions(EntityDimensions.fixed(0.5f, 0.5f))
         .trackRangeChunks(10)
         .build();

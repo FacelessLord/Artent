@@ -8,6 +8,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -17,14 +18,15 @@ public class Flamethrower extends SpraySpell {
         super("flamethrower", SprayElementEntity.SprayElement.Fire, settings);
     }
 
-    @Override
-    public void onCollideWithBlock(World world, ICaster caster, BlockState state, BlockPos pos, Direction dir) {
-        fireParticleBlockCollide(world, state, pos);
+    public void onProjectileBlockHit(ICaster caster, World world, ItemStack stack, BlockState blockState, BlockPos blockPos, Direction hitSide) {
+        super.onProjectileBlockHit(caster, world, stack, blockState, blockPos, hitSide);
+        fireParticleBlockCollide(world, blockState, blockPos);
     }
 
 
     @Override
-    public void onCollideWithEntity(World world, ICaster caster, Entity entity) {
+    public void onProjectileEntityHit(ICaster caster, World world, ItemStack stack, Entity entity) {
+        super.onProjectileEntityHit(caster, world, stack, entity);
         fireParticleEntityCollide(world, caster, entity);
     }
 

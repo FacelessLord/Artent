@@ -14,13 +14,13 @@ public class ManaUtils {
     }
 
     public static int evaluatePrepareManaToConsume(Spell spell, List<Affinity> wandAffinities, int actionType) {
+        if (actionType == SpellSettings.ActionType.SingleCast)
+            return 0; // it's hard to divide baseCost on prepareTime, so I will use mana only on Action
         var spellAffinityType = spell.settings.affinityType;
         var correspondingWandAffinity = getCorrespondingWandAffinity(wandAffinities, spellAffinityType);
         if (correspondingWandAffinity != null) {
-            var cost = actionType == SpellSettings.ActionType.SingleCast
-              ? spell.settings.baseCost
-              : spell.settings.prepareCost;
-            var divider = actionType == SpellSettings.ActionType.SingleCast ? spell.settings.prepareTime : 2;
+            var cost = spell.settings.prepareCost;
+            var divider = 2;
             return (int) (cost * (1 - correspondingWandAffinity.value)) / divider;
         }
         return spell.settings.baseCost;

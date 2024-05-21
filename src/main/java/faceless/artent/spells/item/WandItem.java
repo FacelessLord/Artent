@@ -81,7 +81,10 @@ public class WandItem extends ArtentItem implements ISharpenable {
         if (spell == null) return;
         if (!spell.isSingleCastAction()) return;
 
-        var actionTime = getMaxUseTime(stack) - remainingUseTicks; // TODO minimal spellcast time
+        var actionTime = getMaxUseTime(stack) - remainingUseTicks;
+        if (actionTime < spell.settings.prepareTime)
+            return;
+
         if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
             spell.onRecoil(caster, world, stack, actionTime);
         } else {

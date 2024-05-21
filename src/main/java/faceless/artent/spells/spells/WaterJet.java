@@ -9,6 +9,7 @@ import net.minecraft.block.FarmlandBlock;
 import net.minecraft.block.Fertilizable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.EndermanEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -19,10 +20,15 @@ public class WaterJet extends SpraySpell {
         super("water_jet", SprayElementEntity.SprayElement.Water, settings);
     }
 
-    @Override
-    public void onCollideWithBlock(
-      World world, ICaster caster, BlockState blockState, BlockPos blockPos, Direction dir
+    public void onProjectileBlockHit(
+      ICaster caster,
+      World world,
+      ItemStack stack,
+      BlockState blockState,
+      BlockPos blockPos,
+      Direction hitSide
     ) {
+        super.onProjectileBlockHit(caster, world, stack, blockState, blockPos, hitSide);
         var block = blockState.getBlock();
 
         if (block == Blocks.DIRT) {
@@ -51,7 +57,8 @@ public class WaterJet extends SpraySpell {
     }
 
     @Override
-    public void onCollideWithEntity(World world, ICaster caster, Entity entity) {
+    public void onProjectileEntityHit(ICaster caster, World world, ItemStack stack, Entity entity) {
+        super.onProjectileEntityHit(caster, world, stack, entity);
         if (entity instanceof EndermanEntity enderman) {
             enderman.damage(createDamageSource(world, caster), caster.getPotency());
         }
