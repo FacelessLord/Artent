@@ -13,6 +13,9 @@ public class SpellSettings {
     public final int maxCastTime;
 
     public AffinityType affinityType;
+    public boolean hasGravity;
+    public float gravity;
+    public float velocity;
 
     public SpellSettings(
       int type,
@@ -23,7 +26,10 @@ public class SpellSettings {
       int cooldown,
       int prepareTime,
       int maxCastTime,
-      AffinityType affinityType
+      AffinityType affinityType,
+      boolean hasGravity,
+      float gravity,
+      float velocity
     ) {
         this.type = type;
         this.baseCost = baseCost;
@@ -34,6 +40,9 @@ public class SpellSettings {
         this.prepareTime = prepareTime;
         this.maxCastTime = maxCastTime;
         this.affinityType = affinityType;
+        this.hasGravity = hasGravity;
+        this.gravity = gravity;
+        this.velocity = velocity;
     }
 
 
@@ -63,21 +72,29 @@ public class SpellSettings {
         private int _prepareTime = 3 * 20;
         private int _maxCastTime = 10 * 20;
         private AffinityType _affinityType = AffinityType.None;
+        private boolean _hasGravity = false;
+        private float _gravity = 0;
+        private float _velocity = 2;
 
         private SpellSettingsBuilder(int type) {
             this.type = type;
         }
 
         public SpellSettings build() {
-            return new SpellSettings(type,
-                                     _baseCost,
-                                     _prepareCost,
-                                     _color,
-                                     _maxActionDistance,
-                                     _cooldown,
-                                     _prepareTime,
-                                     _maxCastTime,
-                                     _affinityType);
+            return new SpellSettings(
+              type,
+              _baseCost,
+              _prepareCost,
+              _color,
+              _maxActionDistance,
+              _cooldown,
+              _prepareTime,
+              _maxCastTime,
+              _affinityType,
+              _hasGravity,
+              _gravity,
+              _velocity
+            );
         }
 
         public SpellSettingsBuilder copy() {
@@ -90,6 +107,9 @@ public class SpellSettings {
             copy._cooldown = _cooldown;
             copy._prepareTime = _prepareTime;
             copy._affinityType = _affinityType;
+            copy._gravity = _gravity;
+            copy._hasGravity = _hasGravity;
+            copy._velocity = _velocity;
             return copy;
         }
 
@@ -135,6 +155,22 @@ public class SpellSettings {
 
         public SpellSettingsBuilder affinity(AffinityType affinityType) {
             this._affinityType = affinityType;
+            return this;
+        }
+
+        public SpellSettingsBuilder hasGravity(boolean hasGravity) {
+            this._hasGravity = hasGravity;
+            return this;
+        }
+
+        public SpellSettingsBuilder gravity(float gravity) {
+            this._gravity = gravity;
+            this._hasGravity = true;
+            return this;
+        }
+
+        public SpellSettingsBuilder velocity(float velocity) {
+            this._velocity = velocity;
             return this;
         }
     }

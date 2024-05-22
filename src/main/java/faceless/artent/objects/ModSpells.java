@@ -10,6 +10,7 @@ public class ModSpells {
                                                           .action(3)
                                                           .prepareTime(10)
                                                           .cooldown(10)
+                                                          .velocity(2)
                                                           .color(1, 1, 0.5f)
                                                           .affinity(AffinityType.Light)
                                                           .build());
@@ -24,6 +25,7 @@ public class ModSpells {
                                               .action(1)
                                               .prepareTime(10)
                                               .cooldown(10)
+                                              .velocity(2)
                                               .color(0.17f, 0.03f, 0.38f)
                                               .affinity(AffinityType.Void)
                                               .build());
@@ -78,11 +80,13 @@ public class ModSpells {
                                                 .build());
 
     public static final Spell SmallFireball = new SmallFireball(SpellSettings
-                                                .action(2)
-                                                .cooldown(10)
-                                                .affinity(AffinityType.Fire)
-                                                .maxActionDistance(32)
-                                                .prepareTime(10)
-                                                .build());
+                                                                  .action(2)
+                                                                  .cooldown(10)
+                                                                  .affinity(AffinityType.Fire)
+                                                                  .maxActionDistance(32)
+                                                                  .prepareTime(10)
+                                                                  .velocity(2)
+                                                                  .gravity(0.03f)
+                                                                  .build());
 
 }

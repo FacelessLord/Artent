@@ -63,7 +63,7 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
         this.goalSelector.add(5, new WanderAroundFarGoal(this, 1));
         this.goalSelector.add(6, new LookAtEntityGoal(this, SkeletonEntity.class, 16.0f));
         this.goalSelector.add(6, new LookAroundGoal(this));
-        this.goalSelector.add(4, new MageAttackGoal(this, this, new ArrayList<>(0), 8, 1));
+        this.goalSelector.add(4, new MageAttackGoal(this, this, new ArrayList<>(0), 32, 1));
         this.targetSelector.add(1, new RevengeGoal(this));
         this.targetSelector.add(3,
                                 new ActiveTargetGoal<>(this,
@@ -222,7 +222,7 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 
     @Override
     public Spell getCurrentSpell() {
-        return ModSpells.Flamethrower;
+        return ModSpells.SmallFireball;
     }
 
     public void setMana(int mana) {

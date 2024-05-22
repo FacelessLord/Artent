@@ -10,7 +10,6 @@ public class SpellParticleEntity extends BaseSpellProjectile {
       EntityType<? extends SpellParticleEntity> entityType, World world
     ) {
         super(entityType, world);
-        this.setNoGravity(true);
     }
 
     @Override

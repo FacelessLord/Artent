@@ -19,9 +19,10 @@ public abstract class ProjectileSpell extends Spell {
             var projectile = createProjectile(caster, world, stack);
             projectile.setCaster(caster);
             projectile.setSpell(this);
+            projectile.setNoGravity(!settings.hasGravity);
             projectile.setWandStack(stack);
-            projectile.setPosition(caster.getCasterPosition().add(caster.getCasterRotation()).add(0, 1.5f, 0));
-            projectile.setVelocity(caster.getCasterRotation().multiply(2));
+            projectile.setPosition(caster.getCasterPosition().add(0, 1.5f, 0));
+            projectile.setVelocity(caster.getCasterRotation().multiply(settings.velocity));
             world.spawnEntity(projectile);
         }
     }

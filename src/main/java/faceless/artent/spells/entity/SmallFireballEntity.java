@@ -11,7 +11,6 @@ public class SmallFireballEntity extends BaseSpellProjectile {
       World world
     ) {
         super(entityType, world);
-        this.setNoGravity(false);
     }
 
     @Override

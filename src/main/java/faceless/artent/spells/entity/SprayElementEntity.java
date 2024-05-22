@@ -48,7 +48,6 @@ public class SprayElementEntity extends ThrownEntity {
 
     private ICaster caster;
     private ItemStack wandStack = ItemStack.EMPTY;
-    private Vec3d startingPos;
 
     public SprayElementEntity(EntityType<? extends ThrownEntity> type, World world) {
         super(type, world);
@@ -71,7 +70,6 @@ public class SprayElementEntity extends ThrownEntity {
         if (getLifeTimeLeft() <= 0 ||
             spellId == null ||
             spellId.isEmpty() ||
-            getWorld().isClient ||
             !(SpellRegistry.getSpell(spellId) instanceof SpraySpell spray)) {
             discard();
             return;
@@ -80,31 +78,17 @@ public class SprayElementEntity extends ThrownEntity {
         var blockPos = getBlockPos();
         var blockState = world.getBlockState(blockPos);
 
-        world.getEntitiesByClass(
+        var projectiles = world.getEntitiesByClass(
           ProjectileEntity.class,
           Box.of(getPos(), 3, 3, 3),
           e -> !(e instanceof SprayElementEntity)
-        ).forEach(Entity::discard);
+        );
 
-        if (getMovementType() == RotatingMovement) {
-            if (getStartingPos() == null) {
-                discard();
-                return;
-            }
-            makeRotation();
-        }
+        projectiles.forEach(Entity::discard);
 
         if (spray.projectileTick(world, caster, blockState, blockPos)) {
             discard();
         }
-    }
-
-    private void makeRotation() {
-        var vecToCenter = getStartingPos().subtract(getPos()).multiply(1, 0, 1);
-        var normToCenter = vecToCenter.normalize();
-        var coefficient = centerCoefficient(vecToCenter.length());
-        var velocity = getVelocity().add(normToCenter.multiply(coefficient * 0.48f));
-        setVelocity(velocity.normalize());
     }
 
     @Override
@@ -159,13 +143,6 @@ public class SprayElementEntity extends ThrownEntity {
 
         dir = Direction.fromVector((int) axisVec.x, (int) axisVec.y, (int) axisVec.z);
         return dir;
-    }
-
-    private double centerCoefficient(double distance) {
-        var x = (distance - 3) * 3;
-        var exp = Math.exp(x);
-        var s = (exp - 1) / (exp + 1);
-        return s * s * s;
     }
 
     //region Properties
@@ -225,27 +202,6 @@ public class SprayElementEntity extends ThrownEntity {
         return getDataTracker().get(MOVEMENT_TYPE);
     }
 
-    public Vec3d getStartingPos() {
-        return startingPos;
-    }
-
-    public void setStartingPos(Vec3d startingPos) {
-        this.startingPos = startingPos;
-        if (getMovementType() == RotatingMovement) {
-            var random = getWorld().random;
-            var randomAngle = random.nextFloat() * Math.PI * 2;
-
-            var offset = new Vec3d(
-              Math.sin(randomAngle) * (1 + random.nextFloat()),
-              random.nextFloat() * 4 - 2,
-              Math.cos(randomAngle) * (1 + random.nextFloat())
-            ).multiply(3, 1, 3);
-            setPosition(startingPos.add(offset));
-            var velocity = offset.crossProduct(new Vec3d(0, 1, 0));
-            setVelocity(velocity);
-        }
-    }
-
     //endregion
 
     @Override
@@ -255,14 +211,6 @@ public class SprayElementEntity extends ThrownEntity {
         setSprayElement(sprayElement);
         setMovementType(nbt.getInt("movementType"));
         setLifeTimeLeft(nbt.getInt("lifeTimeLeft"));
-        if (nbt.contains("startingPosX")) {
-            var startingPosX = nbt.getDouble("startingPosX");
-            var startingPosY = nbt.getDouble("startingPosY");
-            var startingPosZ = nbt.getDouble("startingPosZ");
-
-            startingPos = new Vec3d(startingPosX, startingPosY, startingPosZ);
-        }
-
 
         ItemStack wandStack = ItemStack.fromNbt(nbt.getCompound("wandStack"));
         if (nbt.contains("caster")) {
@@ -281,11 +229,6 @@ public class SprayElementEntity extends ThrownEntity {
         nbt.putInt("sprayElement", getSprayElement().ordinal());
         nbt.putInt("movementType", getMovementType());
         nbt.putInt("lifeTimeLeft", getLifeTimeLeft());
-        if (startingPos != null) {
-            nbt.putDouble("startingPosX", startingPos.x);
-            nbt.putDouble("startingPosY", startingPos.y);
-            nbt.putDouble("startingPosZ", startingPos.z);
-        }
 
         nbt.putUuid("caster", getCaster().getCasterUuid());
         ItemStack wandStack = this.getWandStack();

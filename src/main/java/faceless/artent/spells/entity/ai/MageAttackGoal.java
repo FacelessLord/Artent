@@ -1,9 +1,6 @@
 package faceless.artent.spells.entity.ai;
 
-import faceless.artent.spells.api.Affinity;
-import faceless.artent.spells.api.ICaster;
-import faceless.artent.spells.api.ManaUtils;
-import faceless.artent.spells.api.SpellSettings;
+import faceless.artent.spells.api.*;
 import faceless.artent.spells.entity.MageEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -48,9 +45,11 @@ public class MageAttackGoal extends Goal {
         if (spell.isTickAction())
             neededMana = ManaUtils.evaluateManaToConsume(spell, this.affinities, SpellSettings.ActionType.Tick) *
                          spell.settings.maxCastTime +
-                         ManaUtils.evaluatePrepareManaToConsume(spell,
-                                                                this.affinities,
-                                                                SpellSettings.ActionType.Tick) *
+                         ManaUtils.evaluatePrepareManaToConsume(
+                           spell,
+                           this.affinities,
+                           SpellSettings.ActionType.Tick
+                         ) *
                          spell.settings.prepareTime;
         return caster.getMana() >= neededMana && mage.getTarget() != null;
     }
@@ -92,7 +91,7 @@ public class MageAttackGoal extends Goal {
             this.targetSeeingTicker--;
         }
 
-        if (distanceSqr > rangeSquared || this.targetSeeingTicker < 20) {
+        if (distanceSqr > rangeSquared || this.targetSeeingTicker < 20 && distanceSqr > (rangeSquared * 0.5f)) {
             mage.getNavigation().startMovingTo(target, this.speed);
             this.combatTicks = -1;
         } else {
@@ -111,7 +110,7 @@ public class MageAttackGoal extends Goal {
         if (this.combatTicks > -1) {
             if (distanceSqr > (rangeSquared * 0.75f)) {
                 this.backward = false;
-            } else if (distanceSqr < (rangeSquared * 0.25f)) {
+            } else if (distanceSqr < (rangeSquared * 0.50f)) {
                 this.backward = true;
             }
             mage.getMoveControl().strafeTo(this.backward ? -0.5f : 0.5f, this.movingToLeft ? 0.5f : -0.5f);
@@ -119,9 +118,9 @@ public class MageAttackGoal extends Goal {
             if (entity instanceof MobEntity mobEntity) {
                 mobEntity.lookAtEntity(target, 30.0f, 30.0f);
             }
-            mage.lookAtEntity(target, 30.0f, 30.0f);
+            prepareDirectedCast(target);
         } else {
-            mage.getLookControl().lookAt(target, 30.0f, 30.0f);
+            prepareDirectedCast(target);
         }
         if (mage.isUsingItem()) {
             if (!canSeeTarget && this.targetSeeingTicker < -60) {
@@ -138,9 +137,11 @@ public class MageAttackGoal extends Goal {
                 }
                 var actionTime = mage.getItemUseTime() - spell.settings.prepareTime;
                 if (spell.isSingleCastAction()) {
-                    var castMana = ManaUtils.evaluateManaToConsume(spell,
-                                                                   this.affinities,
-                                                                   SpellSettings.ActionType.Tick);
+                    var castMana = ManaUtils.evaluateManaToConsume(
+                      spell,
+                      this.affinities,
+                      SpellSettings.ActionType.Tick
+                    );
                     if (caster.consumeMana(castMana)) {
                         prepareDirectedCast(target);
                         wand.onStoppedUsing(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
@@ -154,9 +155,11 @@ public class MageAttackGoal extends Goal {
 
                 if (spell.isTickAction()) {
                     if (actionTime < spell.settings.maxCastTime) { // duplicating WandItem behaviour
-                        var tickMana = ManaUtils.evaluateManaToConsume(spell,
-                                                                       this.affinities,
-                                                                       SpellSettings.ActionType.Tick);
+                        var tickMana = ManaUtils.evaluateManaToConsume(
+                          spell,
+                          this.affinities,
+                          SpellSettings.ActionType.Tick
+                        );
                         if (caster.consumeMana(tickMana)) {
                             prepareDirectedCast(target);
                             wand.usageTick(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
@@ -176,14 +179,52 @@ public class MageAttackGoal extends Goal {
     }
 
     private void prepareDirectedCast(LivingEntity target) {
-        var attackDir = target.getEyePos().subtract(mage.getPos());
-        var pitch = (float) -(Math.atan2(attackDir.y - 2, Math.hypot(attackDir.x, attackDir.z)) * 180 / Math.PI);
-        var yaw = (float) -(Math.atan2(attackDir.z, -attackDir.x) * 180 / Math.PI - 90);
+        var spell = mage.getCurrentSpell();
+        if (spell == null)
+            return;
         oldYaw = mage.getYaw();
         oldPitch = mage.getPitch();
 
+        var attackDir = target.getEyePos().subtract(mage.getPos());
+
+        if (!spell.settings.hasGravity || !tryCalculateWeightedProjectileCastDirection(spell, target)) {
+
+            var pitch = (float) -(Math.atan2(attackDir.y - 2, Math.hypot(attackDir.x, attackDir.z)) * 180 /
+                                  Math.PI);
+            var yaw = (float) -(Math.atan2(attackDir.z, -attackDir.x) * 180 / Math.PI - 90);
+
+            mage.setYaw(yaw);
+            mage.setPitch(pitch);
+        }
+    }
+
+    private boolean tryCalculateWeightedProjectileCastDirection(Spell spell, LivingEntity target) {
+        var velocity = spell.settings.velocity;
+        var g = spell.settings.gravity;
+
+        var targetPos = target.getEyePos();
+        var magePos = mage.getPos().add(0, 1.5f, 0);
+        var dy = targetPos.getY() - magePos.getY();
+        var dx = targetPos.getX() - magePos.getX();
+        var dz = targetPos.getZ() - magePos.getZ();
+        var dr2 = dx * dx + dz * dz;
+
+        var v2 = velocity * velocity;
+        var v4 = v2 * v2;
+        var g2 = g * g;
+        var discriminant = v4 / (g2 * dr2) - 2 * v2 * dy / (g * dr2) - 1;
+        if (discriminant <= 0)
+            return false;
+        var dr = Math.sqrt(dr2);
+
+        var t1 = v2 / (g * dr) - Math.sqrt(discriminant);
+
+        var attackPitch = (float) -(Math.atan(t1) / Math.PI * 180);
+        var yaw = (float) -(Math.atan2(dz, -dx) * 180 / Math.PI - 90);
+
         mage.setYaw(yaw);
-        mage.setPitch(pitch);
+        mage.setPitch(attackPitch);
+        return true;
     }
 
     private void afterCast() {

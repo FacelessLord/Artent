@@ -37,11 +37,12 @@ public abstract class SpraySpell extends Spell {
             for (int i = 0; i < 25; i++) {
                 var randomAngle = Math.random() * Math.PI * 2;
                 var randomRange = Math.random();
-                var sin = Math.sin(randomAngle) * randomRange;
-                var cos = Math.cos(randomAngle) * randomRange;
+                var sin = Math.sin(randomAngle);
+                var cos = Math.cos(randomAngle);
                 var randomDist = Math.random() * 0.25f;
 
-                var offsetVector = e2.multiply(sin).add(e3.multiply(cos)).add(e1.multiply(randomDist));
+                var offsetVector = e2.multiply(sin * randomRange).add(e3.multiply(cos * randomRange)).add(e1.multiply(
+                  randomDist));
                 var startPos = living.getPos().add(offsetVector).add(0, 1.75f, 0);
 
                 var particle = new SprayElementEntity(ModEntities.SPRAY_ELEMENT_ENTITY, world);
@@ -51,9 +52,15 @@ public abstract class SpraySpell extends Spell {
                 particle.setMovementType(isHurricane
                                            ? SprayElementEntity.RotatingMovement
                                            : SprayElementEntity.DirectMovement);
-                particle.setVelocity(e1.add(offsetVector.multiply(0.4f)));
-                particle.setPosition(startPos.add(e1.multiply(1.5f)));
-                particle.setStartingPos(startPos);
+                if (isHurricane) {
+                    var offset = new Vec3d(sin, Math.random() * 4, cos).multiply(3.5, 1, 3.5);
+
+                    particle.setPosition(living.getPos().add(offset));
+                    particle.setVelocity(cos * 0.01f, 0, -sin * 0.01f);
+                } else {
+                    particle.setPosition(startPos.add(e1.multiply(1.5f)));
+                    particle.setVelocity(e1.add(offsetVector.multiply(0.4f)));
+                }
 
                 world.spawnEntity(particle);
             }
@@ -61,20 +68,15 @@ public abstract class SpraySpell extends Spell {
             for (int i = 0; i < 500; i++) {
                 var randomAngle = Math.random() * Math.PI * 2;
 
-                var offset = new Vec3d(Math.sin(randomAngle) * (1 + Math.random()),
-                                       Math.random() * 4,
-                                       Math.cos(randomAngle) * (1 + Math.random())).multiply(3, 1, 3);
+                var offset = new Vec3d(
+                  Math.sin(randomAngle) * (1 + Math.random()),
+                  Math.random() * 4,
+                  Math.cos(randomAngle) * (1 + Math.random())
+                ).multiply(3, 1, 3);
 
                 var startingPos = living.getPos().add(offset);
-                var velocity = offset.crossProduct(new Vec3d(0, 1, 0));
 
-                world.addParticle(ParticleTypes.FLAME,
-                                  startingPos.x,
-                                  startingPos.y,
-                                  startingPos.z,
-                                  velocity.x * 0.01f,
-                                  velocity.y * 0.01f,
-                                  velocity.z * 0.01f);
+                world.addParticle(ParticleTypes.FLAME, startingPos.x, startingPos.y, startingPos.z, 0, 0, 0);
             }
         } else {
             for (int i = 0; i < 50; i++) { // TODO 500 as before
@@ -95,7 +97,6 @@ public abstract class SpraySpell extends Spell {
                     ? ParticleTypes.FLAME
                     : ParticleTypes.FIREWORK; // TODO: other texture and less lifetime (like other two)
                 world.addParticle(particleType, position.x, position.y, position.z, velocity.x, velocity.y, velocity.z);
-
             }
         }
 

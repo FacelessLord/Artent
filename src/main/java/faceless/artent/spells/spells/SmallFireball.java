@@ -29,4 +29,6 @@ public class SmallFireball extends ProjectileSpell {
             living.damage(createDamageSource(world, caster), 4);
         }
     }
+
+    // TODO method to select correct rotation, or at least give projectile base speed
 }
