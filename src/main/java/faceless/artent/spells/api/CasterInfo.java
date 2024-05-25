@@ -7,6 +7,8 @@ import net.minecraft.world.World;
 
 public class CasterInfo {
     public int mana = 0;
+    public int cooldown;
+    public int maxCooldown = 0;
 
     private int spellBookIndex = 0;
 
@@ -43,6 +45,8 @@ public class CasterInfo {
         var mageNbt = new NbtCompound();
 
         mageNbt.putInt("mana", mana);
+        mageNbt.putInt("cooldown", cooldown);
+        mageNbt.putInt("maxCooldown", maxCooldown);
         mageNbt.putInt("spellBookIndex", spellBookIndex);
 
         nbt.put("caster", mageNbt);
@@ -55,6 +59,8 @@ public class CasterInfo {
         var mageNbt = nbt.getCompound("caster");
 
         this.mana = mageNbt.getInt("mana");
+        this.cooldown = mageNbt.getInt("cooldown");
+        this.maxCooldown = mageNbt.getInt("maxCooldown");
         this.spellBookIndex = mageNbt.getInt("spellBookIndex");
     }
 }

@@ -44,13 +44,16 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
     protected static final RawAnimation START_CAST_ANIMATION = RawAnimation
       .begin()
       .thenPlay("animation.mage.start_cast");
-    private static final TrackedData<Integer> MANA = DataTracker.registerData(MageEntity.class,
-                                                                              TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> MANA = DataTracker.registerData(
+      MageEntity.class,
+      TrackedDataHandlerRegistry.INTEGER
+    );
 
     private static final int MAX_MANA_BASE = 100;
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     public Spell[] spells;
     public UUID mageId;
+    private MageAttackGoal mageAttackGoal;
 
     public MageEntity(EntityType<MageEntity> entityType, World world) {
         super(entityType, world);
@@ -63,12 +66,13 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
         this.goalSelector.add(5, new WanderAroundFarGoal(this, 1));
         this.goalSelector.add(6, new LookAtEntityGoal(this, SkeletonEntity.class, 16.0f));
         this.goalSelector.add(6, new LookAroundGoal(this));
-        this.goalSelector.add(4, new MageAttackGoal(this, this, new ArrayList<>(0), 32, 1));
+        mageAttackGoal = new MageAttackGoal(this, this, new ArrayList<>(0), 32, 1);
+        this.goalSelector.add(4, mageAttackGoal);
         this.targetSelector.add(1, new RevengeGoal(this));
-        this.targetSelector.add(3,
-                                new ActiveTargetGoal<>(this,
-                                                       SkeletonEntity.class,
-                                                       false)); // TODO select mobs not in a team
+        this.targetSelector.add(
+          3,
+          new ActiveTargetGoal<>(this, SkeletonEntity.class, false)
+        ); // TODO select mobs not in a team
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, ZombieEntity.class, false));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, SpiderEntity.class, false));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, CreeperEntity.class, false));
@@ -101,21 +105,18 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
     protected PlayState handsController(final AnimationState<MageEntity> event) {
         var mage = event.getAnimatable();
         if (mage.isUsingItem()) {
-            if (mage.getItemUseTime() < 10)
-                return event.setAndContinue(START_CAST_ANIMATION);
+            if (mage.getItemUseTime() < 10) return event.setAndContinue(START_CAST_ANIMATION);
             return event.setAndContinue(CAST_ANIMATION);
         }
 
-        if (mage.getVelocity().length() > 0.2)
-            return event.setAndContinue(WALK_HANDS_ANIMATION);
+        if (mage.getVelocity().length() > 0.2) return event.setAndContinue(WALK_HANDS_ANIMATION);
 
         return event.setAndContinue(STAND_ANIMATION);
     }
 
     protected PlayState legsController(final AnimationState<MageEntity> event) {
         var mage = event.getAnimatable();
-        if (mage.getVelocity().length() > 0.1)
-            return event.setAndContinue(WALK_LEGS_ANIMATION);
+        if (mage.getVelocity().length() > 0.1) return event.setAndContinue(WALK_LEGS_ANIMATION);
         return event.setAndContinue(STAND_ANIMATION);
     }
 
@@ -183,6 +184,15 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
         return getPos();
     }
 
+    @Override
+    public void setCooldown(int time) {
+        mageAttackGoal.setCooldown(time);
+    }
+
+    @Override
+    public int getCooldown() {
+        return mageAttackGoal == null ? 0 : mageAttackGoal.getCooldown();
+    }
 
     @Override
     public void tick() {

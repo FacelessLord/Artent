@@ -47,12 +47,20 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
         var player = (PlayerEntity) (Object) this;
-        if (player.getWorld() != null && !player.getWorld().isClient && player.getWorld().getTime() % 10 == 1) {
-            if (getPlayerState().tradeInfo != null && getPlayerState().tradeInfo.priceDeterminatorContext == null)
-                setTradeInfo(null);
-            getCasterInfo().tickCaster(player.getWorld(), player);
+        var casterInfo = getCasterInfo();
+        {
+            if (casterInfo.cooldown > 0)
+                setCooldown(casterInfo.cooldown - 1);
+        }
 
-            ArtentServerHook.packetSyncPlayerData(player);
+        if (player.getWorld() != null && !player.getWorld().isClient) {
+            casterInfo.tickCaster(player.getWorld(), player);
+            if (player.getWorld().getTime() % 10 == 1) {
+                if (getPlayerState().tradeInfo != null && getPlayerState().tradeInfo.priceDeterminatorContext == null)
+                    setTradeInfo(null);
+
+                ArtentServerHook.packetSyncPlayerData(player);
+            }
         }
     }
 
@@ -71,8 +79,10 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
             var mobLevel = leveledMob.getLevel();
             var experienceScaling = LevelingUtils.getExperienceScalingByMobLevel(heroInfo.getLevel(), mobLevel);
             if (Double.isInfinite(experienceScaling)) {
-                experienceScaling = LevelingUtils.getExperienceScalingByMobLevel(heroInfo.getLevel(),
-                                                                                 heroInfo.getLevel() + 5) *
+                experienceScaling = LevelingUtils.getExperienceScalingByMobLevel(
+                  heroInfo.getLevel(),
+                  heroInfo.getLevel() + 5
+                ) *
                                     (mobLevel - heroInfo.getLevel());
             }
             var mobsToLevel = LevelingUtils.getSameLevelMobsToLevel(heroInfo.getLevel());
@@ -227,6 +237,23 @@ public abstract class PlayerDataMixin implements ArtentPlayerData, ICaster {
     @Override
     public Vec3d getCasterRotation() {
         return asPlayer().getRotationVector();
+    }
+
+    @Override
+    public int getCooldown() {
+        var casterInfo = getCasterInfo();
+        return casterInfo.cooldown;
+    }
+
+    @Override
+    public void setCooldown(int time) {
+        var casterInfo = getCasterInfo();
+        casterInfo.cooldown = time;
+
+        if (casterInfo.maxCooldown == 0)
+            casterInfo.maxCooldown = time;
+        if (time == 0)
+            casterInfo.maxCooldown = 0;
     }
 
     public PlayerEntity asPlayer() {

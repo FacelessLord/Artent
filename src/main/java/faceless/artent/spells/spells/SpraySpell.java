@@ -67,16 +67,25 @@ public abstract class SpraySpell extends Spell {
         } else if (isHurricane) {
             for (int i = 0; i < 500; i++) {
                 var randomAngle = Math.random() * Math.PI * 2;
-
+                var sin = Math.sin(randomAngle);
+                var cos = Math.cos(randomAngle);
                 var offset = new Vec3d(
-                  Math.sin(randomAngle) * (1 + Math.random()),
+                  sin * (1 + Math.random()),
                   Math.random() * 4,
-                  Math.cos(randomAngle) * (1 + Math.random())
+                  cos * (1 + Math.random())
                 ).multiply(3, 1, 3);
 
                 var startingPos = living.getPos().add(offset);
 
-                world.addParticle(ParticleTypes.FLAME, startingPos.x, startingPos.y, startingPos.z, 0, 0, 0);
+                world.addParticle(
+                  ParticleTypes.FLAME,
+                  startingPos.x,
+                  startingPos.y,
+                  startingPos.z,
+                  cos * 0.1f,
+                  0,
+                  -sin * 0.1f
+                );
             }
         } else {
             for (int i = 0; i < 50; i++) { // TODO 500 as before

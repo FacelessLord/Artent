@@ -128,7 +128,7 @@ public class MageAttackGoal extends Goal {
             } else if (canSeeTarget) {
                 if (mage.getItemUseTime() < spell.settings.prepareTime) {
                     prepareDirectedCast(target);
-                    wand.usageTick(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
+//                    wand.usageTick(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
                     afterCast();
                     if (!mage.isUsingItem()) {
                         stop();
@@ -144,13 +144,13 @@ public class MageAttackGoal extends Goal {
                     );
                     if (caster.consumeMana(castMana)) {
                         prepareDirectedCast(target);
+                        mage.stopUsingItem(); // expected to make cast with wand
                         wand.onStoppedUsing(mage.getWorld(), mage, wand.getMaxUseTime() - mage.getItemUseTime());
                         afterCast();
                     }
 
                     stop(); // TODO use custom stops to enable cooldowns
                     mage.stopUsingItem();
-                    this.cooldown = spell.settings.cooldown;
                 }
 
                 if (spell.isTickAction()) {
@@ -168,8 +168,6 @@ public class MageAttackGoal extends Goal {
                         }
                     }
                     stop();
-                    mage.stopUsingItem();
-                    this.cooldown = spell.settings.cooldown; // TODO will be set by WandItem and I would remove this if-else statement
                 }
 
             }
@@ -225,6 +223,14 @@ public class MageAttackGoal extends Goal {
         mage.setYaw(yaw);
         mage.setPitch(attackPitch);
         return true;
+    }
+
+    public void setCooldown(int time) {
+        cooldown = time;
+    }
+
+    public int getCooldown() {
+        return cooldown;
     }
 
     private void afterCast() {

@@ -43,14 +43,10 @@ public class WandItem extends ArtentItem implements ISharpenable {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         var stack = player.getStackInHand(hand);
 
-        var spell = ((ICaster) player).getCurrentSpell();
-        if (spell == null) return TypedActionResult.fail(stack);
+        if (!(player instanceof ICaster caster)) return TypedActionResult.fail(stack);
 
-        if (Math.random() < spell.getRecoilChance(player, world)) {
-            spell.onRecoil(DataUtil.asCaster(player), world, stack, getMaxUseTime(stack));
-            return TypedActionResult.fail(stack);
-        }
-
+        var spell = caster.getCurrentSpell();
+        if (spell == null || caster.getCooldown() > 0) return TypedActionResult.fail(stack);
         if (spell.isSingleCastAction() || spell.isTickAction()) {
             player.setCurrentHand(hand);
             return TypedActionResult.consume(stack);
@@ -79,26 +75,34 @@ public class WandItem extends ArtentItem implements ISharpenable {
 
         var spell = caster.getCurrentSpell();
         if (spell == null) return;
-        if (!spell.isSingleCastAction()) return;
 
         var actionTime = getMaxUseTime(stack) - remainingUseTicks;
-        if (actionTime < spell.settings.prepareTime)
+        if (actionTime <= spell.settings.prepareTime)
             return;
 
-        if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
-            spell.onRecoil(caster, world, stack, actionTime);
-        } else {
-            var manaToConsume = ManaUtils.evaluateManaToConsume(spell,
-                                                                this.affinities,
-                                                                SpellSettings.ActionType.SingleCast);
-            if (caster.consumeMana(manaToConsume)) spell.action(caster, world, stack, actionTime);
+        if (spell.isSingleCastAction()) {
+
+            if (world.getRandom().nextFloat() < spell.getRecoilChance(user, world)) {
+                spell.onRecoil(caster, world, stack, actionTime);
+            } else {
+                var manaToConsume = ManaUtils.evaluateManaToConsume(
+                  spell,
+                  this.affinities,
+                  SpellSettings.ActionType.SingleCast
+                );
+                if (caster.consumeMana(manaToConsume)) spell.action(caster, world, stack, actionTime);
+            }
         }
+        caster.setCooldown(spell.settings.cooldown);
     }
 
     public void usageTick(World world, LivingEntity living, ItemStack stack, int remainingUseTicks) {
         if (!(living instanceof ICaster caster)) return;
         var spell = caster.getCurrentSpell();
-        if (spell == null) return;
+        if (spell == null || caster.getCooldown() > 0) {
+            living.stopUsingItem();
+            return;
+        }
 
         var actionTime = getMaxUseTime(stack) - remainingUseTicks;
 
@@ -118,7 +122,7 @@ public class WandItem extends ArtentItem implements ISharpenable {
 
         if (actionTime > spell.settings.maxCastTime) {
             living.stopUsingItem();
-            // TODO set cooldown
+            caster.setCooldown(spell.settings.cooldown);
             return;
         }
 

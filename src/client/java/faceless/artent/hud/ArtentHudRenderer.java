@@ -49,8 +49,9 @@ public class ArtentHudRenderer {
         matrices.pop();
 
         var bookStack = getBookStack(ctx);
-        if (!bookStack.isEmpty()) {
+        var casterInfo = DataUtil.getCasterInfo(ctx.player());
 
+        if (!bookStack.isEmpty()) {
             var spellInventory = new ItemSpellInventory(bookStack);
             var spellInventorySize = spellInventory.getSize();
 
@@ -58,6 +59,11 @@ public class ArtentHudRenderer {
             matrices.translate(42, 0, -90.0f);
 
             context.drawTexture(SPELL_BOOK_HUD, 0, 0, 0, 0, 168, 24, 256, 256);
+
+            var cooldown = 0;
+            if (casterInfo.maxCooldown != 0) {
+                cooldown = (18 * casterInfo.cooldown) / casterInfo.maxCooldown;
+            }
 
             for (int j = 0; j < spellInventorySize; j++) {
                 matrices.push();
@@ -69,6 +75,15 @@ public class ArtentHudRenderer {
                 if (spell != null && spell.spell != null) {
                     var spellIconPath = new Identifier(Artent.MODID, "textures/spell/" + spell.spell.id + ".png");
                     context.drawTexture(spellIconPath, 0, 0, 18, 18, 0, 0, 32, 32, 32, 32);
+
+                    RenderSystem.enableBlend();
+                    if (cooldown != 0) {
+                        RenderSystem.clearColor(1, 1, 1, 0.5f);
+                        context.setShaderColor(1, 1, 1, 0.25f);
+                        context.drawTexture(SPELL_BOOK_HUD, 0, 18 - cooldown, 18, 24, 18, cooldown, 256, 256);
+                        context.setShaderColor(1, 1, 1, 1);
+                    }
+                    RenderSystem.disableBlend();
                 }
                 matrices.pop();
             }
@@ -79,7 +94,6 @@ public class ArtentHudRenderer {
             matrices.pop();
         }
 
-        var casterInfo = DataUtil.getCasterInfo(ctx.player());
         var maxMana = casterInfo.getMaxMana(ctx.player());
         var mana = casterInfo.mana;
         if (maxMana != 0) {
@@ -121,15 +135,17 @@ public class ArtentHudRenderer {
 
             var fillPercentage = 1f * heroInfo.experience / heroInfo.getExperienceToLevel();
             var experienceHeight = (int) Math.min(109 * fillPercentage, 109);
-            context.drawTexture(SPELL_BOOK_HUD,
-                                2,
-                                125 - experienceHeight,
-                                77,
-                                42 + 14 + 2 + 109 - experienceHeight,
-                                5,
-                                experienceHeight,
-                                256,
-                                256);
+            context.drawTexture(
+              SPELL_BOOK_HUD,
+              2,
+              125 - experienceHeight,
+              77,
+              42 + 14 + 2 + 109 - experienceHeight,
+              5,
+              experienceHeight,
+              256,
+              256
+            );
             matrices.pop();
         }
     }

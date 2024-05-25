@@ -23,4 +23,7 @@ public interface ICaster {
 
     Vec3d getCasterPosition();
 
+    void setCooldown(int time);
+
+    int getCooldown();
 }
