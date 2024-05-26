@@ -37,6 +37,14 @@
     {
       "config": "artent.client.playerData.mixins.json",
       "environment": "client"
+    },
+    {
+      "config": "artent.client.sharpening.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "artent.client.spells.mixins.json",
+      "environment": "client"
     }
   ],
   "depends": {

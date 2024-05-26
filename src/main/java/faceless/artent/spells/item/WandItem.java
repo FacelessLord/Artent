@@ -46,7 +46,8 @@ public class WandItem extends ArtentItem implements ISharpenable {
         if (!(player instanceof ICaster caster)) return TypedActionResult.fail(stack);
 
         var spell = caster.getCurrentSpell();
-        if (spell == null || caster.getCooldown() > 0) return TypedActionResult.fail(stack);
+        var potency = caster.getPotency();
+        if (spell == null || spell.settings.minimalPotency > potency || caster.getCooldown() > 0) return TypedActionResult.fail(stack);
         if (spell.isSingleCastAction() || spell.isTickAction()) {
             player.setCurrentHand(hand);
             return TypedActionResult.consume(stack);

@@ -16,6 +16,7 @@ public class ModSpells {
                                                           .build());
     public static final Spell LightSword = new LightSword(SpellSettings
                                                             .action(10)
+                                                            .minimalPotency(5)
                                                             .prepareTime(30)
                                                             .cooldown(10)
                                                             .color(1, 1, 0.5f)
@@ -33,6 +34,7 @@ public class ModSpells {
                                                                               .tick(10, 4)
                                                                               .prepareTime(80)
                                                                               .cooldown(80)
+                                                                              .minimalPotency(20)
                                                                               .color(1, 1, 0.5f)
                                                                               .affinity(AffinityType.Light)
                                                                               .build());
@@ -41,6 +43,7 @@ public class ModSpells {
     public static final SpellSettings.SpellSettingsBuilder sprayBuilder = SpellSettings
       .tick(5, 3)
       .prepareTime(10)
+      .minimalPotency(10)
       .cooldown(20)
       .maxActionDistance(6);
 
@@ -67,6 +70,7 @@ public class ModSpells {
     public static final Spell Dash = new Dash(SpellSettings
                                                 .action(5)
                                                 .cooldown(10)
+                                                .minimalPotency(5)
                                                 .affinity(AffinityType.Air)
                                                 .maxActionDistance(6)
                                                 .prepareTime(20)
@@ -74,6 +78,7 @@ public class ModSpells {
     public static final Spell Gust = new Gust(SpellSettings
                                                 .action(5)
                                                 .cooldown(10)
+                                                .minimalPotency(5)
                                                 .affinity(AffinityType.Air)
                                                 .maxActionDistance(6)
                                                 .prepareTime(20)

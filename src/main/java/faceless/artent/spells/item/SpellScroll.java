@@ -5,6 +5,8 @@ import faceless.artent.registries.SpellRegistry;
 import faceless.artent.spells.api.ISpellScroll;
 import faceless.artent.spells.api.ScrollType;
 import faceless.artent.spells.api.Spell;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -21,13 +23,10 @@ public class SpellScroll extends ArtentItem implements ISpellScroll {
         super(settings, "spell_scroll");
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
-        var spellId = getSpellId(stack);
-        if (spellId == null)
-            return;
-        tooltip.add(Text.translatable("artent.spell." + spellId).formatted(Formatting.BLUE));
     }
 
     @Override
@@ -43,8 +42,7 @@ public class SpellScroll extends ArtentItem implements ISpellScroll {
 
     public String getSpellId(ItemStack stack) {
         var stackNbt = stack.getNbt();
-        if (stackNbt == null)
-            return null;
+        if (stackNbt == null) return null;
         return stackNbt.getString(SPELL_ID_KEY);
     }
 }

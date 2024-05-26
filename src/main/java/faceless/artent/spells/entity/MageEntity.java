@@ -166,7 +166,7 @@ public class MageEntity extends HostileEntity implements ICaster, GeoEntity, Ran
 
     @Override
     public int getPotency() {
-        return 2;
+        return ((ILeveledMob)this).getLevel();
     }
 
     @Override

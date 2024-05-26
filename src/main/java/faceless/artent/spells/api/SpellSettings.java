@@ -5,6 +5,7 @@ import org.joml.Vector3f;
 public class SpellSettings {
     public final int type;
     public final int baseCost;
+    public final int minimalPotency;
     public final int prepareCost;
     public final Vector3f color;
     public final float maxActionDistance;
@@ -20,6 +21,7 @@ public class SpellSettings {
     public SpellSettings(
       int type,
       int baseCost,
+      int minimalPotency,
       int prepareCost,
       Vector3f color,
       float maxActionDistance,
@@ -33,6 +35,7 @@ public class SpellSettings {
     ) {
         this.type = type;
         this.baseCost = baseCost;
+        this.minimalPotency = minimalPotency;
         this.prepareCost = prepareCost;
         this.color = color;
         this.maxActionDistance = maxActionDistance;
@@ -65,6 +68,7 @@ public class SpellSettings {
     public static class SpellSettingsBuilder {
         private final int type;
         private int _baseCost = 10;
+        private int _minimalPotency = 1;
         private int _prepareCost;
         private Vector3f _color = new Vector3f(1, 1, 1);
         private float _maxActionDistance = 32;
@@ -84,6 +88,7 @@ public class SpellSettings {
             return new SpellSettings(
               type,
               _baseCost,
+              _minimalPotency,
               _prepareCost,
               _color,
               _maxActionDistance,
@@ -102,6 +107,7 @@ public class SpellSettings {
 
             copy._baseCost = _baseCost;
             copy._prepareCost = _prepareCost;
+            copy._minimalPotency = _minimalPotency;
             copy._color = _color;
             copy._maxActionDistance = _maxActionDistance;
             copy._cooldown = _cooldown;
@@ -120,6 +126,11 @@ public class SpellSettings {
 
         public SpellSettingsBuilder prepareCost(int prepareCost) {
             this._prepareCost = prepareCost;
+            return this;
+        }
+
+        public SpellSettingsBuilder minimalPotency(int minimalPotency) {
+            this._minimalPotency = minimalPotency;
             return this;
         }
 

@@ -207,6 +207,10 @@
   "artent.spell.water_jet": "Водомёт",
   "artent.spell.dash": "Рывок",
   "artent.spell.gust": "Порыв ветра",
+  "artent.spell.small_fireball": "Маленький файрбол",
+  "artent.spell.coldthrower": "Холодомёт",
+  "artent.spell.null": "Неизвестное заклинание",
+  "artent.spell.minimal_potency": "Необходимая мощь: ",
   "artent.spell.fire_hurricane": "Огненный ураган",
   "artent.specialType.common": "Обычный",
   "artent.specialType.cursed": "Проклятый",
@@ -215,5 +219,10 @@
   "artent.specialType.wounded": "Раненый",
   "artent.argument.specialMobType.invalid": "Invalid special mob type specified",
   "entity.artent.mage": "Маг",
-  "entity.artent.crow": "Ворон"
+  "entity.artent.crow": "Ворон",
+  "artent.upgrade.ender_inversion": "Камень инверсии Края",
+  "artent.upgrade.nether_fire_stone": "Камень адского огня",
+  "artent.upgrade.golden_cross": "Золотой крест",
+  "artent.upgrade.poison_bottle": "Бутылка с ядом",
+  "artent.upgrade.vampires_fang": "Клык вампира"
 }

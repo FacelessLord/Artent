@@ -110,10 +110,9 @@ public class ArtentServerHook {
             // Server sided code
             server.execute(() -> {
                 var casterInfo = DataUtil.getCasterInfo(player);
+                player.stopUsingItem();
                 casterInfo.setSpellBookIndex((casterInfo.getSpellBookIndex() - 1 + 18) % 18);
                 packetSyncPlayerData(player);
-
-                player.stopUsingItem();
             });
         });
         ServerPlayNetworking.registerGlobalReceiver(SPELL_INDEX_RIGHT, (server, player, handler, buffer, sender) -> {
@@ -124,9 +123,9 @@ public class ArtentServerHook {
             // Server sided code
             server.execute(() -> {
                 var casterInfo = DataUtil.getCasterInfo(player);
+                player.stopUsingItem();
                 casterInfo.setSpellBookIndex((casterInfo.getSpellBookIndex() + 1) % 18);
                 packetSyncPlayerData(player);
-                player.stopUsingItem();
             });
         });
     }

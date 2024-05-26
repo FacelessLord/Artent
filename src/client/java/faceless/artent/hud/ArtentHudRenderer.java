@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import faceless.artent.Artent;
 import faceless.artent.api.math.Color;
 import faceless.artent.playerData.api.DataUtil;
+import faceless.artent.spells.api.ICaster;
 import faceless.artent.spells.api.ISpellInventoryItem;
 import faceless.artent.spells.api.ItemSpellInventory;
 import net.minecraft.client.gui.DrawContext;
@@ -50,6 +51,7 @@ public class ArtentHudRenderer {
 
         var bookStack = getBookStack(ctx);
         var casterInfo = DataUtil.getCasterInfo(ctx.player());
+        var caster = (ICaster) ctx.player();
 
         if (!bookStack.isEmpty()) {
             var spellInventory = new ItemSpellInventory(bookStack);
@@ -76,8 +78,15 @@ public class ArtentHudRenderer {
                     var spellIconPath = new Identifier(Artent.MODID, "textures/spell/" + spell.spell.id + ".png");
                     context.drawTexture(spellIconPath, 0, 0, 18, 18, 0, 0, 32, 32, 32, 32);
 
+                    var potency = caster.getPotency();
                     RenderSystem.enableBlend();
-                    if (cooldown != 0) {
+
+                    if (potency < spell.spell.settings.minimalPotency) {
+                        RenderSystem.clearColor(1, 0, 0, 0.5f);
+                        context.setShaderColor(1, 0, 0, 0.5f);
+                        context.drawTexture(SPELL_BOOK_HUD, 0, 0, 18, 24, 18, 18, 256, 256);
+                        context.setShaderColor(1, 1, 1, 1);
+                    } else if (cooldown != 0) {
                         RenderSystem.clearColor(1, 1, 1, 0.5f);
                         context.setShaderColor(1, 1, 1, 0.25f);
                         context.drawTexture(SPELL_BOOK_HUD, 0, 18 - cooldown, 18, 24, 18, cooldown, 256, 256);

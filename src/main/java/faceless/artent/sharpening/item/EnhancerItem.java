@@ -1,5 +1,6 @@
 package faceless.artent.sharpening.item;
 
+import faceless.artent.Artent;
 import faceless.artent.api.item.INamed;
 import faceless.artent.sharpening.api.IEnhancer;
 import net.minecraft.item.Item;
@@ -23,7 +24,7 @@ public class EnhancerItem extends Item implements IEnhancer, INamed {
 
     @Override
     public Text getName() {
-        return Text.translatable(nameKey);
+        return Text.translatable(Artent.MODID + "." + nameKey.replace('/', '.'));
     }
 
     @Override
